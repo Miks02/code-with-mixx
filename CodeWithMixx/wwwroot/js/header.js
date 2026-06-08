@@ -10,6 +10,7 @@ export function initHeader() {
     const mobileNavbar = document.getElementById("mobile-navbar");
     const openNavbar = document.getElementById("open-navbar");
     const closeNavbar = document.getElementById("close-navbar");
+    const mobileNavbarList = document.getElementById("mobile-navbar-list");
     
     openNavbar.addEventListener("click", () => {
         openNavbar.classList.add("hidden");
@@ -23,6 +24,10 @@ export function initHeader() {
         closeNavbar.classList.add("hidden");
         mobileNavbar.classList.add("max-h-0", "opacity-0");
         mobileNavbar.classList.remove("max-h-[500px]", "opacity-100");
+    })
+    
+    mobileNavbarList.addEventListener("click", () => {
+        closeNavbar.click();
     })
 
 }
