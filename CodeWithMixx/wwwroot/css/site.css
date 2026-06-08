@@ -1,4 +1,7 @@
 * {
     scroll-behavior: smooth;
     scroll-margin: 35px;
+    scrollbar-color: #1f9c41 darkgreen;
+    scrollbar-width: thin;
 }
+
