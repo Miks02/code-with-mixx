@@ -4,7 +4,4 @@
     ViewData["Title"] = "Home page";
 }
 
-<div class="w-screen text-center">
-    <h1 class="text-xl font-semibold">Welcome</h1>
-    <p>Learn about <a href="https://learn.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
-</div>
+@await Html.PartialAsync("Shared/_Partials/Landing/_Hero")
