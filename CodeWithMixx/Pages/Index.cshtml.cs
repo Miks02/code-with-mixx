@@ -1,10 +1,26 @@
+using System.ComponentModel.DataAnnotations;
+using CodeWithMixx.Common.Extensions;
+using CodeWithMixx.Common.Results;
+using Discord;
+using Discord.WebSocket;
 using FluentValidation;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
+using static CodeWithMixx.Domain.Discord.DiscordError;
 
 namespace CodeWithMixx.Pages;
 
-public enum ContactFormType { Individual, ExamPreparation, Project, Cooperation }
+public enum ContactFormType
+{
+    [Display(Name = "Individualni časovi")]
+    Individual, 
+    [Display(Name = "Priprema za ispite")]
+    ExamPreparation, 
+    [Display(Name = "Projekat/Seminarski")]
+    Project, 
+    [Display(Name = "Saradnja")]
+    Cooperation
+}
 
 public class ContactFormViewModel
 {
@@ -57,22 +73,34 @@ public class ContactFormValidator : AbstractValidator<ContactFormViewModel>
     }
 }
 
-public class ContactHandler
+public class ContactHandler(DiscordSocketClient client, IConfiguration config, ILogger<ContactHandler> logger)
 {
-    public async Task Handle(ContactFormViewModel request, CancellationToken ct = default)
+    private readonly ulong _channelId = config.GetValue<ulong>("Discord:ReservationsChannelId");
+    
+    public async Task<Result> Handle(ContactFormViewModel request)
     {
+        var channel = await client.GetChannelAsync(_channelId) as IMessageChannel;
+
+        if (channel is null)
+        {
+            logger.LogError("Unable to get a channel with id {_channelId}", _channelId);
+            return Result.Failure(ChannelNotFound(_channelId));
+        }
         
-        Console.WriteLine("Contact form submitted");
-        Console.WriteLine($"First name: {request.FirstName}");
-        Console.WriteLine($"Last name: {request.LastName}");
-        Console.WriteLine($"Email: {request.Email}");
-        Console.WriteLine($"Phone number: {request.PhoneNumber}");
-        Console.WriteLine($"Message: {request.Message}");
-        Console.WriteLine($"Type: {request.Type}");
-        Console.WriteLine("Sending the submitted data to the email....");
-        await Task.Delay(3000, ct);
-        Console.WriteLine("Email sent!");
+        var embed = new EmbedBuilder()
+            .WithTitle("Stigao je novi upit!")
+            .WithColor(Color.Green)
+            .AddField("Poslao: ", $"{request.FirstName} {request.LastName}")
+            .AddField("Email: ", request.Email)
+            .AddField("Broj telefona: ", request.PhoneNumber)
+            .AddField("Tip upita: ", request.Type.GetDisplayName())
+            .AddField("Poruka: ", request.Message)
+            .WithCurrentTimestamp()
+            .Build();
         
+        await channel.SendMessageAsync(embed: embed);
+
+        return Result.Success();
     }
 }
 
@@ -81,10 +109,6 @@ public class IndexModel(IValidator<ContactFormViewModel> contactValidator, Conta
 {
     [BindProperty] 
     public ContactFormViewModel ContactForm { get; set; } = null!;
-    
-    public void OnGet()
-    {
-    }
 
     public async Task<IActionResult> OnPost(CancellationToken ct = default)
     {
@@ -93,15 +117,22 @@ public class IndexModel(IValidator<ContactFormViewModel> contactValidator, Conta
         if (!validationResult.IsValid)
         {
             validationResult.Errors.ForEach(x => ModelState.AddModelError(x.PropertyName, x.ErrorMessage));
-            return Partial("Shared/_Partials/Landing/_Contact", ContactForm);
+            return Partial("Shared/_Partials/Landing/_Contact");
         }
         
-        await handler.Handle(ContactForm, ct);
+        var result = await handler.Handle(ContactForm);
 
+        if (!result.IsSuccess)
+        {
+            TempData["ErrorMessage"] = "Došlo je do greške prilikom slanja forme. Molim te pokušaj ponovo kasnije.";
+            return Partial("Shared/_Partials/Landing/_Contact");
+        }
+
+        ModelState.Clear();
+        ContactForm = new ContactFormViewModel();
+        
         TempData["SuccessMessage"] = "Forma je poslata uspešno!";
         
-        ModelState.Clear();
-        
-        return Partial("Shared/_Partials/Landing/_Contact", ContactForm);
+        return Partial("Shared/_Partials/Landing/_Contact");
     }
 }
