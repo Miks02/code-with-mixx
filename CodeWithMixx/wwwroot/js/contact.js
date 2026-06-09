@@ -16,7 +16,6 @@ export function initContact() {
         
         queryType.value = target.dataset.type;
         
-        console.log(target.dataset.type);
         
         switch(target.dataset.type) {
             case "Individual": 
