@@ -5,7 +5,6 @@ import {initContact} from "./contact.js";
 
 
 window.addEventListener('DOMContentLoaded', () => {
-    console.log('DOM fully loaded and parsed');
     initHeroAnimation();
     initHeader();
     initReviewsSlider();

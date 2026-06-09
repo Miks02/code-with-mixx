@@ -1,7 +1,6 @@
 
 
 export function initContact() {
-    console.log("Initializing Contact...");
     
     const contactForm = document.getElementById("contact");
     const queryType = contactForm.querySelector("#type");

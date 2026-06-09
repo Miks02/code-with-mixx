@@ -1,6 +1,5 @@
 
 export function initReviewsSlider() {
-    console.log("Initializing Reviews Slider...");
     const sliderContainer = document.getElementById("reviews-slider-container");
     if (!sliderContainer) {
         console.log("Reviews slider container not found");
