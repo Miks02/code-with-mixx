@@ -16,6 +16,8 @@ export function initContact() {
         
         queryType.value = target.dataset.type;
         
+        console.log(target.dataset.type);
+        
         switch(target.dataset.type) {
             case "Individual": 
                 message.value = "Pozdrav, treba mi malo pomoći oko nekih oblasti, pa me zanimaju detalji za individualne časove.";
@@ -23,7 +25,7 @@ export function initContact() {
             case "ExamPreparation":
                 message.value = "Pozdrav, u frci sam sa odredjenim ispitom pa me zanima tačno kako funkcioniše paket spremanja ispita.";
                 break;    
-            case "ProjectAssignment":
+            case "Project":
                 message.value = "Pozdrav, imam seminarski rad koji moram hitno da rešim pa me zanimaju odredjeni detalji.";
                 break;
             default:
