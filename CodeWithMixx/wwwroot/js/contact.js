@@ -18,13 +18,13 @@ export function initContact() {
         
         switch(target.dataset.type) {
             case "individual": 
-                message.value = "Pozdrav, zainteresovan sam za detalje o individualnim časovima.";
+                message.value = "Pozdrav, treba mi malo pomoći oko nekih oblasti, pa me zanimaju detalji za individualne časove.";
                 break;
             case "exam-preparation":
-                message.value = "Pozdrav, zainteresovan sam za detalje o paketu za spremanje ispita.";
+                message.value = "Pozdrav, u frci sam sa odredjenim ispitom pa me zanima tačno kako funkcioniše paket spremanja ispita.";
                 break;    
             case "project-assignment":
-                message.value = "Pozdrav, zainteresovan sam za detalje o projektu.";
+                message.value = "Pozdrav, imam seminarski rad koji moram hitno da rešim pa me zanimaju odredjeni detalji.";
                 break;
             default:
                 message.value = "";
