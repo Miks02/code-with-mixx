@@ -7,4 +7,6 @@
 @await Html.PartialAsync("Shared/_Partials/Landing/_About")
 @await Html.PartialAsync("Shared/_Partials/Landing/_Pricing")
 @await Html.PartialAsync("Shared/_Partials/Landing/_UserReviews")
-@await Html.PartialAsync("Shared/_Partials/Landing/_Contact")
+<div id="contact-form-container">
+    @await Html.PartialAsync("Shared/_Partials/Landing/_Contact", Model.ContactForm)
+</div>

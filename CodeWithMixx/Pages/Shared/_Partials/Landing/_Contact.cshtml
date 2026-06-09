@@ -1,3 +1,4 @@
+@model ContactFormViewModel
 
 <section id="contact" class="py-12 bg-linear-to-tr from-emerald-950/80 to-emerald-900">
     <div class="max-w-7xl mx-auto px-8">
@@ -42,63 +43,120 @@
                 
                 <div class="p-8 bg-white/5 backdrop-blur-sm rounded-3xl  mt-12">
                     <p class="text-emerald-100/70 text-sm leading-relaxed font-semibold">
-                        Dostupan sam za konsultacije svakog radnog dana. Na poruke odgovaram u roku od 24h.
+                        Dostupan sam za konsultacije svakog radnog dana. Na poruke odgovaram u roku od svega nekoliko sati.
                     </p>
                 </div>
             </div>
 
-            <div class="lg:w-2/3 bg-emerald-800/70 backdrop-blur-md p-8 md:p-12 rounded-3xl  shadow-2xl">
-                <form action="#" method="POST" class="space-y-6 flex flex-col">
+            <div class="lg:w-2/3 bg-emerald-800/70 backdrop-blur-md p-8  rounded-3xl  shadow-2xl">
+                <form hx-post="@Url.Page("Index")" hx-target="#contact-form-container" hx-swap="innerHTML" method="POST" class="gap-4 flex flex-col">
                     <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                         <div class="space-y-2">
-                            <label for="first-name" class="text-sm font-semibold text-emerald-100/60 ml-1 ">Ime</label>
-                            <input type="text" id="first-name" name="first-name" placeholder="Unesite ime" 
-                                class="w-full bg-emerald-950/50  rounded-xl px-4 py-3 text-white placeholder:text-emerald-100/20 focus:outline-hidden focus:ring-2 focus:ring-emerald-500/40 transition duration-200">
+                            <label asp-for="FirstName" class="text-sm font-semibold text-emerald-100/60 ml-1 ">Ime</label>
+                            <input asp-for="FirstName" type="text" id="first-name" placeholder="Unesite ime" 
+                                   class="w-full bg-emerald-950/50  rounded-xl px-4 py-3 text-white placeholder:text-emerald-100/20 focus:outline-hidden focus:ring-2 focus:ring-emerald-500/40 transition duration-200">
+                            <span asp-validation-for="FirstName" class="text-amber-600 font-semibold "></span>
                         </div>
                         <div class="space-y-2">
-                            <label for="last-name" class="text-sm font-semibold text-emerald-100/60 ml-1 ">Prezime</label>
-                            <input type="text" id="last-name" name="last-name" placeholder="Unesite prezime" 
-                                class="w-full bg-emerald-950/50  rounded-xl px-4 py-3 text-white placeholder:text-emerald-100/20 focus:outline-hidden focus:ring-2 focus:ring-emerald-500/40 transition duration-200">
+                            <label asp-for="LastName" class="text-sm font-semibold text-emerald-100/60 ml-1 ">Prezime</label>
+                            <input asp-for="LastName" type="text" id="last-name" placeholder="Unesite prezime" 
+                                   class="w-full bg-emerald-950/50  rounded-xl px-4 py-3 text-white placeholder:text-emerald-100/20 focus:outline-hidden focus:ring-2 focus:ring-emerald-500/40 transition duration-200">
+                            <span asp-validation-for="LastName" class="text-amber-600 font-semibold "></span>
                         </div>
                     </div>
 
                     <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                         <div class="space-y-2">
-                            <label for="phone" class="text-sm font-semibold text-emerald-100/60 ml-1 ">Broj telefona</label>
-                            <input type="tel" id="phone" name="phone" placeholder="+381 60 123 4567" 
-                                class="w-full bg-emerald-950/50  rounded-xl px-4 py-3 text-white placeholder:text-emerald-100/20 focus:outline-hidden focus:ring-2 focus:ring-emerald-500/40 transition duration-200">
+                            <label asp-for="PhoneNumber" class="text-sm font-semibold text-emerald-100/60 ml-1 ">Broj telefona</label>
+                            <input asp-for="PhoneNumber" type="tel" id="phone" placeholder="0601234567" 
+                                   class="w-full bg-emerald-950/50  rounded-xl px-4 py-3 text-white placeholder:text-emerald-100/20 focus:outline-hidden focus:ring-2 focus:ring-emerald-500/40 transition duration-200">
+                            <span asp-validation-for="PhoneNumber" class="text-amber-600 font-semibold "></span>
                         </div>
                         <div class="space-y-2">
-                            <label for="email" class="text-sm font-semibold text-emerald-100/60 ml-1 ">Email adresa</label>
-                            <input type="email" id="email" name="email" placeholder="vas@email.com" 
-                                class="w-full bg-emerald-950/50  rounded-xl px-4 py-3 text-white placeholder:text-emerald-100/20 focus:outline-hidden focus:ring-2 focus:ring-emerald-500/40 transition duration-200">
+                            <label asp-for="Email" class="text-sm font-semibold text-emerald-100/60 ml-1 ">Email adresa</label>
+                            <input asp-for="Email" type="email" id="email" placeholder="vas@email.com" 
+                                   class="w-full bg-emerald-950/50  rounded-xl px-4 py-3 text-white placeholder:text-emerald-100/20 focus:outline-hidden focus:ring-2 focus:ring-emerald-500/40 transition duration-200">
+                            <span asp-validation-for="Email" class="text-amber-600 font-semibold "></span>
                         </div>
                     </div>
 
                     <div class="space-y-2">
-                        <label for="type" class="text-sm font-semibold text-emerald-100/60 ml-1 ">Vrsta upita</label>
-                        <select id="type" name="type" 
-                            class="w-full bg-emerald-950/50  rounded-xl px-4 py-3 text-white focus:outline-hidden focus:ring-2 focus:ring-emerald-500/40 transition duration-200 appearance-none">
-                            <option value="individual" class="bg-emerald-900">Konsultacije za individualne časove</option>
-                            <option value="exam-preparation" class="bg-emerald-900">Konsultacije za pripremanje ispita</option>
-                            <option value="project-assignment" class="bg-emerald-900">Pomoć oko seminarskog</option>
-                            <option value="cooperation" class="bg-emerald-900">Saradnja</option>
-                            <option value="other" class="bg-emerald-900">Ostalo</option>
+                        <label asp-for="Type" class="text-sm font-semibold text-emerald-100/60 ml-1 ">Vrsta upita</label>
+                        <select asp-for="Type" id="type" 
+                                class="w-full bg-emerald-950/50  rounded-xl px-4 py-3 text-white focus:outline-hidden focus:ring-2 focus:ring-emerald-500/40 transition duration-200 appearance-none">
+                            <option value="Individual" class="bg-emerald-900">Konsultacije za individualne časove</option>
+                            <option value="ExamPreparation" class="bg-emerald-900">Konsultacije za pripremanje ispita</option>
+                            <option value="Project" class="bg-emerald-900">Pomoć oko seminarskog</option>
+                            <option value="Cooperation" class="bg-emerald-900">Saradnja</option>
                         </select>
+                        <span asp-validation-for="Type" class="text-amber-600 font-semibold "></span>
                     </div>
 
                     <div class="space-y-2">
-                        <label for="message" class="text-sm font-semibold text-emerald-100/60 ml-1 ">Poruka</label>
-                        <textarea id="message" name="message" rows="5" placeholder="Vaša poruka..." 
+                        <label asp-for="Message" class="text-sm font-semibold text-emerald-100/60 ml-1 ">Poruka</label>
+                        <textarea asp-for="Message" id="message" rows="5" placeholder="Vaša poruka..." 
                             class="w-full bg-emerald-950/50  rounded-xl px-4 py-3 text-white placeholder:text-emerald-100/20 focus:outline-hidden focus:ring-2 focus:ring-emerald-500/40 transition duration-200 resize-none h-32"></textarea>
+                        <span asp-validation-for="Message" class="text-amber-600 font-semibold "></span>
                     </div>
 
                     <button type="submit" 
-                        class="px-6 mx-auto py-4 bg-amber-500 hover:bg-amber-400 text-slate-800 font-bold rounded-2xl shadow-lg transition duration-200 active:scale-95 cursor-pointer">
+                            class="px-6 mx-auto py-4 bg-amber-500 hover:bg-amber-400 text-slate-800 font-bold rounded-2xl shadow-lg transition duration-200 active:scale-95 cursor-pointer">
                         Pošalji poruku
+                        
+                        <svg class="htmx-indicator animate-spin h-5 w-5 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                            <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+                            <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                        </svg>
                     </button>
+
                 </form>
             </div>
         </div>
     </div>
 </section>
+
+@if (TempData["SuccessMessage"] != null)
+{
+    <div class="toast rounded-lg transform translate-x-110 transition duration-400 shadow-xl bg-linear-to-br from-green-600/90 to-green-700/90 backdrop-blur-xl z-100  fixed top-0 w-[90%] mx-auto left-0 right-0 mt-4 p-4 flex items-center gap-4 md:top-auto md:w-1/5 md:right-5 md:left-auto md:bottom-5">
+        <div class="w-full">
+            <div class="flex gap-2 items-center justify-between w-full">
+                <div class="flex items-center justify-between gap-2">
+                    <div class="w-8 h-8 bg-green-700 text-white border border-green-500 rounded-full flex items-center justify-center">
+                        <i class="fa-solid fa-check"></i>
+                    </div>
+                    <h2 class="text-lg font-bold text-white">Uspešno poslato!</h2>
+                </div>
+                <i class="fa-solid fa-xmark text-xl text-slate-100 hover:opacity-70 active:opacity-50 transition duration-200 cursor-pointer close"></i>
+            </div>
+            <p class="text-white mt-2">Stigao mi je tvoj upit, javljam se uskoro!</p>
+        </div>
+    </div>
+}
+
+
+<script>
+    function toggleToast() {
+        const toast = document.querySelector(".toast");
+        const closeBtn = document.querySelector(".close");
+
+        if(!toast) return;
+        
+        closeBtn.addEventListener("click", () => {
+             toast.classList.remove("translate-x-0");
+             toast.classList.add("translate-x-110");
+        });
+        
+        if(toast) {
+            toast.classList.remove("translate-x-110");
+            setTimeout(() => {
+                toast.classList.remove("translate-x-0");
+                toast.classList.add("translate-x-110");
+            }, 4000);
+        }
+    }
+    
+    toggleToast();
+    
+</script>
+
+

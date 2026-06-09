@@ -5,3 +5,18 @@
     scrollbar-width: thin;
 }
 
+/* Po defaultu sakrij spinner */
+.htmx-indicator {
+    display: none;
+}
+
+/* Kada krene HTMX zahtev, prikaži spinner */
+.htmx-request .htmx-indicator {
+    display: inline-block;
+}
+
+/* Opciono: Možeš i da blago zatamniš celo dugme dok učitava da korisnik ne može da klikne dvaput */
+.htmx-request {
+    opacity: 0.7;
+    pointer-events: none; /* Sprečava dupli klik i dupliranje upita u bazu! */
+}
