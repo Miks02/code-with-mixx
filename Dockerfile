@@ -16,10 +16,14 @@ COPY CodeWithMixx/package.json CodeWithMixx/package-lock.json ./CodeWithMixx/
 RUN cd CodeWithMixx && npm ci
 
 COPY . .
+
+RUN cd CodeWithMixx && npm run build:css
+
 RUN dotnet publish ./CodeWithMixx/CodeWithMixx.csproj \
         -c Release \
         -o /app/publish \
-        --no-restore
+        --no-restore \
+        -p:SkipTailwind=true
 
 FROM mcr.microsoft.com/dotnet/aspnet:10.0 AS runtime
 

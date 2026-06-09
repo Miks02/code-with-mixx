@@ -45,7 +45,7 @@
       <Folder Include="wwwroot\lib\" />
     </ItemGroup>
     
-    <Target Name="Tailwind" BeforeTargets="Build">
+    <Target Name="Tailwind" BeforeTargets="Build" Condition="'$(SkipTailwind)' != 'true'">
         <Exec Command="npx tailwindcss -i ./wwwroot/css/input.css -o ./wwwroot/css/output.css --minify" />
     </Target>
 
