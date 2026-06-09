@@ -1,5 +1,8 @@
 using System.Reflection;
+using CodeWithMixx.Infrastructure.BackgroundJobs;
 using CodeWithMixx.Pages;
+using Discord;
+using Discord.WebSocket;
 using FluentValidation;
 using Serilog;
 
@@ -15,6 +18,13 @@ builder.Services
     .AddValidatorsFromAssembly(Assembly.GetExecutingAssembly());
 
 builder.Services.AddScoped<ContactHandler>();
+
+var discordConfig = new DiscordSocketConfig
+{
+    GatewayIntents = GatewayIntents.AllUnprivileged | GatewayIntents.MessageContent
+};
+builder.Services.AddSingleton(new DiscordSocketClient(discordConfig));
+builder.Services.AddHostedService<DiscordBotService>();
 
 var app = builder.Build();
 
