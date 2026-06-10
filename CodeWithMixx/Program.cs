@@ -14,8 +14,10 @@ builder.Services.AddRazorPages()
 
 builder.Host.UseSerilog((context, config) => config.ReadFrom.Configuration(context.Configuration));
 
+
 builder.Services
-    .AddValidatorsFromAssembly(Assembly.GetExecutingAssembly());
+    .AddValidatorsFromAssembly(Assembly.GetExecutingAssembly())
+    .AddHealthChecks();
 
 builder.Services.AddScoped<ContactHandler>();
 
@@ -45,6 +47,8 @@ app.UseSerilogRequestLogging();
 app.UseAuthentication();
 app.UseAuthorization();
 
+
+app.MapHealthChecks("/health");
 app.MapStaticAssets();
 app.MapRazorPages()
     .WithStaticAssets();
