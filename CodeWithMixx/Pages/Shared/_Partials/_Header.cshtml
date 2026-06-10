@@ -4,7 +4,7 @@
 <header id="header" class="fixed top-0 z-50 w-screen bg-emerald-800/80 backdrop-blur-xl shadow-lg">
     <nav class="flex justify-between items-center">
         <a href="#" class="text-white font-bold text-2xl p-4 hover:opacity-70 active:opacity-50 transition duration-200"><span class="text-amber-600">Code</span>WithMixx</a>
-        <ul class="hidden md:flex gap-6 justify-between items-center text-white font-semibold text-xl">
+        <ul class="hidden lg:flex gap-6 justify-between items-center text-white font-semibold text-xl">
             <li>
                 <a href="#" class="block hover:opacity-70 hover:text-amber-400 transition duration-200 p-2 active:opacity-50">Početna</a>
             </li>
@@ -27,15 +27,15 @@
 
         </ul>
         
-        <button aria-label="Otvori meni" id="open-navbar" class="md:hidden p-4 hover:opacity-70 active:opacity-50 transition duration-200 cursor-pointer">
+        <button aria-label="Otvori meni" id="open-navbar" class="lg:hidden p-4 hover:opacity-70 active:opacity-50 transition duration-200 cursor-pointer">
             <i class="fa-solid fa-bars text-white text-2xl"></i>
         </button>
-        <button aria-label="Zatvori meni" id="close-navbar" class="md:hidden p-4 hover:opacity-70 active:opacity-50 transition duration-200 cursor-pointer hidden">
+        <button aria-label="Zatvori meni" id="close-navbar" class="lg:hidden p-4 hover:opacity-70 active:opacity-50 transition duration-200 cursor-pointer hidden">
             <i class="fa-solid fa-xmark text-white text-2xl"></i>
         </button>
     </nav>
     
-    <nav id="mobile-navbar" class="md:hidden overflow-hidden max-h-0 opacity-0 flex flex-col gap-4 items-center text-white font-semibold text-lg transition-all duration-300 ease-in-out">
+    <nav id="mobile-navbar" class="lg:hidden overflow-hidden max-h-0 opacity-0 flex flex-col gap-4 items-center text-white font-semibold text-lg transform-gpu will-change-[max-height,opacity] duration-300 ease-in-out">
         <ul id="mobile-navbar-list" class="flex flex-col gap-2 justify-center items-center text-white font-semibold text-lg w-full text-center py-4">
             <li class="w-full px-4">
                 <a href="#" class="block hover:bg-emerald-700/50 hover:text-amber-400 active:bg-emerald-600 transition duration-200 p-3 rounded-lg">Početna</a>
