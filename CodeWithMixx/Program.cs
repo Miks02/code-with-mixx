@@ -30,23 +30,20 @@ var discordConfig = new DiscordSocketConfig
 builder.Services.AddSingleton(new DiscordSocketClient(discordConfig));
 builder.Services.AddHostedService<DiscordBotService>();
 
-builder.Services.AddRateLimiter(options =>
-{
-    options.AddPolicy("ContactFormLimit", httpContext =>
-        RateLimitPartition.GetSlidingWindowLimiter(
-            partitionKey: httpContext.Connection.RemoteIpAddress?.ToString() ?? "unknown",
-            factory: _ => new SlidingWindowRateLimiterOptions
-            {
-                PermitLimit = 4,
-                Window = TimeSpan.FromMinutes(1),
-                SegmentsPerWindow = 5,
-                QueueLimit = 0
-            }
-        )
-    );
+var contactLimiter = PartitionedRateLimiter.Create<HttpContext, string>(ctx =>
+    RateLimitPartition.GetSlidingWindowLimiter(
+        partitionKey: ctx.Connection.RemoteIpAddress?.ToString() ?? "unknown",
+        factory: _ => new SlidingWindowRateLimiterOptions
+        {
+            PermitLimit = 2,
+            Window = TimeSpan.FromMinutes(1),
+            SegmentsPerWindow = 5,
+            QueueLimit = 0
+        }
+    )
+);
 
-    options.RejectionStatusCode = StatusCodes.Status429TooManyRequests;
-});
+builder.Services.AddSingleton(contactLimiter);
 
 var app = builder.Build();
 
@@ -67,7 +64,6 @@ app.UseForwardedHeaders(forwardedOptions);
 
 
 app.UseRouting();
-app.UseRateLimiter();
 
 app.UseSerilogRequestLogging();
 

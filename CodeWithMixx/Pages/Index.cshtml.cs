@@ -1,4 +1,5 @@
 using System.ComponentModel.DataAnnotations;
+using System.Threading.RateLimiting;
 using CodeWithMixx.Common.Extensions;
 using CodeWithMixx.Common.Results;
 using Discord;
@@ -105,15 +106,29 @@ public class ContactHandler(DiscordSocketClient client, IConfiguration config, I
     }
 }
 
-
-[EnableRateLimiting("ContactFormLimit")]
-public class IndexModel(IValidator<ContactFormViewModel> contactValidator, ContactHandler handler) : PageModel
+public class IndexModel(
+    IValidator<ContactFormViewModel> contactValidator,
+    ContactHandler handler,
+    PartitionedRateLimiter<HttpContext> limiter) : PageModel
 {
     [BindProperty] 
     public ContactFormViewModel ContactForm { get; set; } = null!;
 
+    [DisableRateLimiting]
+    public IActionResult OnGet()
+    {
+        return Page();
+    }
+
     public async Task<IActionResult> OnPost(CancellationToken ct = default)
     {
+        using var lease = await limiter.AcquireAsync(HttpContext);
+        if (!lease.IsAcquired)
+        {
+            TempData["ErrorMessage"] = "Previše zahteva, pokušaj opet za 2 minuta.";
+            return Partial("Shared/_Partials/Landing/_Contact");
+        }
+        
         var validationResult = await contactValidator.ValidateAsync(ContactForm, ct);
 
         if (!validationResult.IsValid)
