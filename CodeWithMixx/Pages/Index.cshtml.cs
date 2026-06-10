@@ -6,6 +6,7 @@ using Discord.WebSocket;
 using FluentValidation;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
+using Microsoft.AspNetCore.RateLimiting;
 using static CodeWithMixx.Domain.Discord.DiscordError;
 
 namespace CodeWithMixx.Pages;
@@ -105,6 +106,7 @@ public class ContactHandler(DiscordSocketClient client, IConfiguration config, I
 }
 
 
+[EnableRateLimiting("ContactFormLimit")]
 public class IndexModel(IValidator<ContactFormViewModel> contactValidator, ContactHandler handler) : PageModel
 {
     [BindProperty] 

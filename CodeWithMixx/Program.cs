@@ -1,14 +1,16 @@
 using System.Reflection;
+using System.Threading.RateLimiting;
 using CodeWithMixx.Infrastructure.BackgroundJobs;
 using CodeWithMixx.Pages;
 using Discord;
 using Discord.WebSocket;
 using FluentValidation;
+using Microsoft.AspNetCore.HttpOverrides;
+using Microsoft.AspNetCore.RateLimiting;
 using Serilog;
 
 var builder = WebApplication.CreateBuilder(args);
 
-// Add services to the container.
 builder.Services.AddRazorPages()
     .AddMvcOptions(options => options.SuppressImplicitRequiredAttributeForNonNullableReferenceTypes = true);
 
@@ -28,25 +30,49 @@ var discordConfig = new DiscordSocketConfig
 builder.Services.AddSingleton(new DiscordSocketClient(discordConfig));
 builder.Services.AddHostedService<DiscordBotService>();
 
+builder.Services.AddRateLimiter(options =>
+{
+    options.AddPolicy("ContactFormLimit", httpContext =>
+        RateLimitPartition.GetSlidingWindowLimiter(
+            partitionKey: httpContext.Connection.RemoteIpAddress?.ToString() ?? "unknown",
+            factory: _ => new SlidingWindowRateLimiterOptions
+            {
+                PermitLimit = 4,
+                Window = TimeSpan.FromMinutes(1),
+                SegmentsPerWindow = 5,
+                QueueLimit = 0
+            }
+        )
+    );
+
+    options.RejectionStatusCode = StatusCodes.Status429TooManyRequests;
+});
+
 var app = builder.Build();
 
-// Configure the HTTP request pipeline.
 if (!app.Environment.IsDevelopment())
 {
     app.UseExceptionHandler("/Error");
-    // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
     app.UseHsts();
 }
 
-app.UseHttpsRedirection();
+var forwardedOptions = new ForwardedHeadersOptions
+{
+    ForwardedHeaders = ForwardedHeaders.XForwardedFor | ForwardedHeaders.XForwardedProto
+};
+forwardedOptions.KnownIPNetworks.Clear();
+forwardedOptions.KnownProxies.Clear();
+
+app.UseForwardedHeaders(forwardedOptions);
+
 
 app.UseRouting();
+app.UseRateLimiter();
 
 app.UseSerilogRequestLogging();
 
 app.UseAuthentication();
 app.UseAuthorization();
-
 
 app.MapHealthChecks("/health");
 app.MapStaticAssets();
