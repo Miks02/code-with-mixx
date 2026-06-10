@@ -31,6 +31,12 @@ export function initContact() {
         }
     })
     
-
+    const form = document.getElementById("contact-form");
+    const submitBtn = form.querySelector("#contact-submit-btn");
+    
+    submitBtn.addEventListener("click", () => {
+        form.scrollIntoView({top: 20,behavior: "smooth"});
+    })
+    
     
 }
