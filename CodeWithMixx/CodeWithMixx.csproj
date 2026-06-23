@@ -4,6 +4,7 @@
         <TargetFramework>net10.0</TargetFramework>
         <Nullable>enable</Nullable>
         <ImplicitUsings>enable</ImplicitUsings>
+        <EnvironmentName>Production</EnvironmentName>
     </PropertyGroup>
 
     <ItemGroup>
@@ -46,6 +47,7 @@
     </ItemGroup>
     
     <Target Name="Tailwind" BeforeTargets="Build" Condition="'$(SkipTailwind)' != 'true'">
+        <Exec Command="npm install" />
         <Exec Command="npx tailwindcss -i ./wwwroot/css/input.css -o ./wwwroot/css/output.css --minify" />
     </Target>
 
