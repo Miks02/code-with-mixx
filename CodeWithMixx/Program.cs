@@ -1,12 +1,15 @@
 using System.Reflection;
 using System.Threading.RateLimiting;
+using CodeWithMixx.Domain.AppUsers;
 using CodeWithMixx.Infrastructure.BackgroundJobs;
+using CodeWithMixx.Infrastructure.Persistence;
 using CodeWithMixx.Pages;
 using Discord;
 using Discord.WebSocket;
 using FluentValidation;
 using Microsoft.AspNetCore.HttpOverrides;
-using Microsoft.AspNetCore.RateLimiting;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.EntityFrameworkCore;
 using Serilog;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -14,8 +17,26 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddRazorPages()
     .AddMvcOptions(options => options.SuppressImplicitRequiredAttributeForNonNullableReferenceTypes = true);
 
-builder.Host.UseSerilog((context, config) => config.ReadFrom.Configuration(context.Configuration));
+builder.Services.AddDbContext<AppDbContext>(options =>
+{
+    options.UseNpgsql(builder.Configuration.GetConnectionString("PostgresConnection"));
+});
 
+
+builder.Services.AddIdentity<AppUser, IdentityRole>(options =>
+{
+    options.User.RequireUniqueEmail = true;
+    options.Password.RequireDigit = true;
+    options.Password.RequiredLength = 8;
+    options.Password.RequireLowercase = true;
+    options.SignIn.RequireConfirmedEmail = false;
+    options.SignIn.RequireConfirmedAccount = false;
+})
+.AddEntityFrameworkStores<AppDbContext>()
+.AddDefaultTokenProviders();
+
+
+builder.Host.UseSerilog((context, config) => config.ReadFrom.Configuration(context.Configuration));
 
 builder.Services
     .AddValidatorsFromAssembly(Assembly.GetExecutingAssembly())
