@@ -3,6 +3,10 @@
 export function initContact() {
     
     const contactForm = document.getElementById("contact");
+
+    if(!contactForm)
+        return;
+    
     const queryType = contactForm.querySelector("#type");
     const pricing = document.getElementById("pricing-grid");
     const message = contactForm.querySelector("#message");
