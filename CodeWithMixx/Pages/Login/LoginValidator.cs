@@ -2,7 +2,7 @@ using FluentValidation;
 
 namespace CodeWithMixx.Pages.Login;
 
-public class LoginValidator : AbstractValidator<LoginViewModel>
+public class LoginValidator : AbstractValidator<LoginInputModel>
 {
     public LoginValidator()
     {

@@ -16,40 +16,40 @@
             <div asp-validation-summary="ModelOnly" class="text-amber-600 font-semibold text-sm"></div>
             
             <div>
-                <label asp-for="LoginVm.Email" class="text-sm font-semibold text-emerald-100/60 ml-1">Email adresa</label>
+                <label asp-for="Input.Email" class="text-sm font-semibold text-emerald-100/60 ml-1">Email adresa</label>
                 <div class="relative">
                     <span class="absolute left-4 top-1/2 -translate-y-1/2 text-emerald-100/40">
                         <i class="fas fa-envelope"></i>
                     </span>
-                    <input id="login-email" asp-for="LoginVm.Email" 
+                    <input id="login-email" asp-for="Input.Email" 
                            class="w-full pl-11 pr-4 py-3 bg-emerald-900/60 border border-emerald-500/20 rounded-xl text-white placeholder-emerald-100/20 focus:outline-none focus:ring-2 focus:ring-emerald-500/40 transition-all" 
                            placeholder="pera@email.com" />
                 </div>
                 <div id="email-validation" class="text-amber-500 font-semibold text-xs ml-1">
-                    <span  asp-validation-for="LoginVm.Email"></span>
+                    <span  asp-validation-for="Input.Email"></span>
                 </div>
             </div>
 
             <div>
-                <label asp-for="LoginVm.Password" class="text-sm font-semibold text-emerald-100/60 ml-1">Lozinka</label>
+                <label asp-for="Input.Password" class="text-sm font-semibold text-emerald-100/60 ml-1">Lozinka</label>
                 <div class="relative">
                     <span class="absolute left-4 top-1/2 -translate-y-1/2 text-emerald-100/40">
                         <i class="fas fa-lock"></i>
                     </span>
-                    <input id="login-password" asp-for="LoginVm.Password" 
+                    <input id="login-password" type="password" asp-for="Input.Password" 
                            class="w-full pl-11 pr-4 py-3 bg-emerald-900/60 border border-emerald-500/20 rounded-xl text-white placeholder-emerald-100/20 focus:outline-none focus:ring-2 focus:ring-emerald-500/40 transition-all" 
                            placeholder="••••••••" />
                 </div>
                 <div id="password-validation" class="text-amber-500 font-semibold text-xs ml-1">
-                    <span  asp-validation-for="LoginVm.Password"></span>
+                    <span  asp-validation-for="Input.Password"></span>
                 </div>
             </div>
 
             <div class="flex items-center justify-between px-1">
                 <div class="flex items-center">
-                    <input asp-for="LoginVm.RememberMe" 
+                    <input asp-for="Input.RememberMe" 
                            class="checkbox-emerald" />
-                    <label asp-for="LoginVm.RememberMe" class="ml-2 text-sm text-emerald-100 cursor-pointer select-none">Zapamti me</label>
+                    <label asp-for="Input.RememberMe" class="ml-2 text-sm text-emerald-100 cursor-pointer select-none">Zapamti me</label>
                 </div>
                 <a href="#" class="text-sm text-emerald-100 hover:text-amber-300 transition-colors">Zaboravljena lozinka?</a>
             </div>
