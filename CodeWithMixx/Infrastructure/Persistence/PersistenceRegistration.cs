@@ -10,5 +10,6 @@ public static class PersistenceRegistration
         {
             options.UseNpgsql(connectionString);
         });
+        services.AddScoped<DatabaseSeeder>();
     }
 }

@@ -17,4 +17,13 @@ public static class DependencyInjection
         services.AddDiscord();
         services.AddRateLimiters();
     }
+
+    public static async Task MapSeeders(this WebApplication app)
+    {
+        using var scope = app.Services.CreateScope();
+        var seeder = scope.ServiceProvider.GetRequiredService<DatabaseSeeder>();
+        
+        await seeder.SeedRolesAsync();
+        await seeder.SeedAdminAsync();
+    }
 }

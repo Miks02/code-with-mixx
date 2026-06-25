@@ -1,4 +1,5 @@
 using CodeWithMixx.Infrastructure;
+using CodeWithMixx.Infrastructure.Persistence;
 using CodeWithMixx.Pages;
 using Microsoft.AspNetCore.HttpOverrides;
 using Serilog;
@@ -16,6 +17,8 @@ builder.Services.AddScoped<ContactHandler>();
 
 var app = builder.Build();
 
+await app.MapSeeders();
+
 if (!app.Environment.IsDevelopment())
 {
     app.UseExceptionHandler("/Error");
@@ -30,7 +33,6 @@ forwardedOptions.KnownIPNetworks.Clear();
 forwardedOptions.KnownProxies.Clear();
 
 app.UseForwardedHeaders(forwardedOptions);
-
 
 app.UseRouting();
 
