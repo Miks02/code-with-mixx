@@ -1,4 +1,5 @@
 using System.Reflection;
+using CodeWithMixx.Common.Interfaces;
 using CodeWithMixx.Infrastructure.Discord;
 using CodeWithMixx.Infrastructure.Identity;
 using CodeWithMixx.Infrastructure.Persistence;
@@ -16,6 +17,18 @@ public static class DependencyInjection
         services.AddValidatorsFromAssembly(Assembly.GetExecutingAssembly());
         services.AddDiscord();
         services.AddRateLimiters();
+        services.AddHandlers();
+    }
+
+    private static void AddHandlers(this IServiceCollection services)
+    {
+        var handlers = typeof(Program).Assembly
+            .GetTypes()
+            .Where(t => t.IsClass && !t.IsAbstract && t.IsAssignableTo(typeof(IHandler)))
+            .ToList();
+
+        foreach (var handler in handlers)
+            services.AddScoped(handler);
     }
 
     public static async Task MapSeeders(this WebApplication app)
