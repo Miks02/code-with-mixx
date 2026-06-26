@@ -12,4 +12,10 @@ public class AppUser : IdentityUser
     public Admin? Admin { get; set; }
     
     public Student? Student { get; set; }
+
+    public AccountStatus AccountStatus { get; set; } = AccountStatus.Active;
+    
+    public DateTime AccountStatusUpdatedAt { get; set; } = DateTime.UtcNow;
+    public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
+    public DateTime? LastLoginAt { get; set; }
 }
