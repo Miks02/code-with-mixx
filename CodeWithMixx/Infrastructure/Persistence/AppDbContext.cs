@@ -1,6 +1,6 @@
-using CodeWithMixx.Domain.Admins;
-using CodeWithMixx.Domain.AppUsers;
-using CodeWithMixx.Domain.Students;
+using CodeWithMixx.Domain.Entities.Admins;
+using CodeWithMixx.Domain.Entities.AppUsers;
+using CodeWithMixx.Domain.Entities.Students;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;

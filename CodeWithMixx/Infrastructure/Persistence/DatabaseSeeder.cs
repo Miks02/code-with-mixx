@@ -1,5 +1,5 @@
-using CodeWithMixx.Domain.Admins;
-using CodeWithMixx.Domain.AppUsers;
+using CodeWithMixx.Domain.Entities.Admins;
+using CodeWithMixx.Domain.Entities.AppUsers;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 

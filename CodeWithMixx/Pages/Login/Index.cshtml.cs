@@ -19,7 +19,7 @@ public class IndexModel(IValidator<LoginInputModel> loginValidator, LoginHandler
             return Page();
         }
         
-        var result = await handler.HandleAsync(Input, ct);
+        var result = await handler.HandleAsync(Input);
 
         if (!result.IsSuccess)
         {

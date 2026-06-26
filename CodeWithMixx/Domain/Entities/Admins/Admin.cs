@@ -1,6 +1,6 @@
-using CodeWithMixx.Domain.AppUsers;
+using CodeWithMixx.Domain.Entities.AppUsers;
 
-namespace CodeWithMixx.Domain.Admins;
+namespace CodeWithMixx.Domain.Entities.Admins;
 
 public class Admin
 {

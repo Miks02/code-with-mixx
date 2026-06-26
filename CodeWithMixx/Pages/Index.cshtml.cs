@@ -8,7 +8,7 @@ using FluentValidation;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.AspNetCore.RateLimiting;
-using static CodeWithMixx.Domain.Discord.DiscordError;
+using static CodeWithMixx.Domain.Entities.Discord.DiscordError;
 
 namespace CodeWithMixx.Pages;
 

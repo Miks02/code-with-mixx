@@ -1,14 +1,14 @@
 using CodeWithMixx.Common.Interfaces;
 using CodeWithMixx.Common.Results;
 using CodeWithMixx.Domain;
-using CodeWithMixx.Domain.AppUsers;
+using CodeWithMixx.Domain.Entities.AppUsers;
 using Microsoft.AspNetCore.Identity;
 
 namespace CodeWithMixx.Pages.Login;
 
 public class LoginHandler(UserManager<AppUser> userManager, SignInManager<AppUser> signInManager) : IHandler
 {
-    public async Task<Result> HandleAsync(LoginInputModel request, CancellationToken ct = default)
+    public async Task<Result> HandleAsync(LoginInputModel request)
     {
         var user = await userManager.FindByEmailAsync(request.Email);
         

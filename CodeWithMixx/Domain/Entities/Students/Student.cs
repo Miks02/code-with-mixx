@@ -1,6 +1,6 @@
-using CodeWithMixx.Domain.AppUsers;
+using CodeWithMixx.Domain.Entities.AppUsers;
 
-namespace CodeWithMixx.Domain.Students;
+namespace CodeWithMixx.Domain.Entities.Students;
 
 public class Student
 {

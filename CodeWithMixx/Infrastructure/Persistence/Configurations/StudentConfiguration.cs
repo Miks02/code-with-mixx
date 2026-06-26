@@ -1,4 +1,4 @@
-using CodeWithMixx.Domain.Students;
+using CodeWithMixx.Domain.Entities.Students;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 

@@ -1,7 +1,6 @@
-using CodeWithMixx.Domain.AppUsers;
+using CodeWithMixx.Domain.Entities.AppUsers;
 using CodeWithMixx.Infrastructure.Persistence;
 using Microsoft.AspNetCore.Identity;
-using Microsoft.EntityFrameworkCore;
 
 namespace CodeWithMixx.Infrastructure.Identity;
 

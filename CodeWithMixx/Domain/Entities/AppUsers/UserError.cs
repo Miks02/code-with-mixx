@@ -1,6 +1,6 @@
 using CodeWithMixx.Common.Results;
 
-namespace CodeWithMixx.Domain.AppUsers;
+namespace CodeWithMixx.Domain.Entities.AppUsers;
 
 public static class UserError
 {

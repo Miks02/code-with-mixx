@@ -1,8 +1,8 @@
-using CodeWithMixx.Domain.Admins;
-using CodeWithMixx.Domain.Students;
+using CodeWithMixx.Domain.Entities.Admins;
+using CodeWithMixx.Domain.Entities.Students;
 using Microsoft.AspNetCore.Identity;
 
-namespace CodeWithMixx.Domain.AppUsers;
+namespace CodeWithMixx.Domain.Entities.AppUsers;
 
 public class AppUser : IdentityUser
 {

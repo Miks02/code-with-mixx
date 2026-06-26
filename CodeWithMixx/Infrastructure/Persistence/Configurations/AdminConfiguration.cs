@@ -1,4 +1,4 @@
-using CodeWithMixx.Domain.Admins;
+using CodeWithMixx.Domain.Entities.Admins;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
