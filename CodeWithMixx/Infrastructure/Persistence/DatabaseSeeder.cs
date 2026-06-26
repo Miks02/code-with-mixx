@@ -61,6 +61,7 @@ public class DatabaseSeeder(
         {
             FirstName = configuration["Admin:FirstName"]!,
             LastName = configuration["Admin:LastName"]!,
+            PhoneNumber = configuration["Admin:PhoneNumber"],
             UserName = adminEmail,
             Email = adminEmail,
             EmailConfirmed = true,
