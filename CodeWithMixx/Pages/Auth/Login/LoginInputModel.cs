@@ -1,4 +1,4 @@
-namespace CodeWithMixx.Pages.Login;
+namespace CodeWithMixx.Pages.Auth.Login;
 
 public record LoginInputModel
 {

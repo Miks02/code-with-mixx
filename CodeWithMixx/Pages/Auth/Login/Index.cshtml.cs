@@ -2,12 +2,20 @@ using FluentValidation;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 
-namespace CodeWithMixx.Pages.Login;
+namespace CodeWithMixx.Pages.Auth.Login;
 
 public class IndexModel(IValidator<LoginInputModel> loginValidator, LoginHandler handler) : PageModel
 {
     [BindProperty]
     public LoginInputModel Input { get; set; } = null!;
+
+    public IActionResult OnGet()
+    {
+        if (User.Identity?.IsAuthenticated == true)
+            return RedirectToPage("/Index");
+
+        return Page();
+    }
     
     public async Task<IActionResult> OnPost(CancellationToken ct = default)
     {
@@ -36,11 +44,10 @@ public class IndexModel(IValidator<LoginInputModel> loginValidator, LoginHandler
             ModelState.AddModelError("Input.Password", errorMessage);
             return Page();
         }
-
+        
         if (User.IsInRole("Admin"))
             return RedirectToPage("/Admin/Dashboard/Index");
         
-        
-        return Page();
+        return RedirectToPage("/Index");
     }
 }
