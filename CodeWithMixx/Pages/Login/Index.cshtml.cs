@@ -15,15 +15,25 @@ public class IndexModel(IValidator<LoginInputModel> loginValidator, LoginHandler
 
         if (!validationResult.IsValid)
         {
-            validationResult.Errors.ForEach(x => ModelState.AddModelError($"LoginVm.{x.PropertyName}", x.ErrorMessage));
+            validationResult.Errors.ForEach(x => ModelState.AddModelError($"Input.{x.PropertyName}", x.ErrorMessage));
             return Page();
         }
         
-        var result = await handler.HandleAsync(Input);
+        var result = await handler.HandleAsync(Input, ct);
 
         if (!result.IsSuccess)
         {
-            ModelState.AddModelError("Input.Password", "Email adresa ili lozinka nisu validni");
+            var errorCode = result.Errors[0].Code;
+            var errorMessage = errorCode switch
+            {
+                "Auth.LoginFailed" => "Email adresa ili lozinka nisu validni.",
+                "Auth.AccountDeactivated" => "Nalog je deaktiviran zbog neaktivnosti, obrati se administratoru.",
+                "Auth.AccountSuspended" => "Nalog je suspendovan, obrati se administratoru.",
+                "Auth.AccountLocked" => "Nalog je zaključan na 5 minuta zbog previše pokušaja",
+                _ => "Došlo je do neočekivane greške prilikom prijavljivanja. Pokušaj ponovo kasnije."
+            };
+            
+            ModelState.AddModelError("Input.Password", errorMessage);
             return Page();
         }
 
