@@ -1,6 +1,6 @@
 using CodeWithMixx.Common.Results;
 
-namespace CodeWithMixx.Domain.Discord;
+namespace CodeWithMixx.Domain.Entities.Discord;
 
 public static class DiscordError
 {

@@ -1,12 +1,6 @@
-using System.Reflection;
-using System.Threading.RateLimiting;
-using CodeWithMixx.Infrastructure.BackgroundJobs;
+using CodeWithMixx.Infrastructure;
 using CodeWithMixx.Pages;
-using Discord;
-using Discord.WebSocket;
-using FluentValidation;
 using Microsoft.AspNetCore.HttpOverrides;
-using Microsoft.AspNetCore.RateLimiting;
 using Serilog;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -17,35 +11,12 @@ builder.Services.AddRazorPages()
 builder.Host.UseSerilog((context, config) => config.ReadFrom.Configuration(context.Configuration));
 
 
-builder.Services
-    .AddValidatorsFromAssembly(Assembly.GetExecutingAssembly())
-    .AddHealthChecks();
-
+builder.Services.AddInfrastructure(builder.Configuration);
 builder.Services.AddScoped<ContactHandler>();
 
-var discordConfig = new DiscordSocketConfig
-{
-    GatewayIntents = GatewayIntents.AllUnprivileged | GatewayIntents.MessageContent
-};
-builder.Services.AddSingleton(new DiscordSocketClient(discordConfig));
-builder.Services.AddHostedService<DiscordBotService>();
-
-var contactLimiter = PartitionedRateLimiter.Create<HttpContext, string>(ctx =>
-    RateLimitPartition.GetSlidingWindowLimiter(
-        partitionKey: ctx.Connection.RemoteIpAddress?.ToString() ?? "unknown",
-        factory: _ => new SlidingWindowRateLimiterOptions
-        {
-            PermitLimit = 2,
-            Window = TimeSpan.FromMinutes(1),
-            SegmentsPerWindow = 5,
-            QueueLimit = 0
-        }
-    )
-);
-
-builder.Services.AddSingleton(contactLimiter);
-
 var app = builder.Build();
+
+await app.MapSeeders();
 
 if (!app.Environment.IsDevelopment())
 {
@@ -62,7 +33,6 @@ forwardedOptions.KnownProxies.Clear();
 
 app.UseForwardedHeaders(forwardedOptions);
 
-
 app.UseRouting();
 
 app.UseSerilogRequestLogging();
@@ -70,7 +40,6 @@ app.UseSerilogRequestLogging();
 app.UseAuthentication();
 app.UseAuthorization();
 
-app.MapHealthChecks("/health");
 app.MapStaticAssets();
 app.MapRazorPages()
     .WithStaticAssets();

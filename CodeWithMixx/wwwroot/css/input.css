@@ -2,3 +2,21 @@
 @source "../../Pages/**/*.cshtml";
 @source "../../Pages/**/*.cshtml.cs";
 @source "../js/**/*.js";
+
+@layer components {
+    .checkbox-emerald {
+        @apply w-4 h-4 rounded border-emerald-500/30 bg-white/5 text-emerald-500 
+               focus:ring-emerald-400/50 focus:ring-offset-0 transition-all cursor-pointer
+               checked:bg-emerald-500 checked:border-emerald-500;
+        appearance: none;
+        -webkit-appearance: none;
+        position: relative;
+    }
+
+    .checkbox-emerald:checked::after {
+        content: '\f00c';
+        font-family: "Font Awesome 6 Free", sans-serif;
+        font-weight: 900;
+        @apply absolute inset-0 flex items-center justify-center text-[10px] text-emerald-950;
+    }
+}
