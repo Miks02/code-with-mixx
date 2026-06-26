@@ -6,7 +6,7 @@ using CodeWithMixx.Infrastructure.Persistence;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 
-namespace CodeWithMixx.Pages.Login;
+namespace CodeWithMixx.Pages.Auth.Login;
 
 public class LoginHandler(
     SignInManager<AppUser> signInManager,

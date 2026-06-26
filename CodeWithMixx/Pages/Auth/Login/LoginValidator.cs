@@ -1,6 +1,6 @@
 using FluentValidation;
 
-namespace CodeWithMixx.Pages.Login;
+namespace CodeWithMixx.Pages.Auth.Login;
 
 public class LoginValidator : AbstractValidator<LoginInputModel>
 {
