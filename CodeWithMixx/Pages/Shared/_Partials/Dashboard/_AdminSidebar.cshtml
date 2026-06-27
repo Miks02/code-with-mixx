@@ -1,0 +1,87 @@
+
+@{
+    var title = ViewData["Title"] ?? "Title";
+}
+
+<aside class="hidden md:flex flex-col bg-emerald-900/70 p-8 w-64 backdrop-blur-3xl shadow-2xl min-h-screen text-white border-r border-emerald-800/50">
+    <div class="flex flex-col justify-center items-center mb-10 space-y-4">
+        <p class="text-2xl font-semibold">
+            <span class="text-amber-600">Code</span>WithMixx
+        </p>
+        <h2 class="text-lg font-semibold">@title</h2>
+        <div class="h-px bg-emerald-200 w-full"></div>
+    </div>
+
+    <nav class="grow">
+        <ul class="space-y-2 flex flex-col text-lg font-semibold h-full text-sky-100">
+            <li>
+                <a hx-get="/Admin/Dashboard/Index" hx-target="#content" hx-swap="innerHTML" hx-push-url="true" class="flex items-center p-2 hover:bg-emerald-800 hover:ml-2 rounded-lg transition-all group">
+                    <span class="text-emerald-300 group-hover:text-amber-500 mr-3 w-4">
+                        <i class="fas fa-chart-line"></i>
+                    </span>
+                    <span>Analitika</span>
+                </a>
+            </li>
+            <li>
+                <a hx-get="/Admin/Students/Index" hx-target="#content" hx-swap="innerHTML" hx-push-url="true" class="flex items-center p-2 hover:bg-emerald-800 hover:ml-2 rounded-lg transition-all group">
+                    <span class="text-emerald-300 group-hover:text-amber-500 mr-3 w-4">
+                        <i class="fas fa-user-graduate"></i>
+                    </span>
+                    <span>Studenti</span>
+                </a>
+            </li>
+            <li>
+                <a hx-get="/Admin/Calendar/Index" hx-target="#content" hx-swap="innerHTML" class="flex items-center p-2 hover:bg-emerald-800 hover:ml-2 rounded-lg transition-all group">
+                    <span class="text-emerald-300 group-hover:text-amber-500 mr-3 w-4">
+                        <i class="fas fa-calendar-alt"></i>
+                    </span>
+                    <span>Kalendar i časovi</span>
+                </a>
+            </li>
+            <li>
+                <a hx-get="/Admin/Projects/Index" hx-target="#content" hx-swap="innerHTML" class="flex items-center p-2 hover:bg-emerald-800 hover:ml-2 rounded-lg transition-all group">
+                    <span class="text-emerald-300 group-hover:text-amber-500 mr-3 w-4">
+                        <i class="fas fa-file-alt"></i>
+                    </span>
+                    <span>Projekti</span>
+                </a>
+            </li>
+            <li>
+                <a hx-get="/Admin/Finances/Index" hx-target="#content" hx-swap="innerHTML" class="flex items-center p-2 hover:bg-emerald-800 hover:ml-2 rounded-lg transition-all group">
+                    <span class="text-emerald-300 group-hover:text-amber-500 mr-3 w-4">
+                        <i class="fas fa-money-bill-wave"></i>
+                    </span>
+                    <span>Finansije</span>
+                </a>
+            </li>
+            <li>
+                <a hx-get="/Admin/Settings/Index" hx-target="#content" hx-swap="innerHTML" class="flex items-center p-2 hover:bg-emerald-800 hover:ml-2 rounded-lg transition-all group">
+                    <span class="text-emerald-300 group-hover:text-amber-500 mr-3 w-4">
+                        <i class="fas fa-cog"></i>
+                    </span>
+                    <span>Podešavanja</span>
+                </a>
+            </li>
+            <div class="h-px bg-emerald-400 mt-auto"></div>
+            <li>
+                <a asp-page="/Index" class="flex items-center p-2 hover:bg-emerald-800 hover:ml-2 rounded-lg transition-all group">
+                    <span class="text-yellow-300 group-hover:text-sky-500 mr-3 w-4">
+                        <i class="fa-solid fa-angles-left"></i>
+                    </span>
+                    <span class="text-red-100">Nazad na sajt</span>
+                </a>
+            </li>
+            <li>
+                
+                <form method="post" asp-page="/Auth/Logout" class="flex">
+                    <button class="flex items-center p-2 hover:bg-emerald-800 hover:ml-2 rounded-lg transition-all group cursor-pointer w-full">
+                        <span class="text-red-300 group-hover:text-orange-500 mr-3 w-4">
+                            <i class="fa-solid fa-arrow-right-from-bracket"></i>
+                        </span>
+                        <span class="text-red-100">Odjava</span>
+                    </button>
+                </form>
+            </li>
+        </ul>
+    </nav>
+</aside>
