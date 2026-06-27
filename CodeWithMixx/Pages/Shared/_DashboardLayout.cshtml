@@ -8,20 +8,21 @@
     <link rel="stylesheet" href="~/css/site.css" asp-append-version="true"/>
     <link rel="icon" type="image/png" href="~/codewithmixx-logo-transparent-icon.png"/>
 </head>
-<body class="min-h-screen flex bg-linear-to-br from-emerald-700 to-emerald-800">
+<body class="h-screen overflow-hidden flex bg-linear-to-br from-emerald-800 to-emerald-700">
 
 @await Html.PartialAsync("_Partials/Dashboard/_AdminSidebar")
 
-<div class="flex flex-col grow">
+<div class="flex flex-col grow overflow-hidden">
     @await Html.PartialAsync("_Partials/Dashboard/_AdminHeader")
-    
-    <main class="grow p-6">
+
+    <main class="grow overflow-y-auto p-6">
         @RenderBody()
     </main>
 </div>
 
 
 <script src="https://unpkg.com/htmx.org@2.0.0" defer></script>
+<script src="~/js/dashboard/dashboard.js" asp-append-version="true" type="module"></script>
 @await RenderSectionAsync("Scripts", required: false)
 </body>
 </html>

@@ -1,0 +1,11 @@
+@page
+@model CodeWithMixx.Pages.Admin.Dashboard.Index
+
+@{
+    Layout = "_DashboardLayout";
+    ViewData["Title"] = "Analitika";
+}
+
+<div id="content">
+    @await Html.PartialAsync("_Dashboard")
+</div>
