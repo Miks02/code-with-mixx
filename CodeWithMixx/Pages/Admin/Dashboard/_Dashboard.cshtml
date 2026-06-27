@@ -1,15 +1,21 @@
+@using System.Globalization
+@{
+    var currentDate = DateTime.Now.ToString("dd. MMMM yyyy.", new CultureInfo("sr-Latn-RS"));
+    var currentYear = DateTime.Now.Year;
+}
+
 <title hx-swap-oob="outerHTML">CodeWithMixx | Analitika</title>
 
 <div class="space-y-6 animate-fade-in">
 
-    <div class="flex justify-between gap-3 sm:flex-row sm:items-center">
-        <div>
+    <div class="flex justify-between gap-3 sm:flex-row sm:items-center bg-emerald-900/60 px-4 py-2 rounded-lg shadow-lg ">
+        <div class="">
             <h1 class="text-3xl font-bold text-white tracking-tight">Analitika</h1>
             <p class="mt-0.5 text-sm text-emerald-300/70">Opšta statistika poslovanja</p>
         </div>
         <div class="flex items-center gap-2 self-center rounded-lg bg-white/5 px-4 py-2 text-sm text-emerald-100/80 backdrop-blur-sm sm:self-auto">
             <i class="fa-regular fa-calendar text-emerald-400"></i>
-            <span>27. jun 2026.</span>
+            <span>@currentDate</span>
         </div>
     </div>
 
@@ -86,41 +92,37 @@
 
     <div class="flex flex-col gap-4 xl:flex-row">
 
-        <div class="min-w-0 flex-3 rounded-2xl bg-emerald-950/40 p-6 shadow-xl shadow-black/20">
+        <div class="min-w-0 flex-3 rounded-2xl bg-emerald-950/40 p-6 shadow-xl shadow-black/20 backdrop-blur-sm">
             <div class="mb-5 flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
                 <div>
                     <h3 class="font-semibold text-white">Finansijski pregled</h3>
-                    <p class="mt-0.5 text-xs text-emerald-300/60">Prihodi po mesecima — tekuća godina</p>
+                    <p class="mt-0.5 text-xs text-amber-300/90">Prihodi po mesecima - tekuća godina</p>
                 </div>
                 <div class="flex gap-1.5">
-                    <button class="rounded-lg bg-emerald-500/20 px-3 py-1.5 text-xs font-medium text-emerald-200 transition-colors hover:bg-emerald-500/30">Mesec</button>
-                    <button class="rounded-lg px-3 py-1.5 text-xs text-emerald-300/60 transition-colors hover:bg-white/5 hover:text-emerald-200">Kvartal</button>
-                    <button class="rounded-lg px-3 py-1.5 text-xs text-emerald-300/60 transition-colors hover:bg-white/5 hover:text-emerald-200">Godina</button>
+                    <select class="bg-amber-400 px-2 py-1 rounded-md shadow-md font-semibold text-sky-900">
+                        <option selected disabled hidden value="@currentYear">@currentYear</option>
+                    </select>
                 </div>
             </div>
-            <div class="flex h-56 flex-col items-center justify-center rounded-xl bg-green-900/60">
-                <i class="fa-solid fa-chart-line mb-3 text-4xl text-emerald-400"></i>
-                <p class="text-sm font-medium text-emerald-200/60">Line chart - finansijski prihodi</p>
-                <p class="mt-1 text-xs text-emerald-300/40">Chart.js placeholder</p>
+            <div class="flex h-56 flex-col items-center justify-center rounded-xl bg-green-900/30 shadow-sm">
+                <canvas id="finance-chart"></canvas>
             </div>
         </div>
 
-        <div class="min-w-0 flex-2 rounded-2xl bg-indigo-700/40 p-6 shadow-xl shadow-black/20">
+        <div class="min-w-0 flex-2 rounded-2xl bg-indigo-700/40 p-6 shadow-xl shadow-black/20 backdrop-blur-sm">
             <div class="mb-5">
                 <h3 class="font-semibold text-white">Aktivnost po mesecima</h3>
-                <p class="mt-0.5 text-xs text-emerald-300/60">Najaktivniji mesec — časovi</p>
+                <p class="mt-0.5 text-xs text-emerald-300/60">Najaktivniji mesec - časovi</p>
             </div>
-            <div class="flex h-56 flex-col items-center justify-center rounded-xl bg-indigo-900/25">
-                <i class="fa-solid fa-chart-pie mb-3 text-4xl text-indigo-400"></i>
-                <p class="text-sm font-medium text-emerald-200/60">Pie chart - raspodela po mesecima</p>
-                <p class="mt-1 text-xs text-emerald-300/40">Chart.js placeholder</p>
+            <div class="flex h-56 flex-col items-center justify-center rounded-xl bg-indigo-900/25 shadow-sm p-4">
+                <canvas id="subjects-chart"></canvas>
             </div>
         </div>
 
         <div class="flex min-w-60 flex-1 flex-col rounded-2xl bg-green-900/80 p-6 shadow-xl shadow-black/20 backdrop-blur-sm">
             <div class="mb-5">
                 <h3 class="font-semibold text-white">Brze akcije</h3>
-                <p class="mt-0.5 text-xs text-emerald-300/60">Prečice za česte operacije</p>
+                <p class="mt-0.5 text-xs text-amber-300/90">Prečice za česte operacije</p>
             </div>
             <div class="flex flex-1 flex-col gap-2.5">
 
@@ -169,119 +171,119 @@
         <div class="w-full max-w-full overflow-x-hidden">
             <table class="w-full table-fixed text-sm sm:table-auto">
                 <thead>
-                    <tr class="bg-emerald-900/40">
-                        <th class="px-5 py-3 text-left text-xs font-semibold uppercase tracking-wider text-emerald-300/60 sm:px-6">Student</th>
-                        <th class="px-5 py-3 text-left text-xs font-semibold uppercase tracking-wider text-emerald-300/60 sm:px-6">Naziv časa</th>
-                        <th class="px-5 py-3 text-left text-xs font-semibold uppercase tracking-wider text-emerald-300/60 sm:px-6">Datum i vreme</th>
-                        <th class="hidden px-5 py-3 text-left text-xs font-semibold uppercase tracking-wider text-emerald-300/60 md:table-cell sm:px-6">Status</th>
-                    </tr>
+                <tr class="bg-emerald-900/40">
+                    <th class="px-5 py-3 text-left text-xs font-semibold uppercase tracking-wider text-emerald-300/60 sm:px-6">Student</th>
+                    <th class="px-5 py-3 text-left text-xs font-semibold uppercase tracking-wider text-emerald-300/60 sm:px-6">Naziv časa</th>
+                    <th class="px-5 py-3 text-left text-xs font-semibold uppercase tracking-wider text-emerald-300/60 sm:px-6">Datum i vreme</th>
+                    <th class="hidden px-5 py-3 text-left text-xs font-semibold uppercase tracking-wider text-emerald-300/60 md:table-cell sm:px-6">Status</th>
+                </tr>
                 </thead>
                 <tbody class="divide-y divide-white/5">
 
-                    <tr class="group transition-colors hover:bg-white/4">
-                        <td class="px-5 py-4 sm:px-6">
-                            <div class="flex items-center gap-3">
-                                <div class="flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-emerald-500/20 text-xs font-bold text-emerald-300">MN</div>
-                                <span class="font-medium text-white">Marko Nikolić</span>
-                            </div>
-                        </td>
-                        <td class="px-5 py-4 text-emerald-100/80 sm:px-6">OOP — Nasleđivanje</td>
-                        <td class="px-5 py-4 sm:px-6">
-                            <div class="flex items-center gap-2 text-emerald-100/80">
-                                <i class="fa-regular fa-clock text-emerald-400/70 text-xs"></i>
-                                <span>25. jun, 18:00</span>
-                            </div>
-                        </td>
-                        <td class="hidden px-5 py-4 md:table-cell sm:px-6">
-                            <span class="inline-flex items-center gap-1.5 rounded-full bg-sky-500/15 px-2.5 py-1 text-xs font-medium text-sky-300">
-                                <span class="h-1.5 w-1.5 rounded-full bg-sky-400"></span>Zakazano
-                            </span>
-                        </td>
-                    </tr>
+                <tr class="group transition-colors hover:bg-white/4">
+                    <td class="px-5 py-4 sm:px-6">
+                        <div class="flex items-center gap-3">
+                            <div class="flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-emerald-500/20 text-xs font-bold text-emerald-300">MN</div>
+                            <span class="font-medium text-white">Marko Nikolić</span>
+                        </div>
+                    </td>
+                    <td class="px-5 py-4 text-emerald-100/80 sm:px-6">OOP — Nasleđivanje</td>
+                    <td class="px-5 py-4 sm:px-6">
+                        <div class="flex items-center gap-2 text-emerald-100/80">
+                            <i class="fa-regular fa-clock text-emerald-400/70 text-xs"></i>
+                            <span>25. jun, 18:00</span>
+                        </div>
+                    </td>
+                    <td class="hidden px-5 py-4 md:table-cell sm:px-6">
+                        <span class="inline-flex items-center gap-1.5 rounded-full bg-sky-500/15 px-2.5 py-1 text-xs font-medium text-sky-300">
+                            <span class="h-1.5 w-1.5 rounded-full bg-sky-400"></span>Zakazano
+                        </span>
+                    </td>
+                </tr>
 
-                    <tr class="group transition-colors hover:bg-white/4">
-                        <td class="px-5 py-4 sm:px-6">
-                            <div class="flex items-center gap-3">
-                                <div class="flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-sky-500/20 text-xs font-bold text-sky-300">AK</div>
-                                <span class="font-medium text-white">Anđela Kovačević</span>
-                            </div>
-                        </td>
-                        <td class="px-5 py-4 text-emerald-100/80 sm:px-6">Baze podataka — SQL Joinovi</td>
-                        <td class="px-5 py-4 sm:px-6">
-                            <div class="flex items-center gap-2 text-emerald-100/80">
-                                <i class="fa-regular fa-clock text-emerald-400/70 text-xs"></i>
-                                <span>26. jun, 17:00</span>
-                            </div>
-                        </td>
-                        <td class="hidden px-5 py-4 md:table-cell sm:px-6">
-                            <span class="inline-flex items-center gap-1.5 rounded-full bg-sky-500/15 px-2.5 py-1 text-xs font-medium text-sky-300">
-                                <span class="h-1.5 w-1.5 rounded-full bg-sky-400"></span>Zakazano
-                            </span>
-                        </td>
-                    </tr>
+                <tr class="group transition-colors hover:bg-white/4">
+                    <td class="px-5 py-4 sm:px-6">
+                        <div class="flex items-center gap-3">
+                            <div class="flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-sky-500/20 text-xs font-bold text-sky-300">AK</div>
+                            <span class="font-medium text-white">Anđela Kovačević</span>
+                        </div>
+                    </td>
+                    <td class="px-5 py-4 text-emerald-100/80 sm:px-6">Baze podataka — SQL Joinovi</td>
+                    <td class="px-5 py-4 sm:px-6">
+                        <div class="flex items-center gap-2 text-emerald-100/80">
+                            <i class="fa-regular fa-clock text-emerald-400/70 text-xs"></i>
+                            <span>26. jun, 17:00</span>
+                        </div>
+                    </td>
+                    <td class="hidden px-5 py-4 md:table-cell sm:px-6">
+                        <span class="inline-flex items-center gap-1.5 rounded-full bg-sky-500/15 px-2.5 py-1 text-xs font-medium text-sky-300">
+                            <span class="h-1.5 w-1.5 rounded-full bg-sky-400"></span>Zakazano
+                        </span>
+                    </td>
+                </tr>
 
-                    <tr class="group transition-colors hover:bg-white/4">
-                        <td class="px-5 py-4 sm:px-6">
-                            <div class="flex items-center gap-3">
-                                <div class="flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-violet-500/20 text-xs font-bold text-violet-300">ST</div>
-                                <span class="font-medium text-white">Stefan Todorović</span>
-                            </div>
-                        </td>
-                        <td class="px-5 py-4 text-emerald-100/80 sm:px-6">Web razvoj — React Hooks</td>
-                        <td class="px-5 py-4 sm:px-6">
-                            <div class="flex items-center gap-2 text-emerald-100/80">
-                                <i class="fa-regular fa-clock text-emerald-400/70 text-xs"></i>
-                                <span>27. jun, 19:30</span>
-                            </div>
-                        </td>
-                        <td class="hidden px-5 py-4 md:table-cell sm:px-6">
-                            <span class="inline-flex items-center gap-1.5 rounded-full bg-amber-500/15 px-2.5 py-1 text-xs font-medium text-amber-300">
-                                <span class="h-1.5 w-1.5 rounded-full bg-amber-400"></span>Na čekanju
-                            </span>
-                        </td>
-                    </tr>
+                <tr class="group transition-colors hover:bg-white/4">
+                    <td class="px-5 py-4 sm:px-6">
+                        <div class="flex items-center gap-3">
+                            <div class="flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-violet-500/20 text-xs font-bold text-violet-300">ST</div>
+                            <span class="font-medium text-white">Stefan Todorović</span>
+                        </div>
+                    </td>
+                    <td class="px-5 py-4 text-emerald-100/80 sm:px-6">Web razvoj — React Hooks</td>
+                    <td class="px-5 py-4 sm:px-6">
+                        <div class="flex items-center gap-2 text-emerald-100/80">
+                            <i class="fa-regular fa-clock text-emerald-400/70 text-xs"></i>
+                            <span>27. jun, 19:30</span>
+                        </div>
+                    </td>
+                    <td class="hidden px-5 py-4 md:table-cell sm:px-6">
+                        <span class="inline-flex items-center gap-1.5 rounded-full bg-amber-500/15 px-2.5 py-1 text-xs font-medium text-amber-300">
+                            <span class="h-1.5 w-1.5 rounded-full bg-amber-400"></span>Na čekanju
+                        </span>
+                    </td>
+                </tr>
 
-                    <tr class="group transition-colors hover:bg-white/4">
-                        <td class="px-5 py-4 sm:px-6">
-                            <div class="flex items-center gap-3">
-                                <div class="flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-emerald-500/20 text-xs font-bold text-emerald-300">JM</div>
-                                <span class="font-medium text-white">Jovana Milošević</span>
-                            </div>
-                        </td>
-                        <td class="px-5 py-4 text-emerald-100/80 sm:px-6">Algoritmi — Sortiranje</td>
-                        <td class="px-5 py-4 sm:px-6">
-                            <div class="flex items-center gap-2 text-emerald-100/80">
-                                <i class="fa-regular fa-clock text-emerald-400/70 text-xs"></i>
-                                <span>28. jun, 16:00</span>
-                            </div>
-                        </td>
-                        <td class="hidden px-5 py-4 md:table-cell sm:px-6">
-                            <span class="inline-flex items-center gap-1.5 rounded-full bg-sky-500/15 px-2.5 py-1 text-xs font-medium text-sky-300">
-                                <span class="h-1.5 w-1.5 rounded-full bg-sky-400"></span>Zakazano
-                            </span>
-                        </td>
-                    </tr>
+                <tr class="group transition-colors hover:bg-white/4">
+                    <td class="px-5 py-4 sm:px-6">
+                        <div class="flex items-center gap-3">
+                            <div class="flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-emerald-500/20 text-xs font-bold text-emerald-300">JM</div>
+                            <span class="font-medium text-white">Jovana Milošević</span>
+                        </div>
+                    </td>
+                    <td class="px-5 py-4 text-emerald-100/80 sm:px-6">Algoritmi — Sortiranje</td>
+                    <td class="px-5 py-4 sm:px-6">
+                        <div class="flex items-center gap-2 text-emerald-100/80">
+                            <i class="fa-regular fa-clock text-emerald-400/70 text-xs"></i>
+                            <span>28. jun, 16:00</span>
+                        </div>
+                    </td>
+                    <td class="hidden px-5 py-4 md:table-cell sm:px-6">
+                        <span class="inline-flex items-center gap-1.5 rounded-full bg-sky-500/15 px-2.5 py-1 text-xs font-medium text-sky-300">
+                            <span class="h-1.5 w-1.5 rounded-full bg-sky-400"></span>Zakazano
+                        </span>
+                    </td>
+                </tr>
 
-                    <tr class="group transition-colors hover:bg-white/4">
-                        <td class="px-5 py-4 sm:px-6">
-                            <div class="flex items-center gap-3">
-                                <div class="flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-amber-500/20 text-xs font-bold text-amber-300">NP</div>
-                                <span class="font-medium text-white">Nikola Petrović</span>
-                            </div>
-                        </td>
-                        <td class="px-5 py-4 text-emerald-100/80 sm:px-6">C# — LINQ i Lambda izrazi</td>
-                        <td class="px-5 py-4 sm:px-6">
-                            <div class="flex items-center gap-2 text-emerald-100/80">
-                                <i class="fa-regular fa-clock text-emerald-400/70 text-xs"></i>
-                                <span>29. jun, 20:00</span>
-                            </div>
-                        </td>
-                        <td class="hidden px-5 py-4 md:table-cell sm:px-6">
-                            <span class="inline-flex items-center gap-1.5 rounded-full bg-sky-500/15 px-2.5 py-1 text-xs font-medium text-sky-300">
-                                <span class="h-1.5 w-1.5 rounded-full bg-sky-400"></span>Zakazano
-                            </span>
-                        </td>
-                    </tr>
+                <tr class="group transition-colors hover:bg-white/4">
+                    <td class="px-5 py-4 sm:px-6">
+                        <div class="flex items-center gap-3">
+                            <div class="flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-amber-500/20 text-xs font-bold text-amber-300">NP</div>
+                            <span class="font-medium text-white">Nikola Petrović</span>
+                        </div>
+                    </td>
+                    <td class="px-5 py-4 text-emerald-100/80 sm:px-6">C# — LINQ i Lambda izrazi</td>
+                    <td class="px-5 py-4 sm:px-6">
+                        <div class="flex items-center gap-2 text-emerald-100/80">
+                            <i class="fa-regular fa-clock text-emerald-400/70 text-xs"></i>
+                            <span>29. jun, 20:00</span>
+                        </div>
+                    </td>
+                    <td class="hidden px-5 py-4 md:table-cell sm:px-6">
+                        <span class="inline-flex items-center gap-1.5 rounded-full bg-sky-500/15 px-2.5 py-1 text-xs font-medium text-sky-300">
+                            <span class="h-1.5 w-1.5 rounded-full bg-sky-400"></span>Zakazano
+                        </span>
+                    </td>
+                </tr>
 
                 </tbody>
             </table>
@@ -294,3 +296,4 @@
     </div>
 
 </div>
+
