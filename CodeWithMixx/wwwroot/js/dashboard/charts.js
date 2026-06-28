@@ -1,6 +1,7 @@
 
 export function initCharts() {
-   
+    if(!window.location.pathname.includes('/dashboard'))
+        return;
     getFinanceChart();
     getSubjectsChart();
     
@@ -21,7 +22,17 @@ function getFinanceChart() {
                 backgroundColor: 'rgba(52, 211, 153, 0.1)',
                 borderWidth: 3,
                 tension: 0.4,
-                pointBackgroundColor: '#fbbf24'
+                pointBackgroundColor: '#fbbf24',
+                yAxisID: 'profit'
+            },
+            {
+                label: 'Učenici',
+                data: [12, 8, 6, 16, 10, 14],
+                borderColor: 'orange',
+                borderWidth: 3,
+                tension: 0.4,
+                pointBackgroundColor: '#fbbf24',
+                yAxisID: 'students'
             }]
         },
         options: {
@@ -29,17 +40,25 @@ function getFinanceChart() {
             maintainAspectRatio: false,
             plugins: {
                 legend: {
-                    display: false
+                    display: false    
                 }
             },
             scales: {
                 x: {
                     grid: { color: 'rgba(6, 78, 59, 0.2)' },
-                    ticks: { color: '#a7f3d0' }
+                    ticks: { color: '#a7f3d0' },
                 },
-                y: {
+                profit: {
+                    type: 'linear',
+                    position: 'left',
                     grid: { color: 'rgba(6, 78, 59, 0.2)' },
                     ticks: { color: '#a7f3d0' }
+                },
+                students: {
+                    type: 'linear',
+                    position: 'right',
+                    grid: { drawOnChartArea: false },
+                    ticks: { color: 'orange' }
                 }
             }
         }
