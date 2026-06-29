@@ -1,5 +1,5 @@
 @page
-@model CodeWithMixx.Pages.Admin.Dashboard.Index
+@model IndexModel
 
 @{
     Layout = "_DashboardLayout";
@@ -7,5 +7,5 @@
 }
 
 <div id="content">
-    @await Html.PartialAsync("_Dashboard")
+    @await Html.PartialAsync("_Dashboard", Model.ViewModel)
 </div>
