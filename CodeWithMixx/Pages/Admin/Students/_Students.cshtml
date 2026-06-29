@@ -1,0 +1,94 @@
+@using CodeWithMixx.Common.Extensions
+@using CodeWithMixx.Domain.Entities.AppUsers
+@model StudentsViewModel
+
+<title hx-swap-oob="outerHTML">CodeWithMixx | Studenti</title>
+
+    
+@await Html.PartialAsync("_Partials/Dashboard/_PageHeading", ("Spisak i upravljanje studentima/učenicima", "Studenti"))
+
+  <div class="w-full min-w-0 max-w-full overflow-hidden rounded-2xl bg-emerald-950/80 shadow-xl shadow-black/20">
+
+        <div class="flex flex-col gap-3 px-5 pb-4 pt-5 sm:flex-row sm:items-center sm:justify-between sm:px-6">
+            <div>
+                <h3 class="font-semibold text-white">Spisak studenata</h3>
+                <p class="mt-0.5 text-xs text-emerald-300/60">Lista svih studenata koji se nalaze u sistemu</p>
+            </div>
+            <div class="grid w-full gap-2 sm:w-auto sm:grid-cols-[minmax(180px,1fr)_170px_230px_auto] sm:items-center">
+                <div class="flex items-center rounded-lg bg-white/10 px-3 py-2 text-sm text-emerald-100/80">
+                    <i class="fa-solid fa-magnifying-glass mr-2 text-emerald-300/80"></i>
+                    <input
+                        type="text"
+                        placeholder="Pretrazi studenta"
+                        class="w-full bg-transparent text-sm text-white placeholder:text-emerald-200/50 outline-none" />
+                </div>
+
+                <div class="relative">
+                    <i class="fa-solid fa-filter pointer-events-none absolute left-3 top-1/2 -translate-y-1/2 text-xs text-emerald-300/80"></i>
+                    <select class="w-full appearance-none rounded-lg bg-white/10 py-2 pl-8 pr-8 text-sm text-white outline-none">
+                        <option selected>Podrazumevano</option>
+                        <option>Status</option>
+                        <option>Aktivni projekat</option>
+                    </select>
+                    <i class="fa-solid fa-chevron-down pointer-events-none absolute right-3 top-1/2 -translate-y-1/2 text-[10px] text-emerald-300/80"></i>
+                </div>
+
+                <div class="relative">
+                    <i class="fa-solid fa-arrow-down-a-z pointer-events-none absolute left-3 top-1/2 -translate-y-1/2 text-xs text-emerald-300/80"></i>
+                    <select class="w-full appearance-none rounded-lg bg-white/10 py-2 pl-8 pr-8 text-sm text-white outline-none">
+                        <option selected>Ime</option>
+                        <option>Datum registracije - gore</option>
+                        <option>Datum registracije - dole</option>
+                        <option>Status</option>
+                        <option>Aktivni projekti</option>
+                    </select>
+                    <i class="fa-solid fa-chevron-down pointer-events-none absolute right-3 top-1/2 -translate-y-1/2 text-[10px] text-emerald-300/80"></i>
+                </div>
+
+                <button type="button" class="inline-flex items-center justify-center rounded-lg bg-emerald-500 px-3 py-2 text-sm font-semibold text-white shadow-lg shadow-emerald-900/40 transition-all hover:bg-emerald-400 active:scale-[.98]" aria-label="Dodaj studenta">
+                    <i class="fa-solid fa-plus"></i>
+                </button>
+            </div>
+        </div>
+
+        <div id="student-list" class="grid gap-4 px-5 pb-5 sm:grid-cols-2 lg:grid-cols-3 sm:px-6">
+            @foreach (var student in Model.StudentsPage.Items)
+            {
+                <article class="rounded-xl bg-white/5 p-4 shadow-md transition-colors hover:bg-white/10 cursor-pointer active:scale-95 active:opacity-70 transition-transform duration-100">
+                    <div class="mb-3 flex items-center gap-3">
+                        <div class="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-emerald-500/20 text-sm font-bold text-emerald-300">@student.Initials</div>
+                        <div>
+                            <h4 class="font-semibold text-white">@student.FullName</h4>
+                            <p class="text-xs text-emerald-300/70">@student.University</p>
+                        </div>
+                    </div>
+                    <div class="flex justify-between items-center gap-2 flex-wrap text-sm text-emerald-100/80">
+                        <div class="flex flex-col gap-2">
+                            @switch (student.Status)
+                            {
+                                case AccountStatus.Active:
+                                    <p class="text-green-400 font-semibold"><i class="fa-solid fa-circle-check mr-2"></i>Aktivan</p>
+                                    break;
+                                case AccountStatus.Deactivated:
+                                    <p class="text-red-400"><i class="fa-solid fa-circle-xmark mr-2"></i>Deaktiviran</p>
+                                    break;
+                                case AccountStatus.Suspended:
+                                    <p class="text-amber-400"><i class="fa-solid fa-trash mr-2"></i>Suspendovan</p>
+                                    break; 
+                            }
+                            <p><i class="fa-regular fa-calendar mr-2 text-emerald-400/80"></i>Registrovan: @student.RegisteredAt</p>
+                        </div>
+                        <div class="flex flex-col gap-2">
+                            <p><i class="fa-regular fa-envelope mr-2 text-emerald-400/80"></i>@student.Email</p>
+                            <p><i class="fa-solid fa-phone mr-2 text-emerald-400/80"></i>@student.PhoneNumber</p>
+                        </div>
+                    </div>
+                </article>
+            }
+        </div>
+
+        <div class="flex items-center justify-between bg-emerald-900/30 px-5 py-3 sm:px-6">
+            <p class="text-xs text-emerald-300/50">Prikazano @Model.StudentsPage.PaginatedCount od @Model.StudentsPage.TotalCount studenata</p>
+        </div>
+
+    </div>

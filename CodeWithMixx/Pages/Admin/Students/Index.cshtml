@@ -1,0 +1,11 @@
+@page
+@model CodeWithMixx.Pages.Admin.Students.IndexModel
+
+@{
+    Layout = "_DashboardLayout";
+    ViewData["Title"] = "Studenti ";
+}
+
+<div id="content">
+    @await Html.PartialAsync("_Students", Model.ViewModel)
+</div>
