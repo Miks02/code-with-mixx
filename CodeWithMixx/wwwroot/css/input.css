@@ -19,4 +19,12 @@
         font-weight: 900;
         @apply absolute inset-0 flex items-center justify-center text-[10px] text-emerald-950;
     }
+    
+    button, a {
+        @apply cursor-pointer;
+    }
+    
+    #content {
+        @apply space-y-8;
+    }
 }

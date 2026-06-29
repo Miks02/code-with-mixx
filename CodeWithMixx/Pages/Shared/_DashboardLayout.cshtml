@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CodeWithMixx | @ViewData["Title"]</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css"/>
+    <link rel="stylesheet" href="~/css/output.css" asp-append-version="true"/>
+    <link rel="stylesheet" href="~/css/site.css" asp-append-version="true"/>
+    <link rel="icon" type="image/png" href="~/codewithmixx-logo-transparent-icon.png"/>
+</head>
+<body id="vanta-bg" class="h-screen overflow-hidden flex bg-linear-to-br from-emerald-800 to-emerald-700">
+
+@await Html.PartialAsync("_Partials/Dashboard/_AdminSidebar")
+
+<div class="flex flex-col grow overflow-hidden">
+    @await Html.PartialAsync("_Partials/Dashboard/_AdminHeader")
+
+    <main  class="grow overflow-y-auto p-6">
+        @RenderBody()
+    </main>
+</div>
+
+
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js" defer></script>
+<script src="https://cdn.jsdelivr.net/npm/vanta@latest/dist/vanta.fog.min.js" defer></script>
+<script src="https://unpkg.com/htmx.org@2.0.0" defer></script>
+<script src="~/js/dashboard/dashboard.js" asp-append-version="true" type="module"></script>
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+@await RenderSectionAsync("Scripts", required: false)
+</body>
+</html>
+
+
+
+
