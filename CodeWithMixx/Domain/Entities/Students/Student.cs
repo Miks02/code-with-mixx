@@ -6,4 +6,9 @@ public class Student
 {
     public AppUser AppUser { get; set; } = null!;
     public string AppUserId { get; set; } = null!;
+    
+    public string? University { get; set; }
+    
+    
+    
 }
