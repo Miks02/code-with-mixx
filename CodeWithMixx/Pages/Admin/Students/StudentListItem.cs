@@ -4,13 +4,14 @@ namespace CodeWithMixx.Pages.Admin.Students;
 
 public record StudentListItem
 {
-    public string Initials { get; set; } = string.Empty;
-    public string FullName { get; set; } = string.Empty;
-    public string Email { get; set; } = string.Empty;
-    public string PhoneNumber { get; set; } = string.Empty;
-    public string University { get; set; } = string.Empty;
-    public int LessonCount { get; set; }
-    public AccountStatus Status { get; set; }
-    public bool ActiveProject { get; set; }
-    public string RegisteredAt { get; set; } = null!;
+    public string Id { get; init; }
+    public string Initials { get; init; } = string.Empty;
+    public string FullName { get; init; } = string.Empty;
+    public string Email { get; init; } = string.Empty;
+    public string PhoneNumber { get; init; } = string.Empty;
+    public string University { get; init; } = string.Empty;
+    public int LessonCount { get; init; }
+    public AccountStatus Status { get; init; }
+    public bool ActiveProject { get; init; }
+    public string RegisteredAt { get; init; } = null!;
 };

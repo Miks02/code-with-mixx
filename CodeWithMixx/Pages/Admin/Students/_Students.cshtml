@@ -19,28 +19,46 @@
                 <i class="fa-solid fa-magnifying-glass mr-2 text-emerald-300/80"></i>
                 <input
                     type="text"
+                    name="search"
                     placeholder="Pretraži studenta"
+                    hx-get="/admin/students?handler=Students"
+                    hx-trigger="keyup changed delay:500ms"
+                    hx-target="#student-list"
+                    hx-indicator="#student-list-indicator"
+                    hx-include="[name='filter'], [name='sort']"
                     class="w-full bg-transparent text-sm text-emerald-100/80 placeholder:text-emerald-200/50 outline-none" />
             </div>
 
             <div class="relative">
                 <i class="fa-solid fa-filter pointer-events-none absolute left-3 top-1/2 -translate-y-1/2 text-xs text-emerald-300/80"></i>
-                <select class="w-full appearance-none rounded-lg bg-emerald-800 py-2 pl-8 pr-8 text-sm text-emerald-100/80 outline-none">
-                    <option selected>Podrazumevano</option>
-                    <option>Status</option>
-                    <option>Aktivni projekat</option>
+                <select 
+                    name="filter"
+                    hx-get="/admin/students?handler=Students"
+                    hx-target="#student-list"
+                    hx-indicator="#student-list-indicator"
+                    hx-include="[name='search'], [name='sort']"
+                    class="w-full appearance-none rounded-lg bg-emerald-800 py-2 pl-8 pr-8 text-sm text-emerald-100/80 outline-none">
+                    <option value="" selected>Svi statusi</option>
+                    <option value="active">Aktivan</option>
+                    <option value="deactivated">Deaktiviran</option>
+                    <option value="suspended">Suspendovan</option>
                 </select>
                 <i class="fa-solid fa-chevron-down pointer-events-none absolute right-3 top-1/2 -translate-y-1/2 text-[10px] text-emerald-300/80"></i>
             </div>
 
             <div class="relative">
                 <i class="fa-solid fa-arrow-down-a-z pointer-events-none absolute left-3 top-1/2 -translate-y-1/2 text-xs text-emerald-300/80"></i>
-                <select class="w-full appearance-none rounded-lg bg-emerald-800 py-2 pl-8 pr-8 text-sm text-emerald-100/80 outline-none">
-                    <option selected>Ime</option>
-                    <option>Datum registracije - gore</option>
-                    <option>Datum registracije - dole</option>
-                    <option>Status</option>
-                    <option>Aktivni projekti</option>
+                <select 
+                    name="sort"
+                    hx-get="/admin/students?handler=Students"
+                    hx-target="#student-list"
+                    hx-indicator="#student-list-indicator"
+                    hx-include="[name='search'], [name='filter']"
+                    class="w-full appearance-none rounded-lg bg-emerald-800 py-2 pl-8 pr-8 text-sm text-emerald-100/80 outline-none">
+                    <option value="name" selected>Ime</option>
+                    <option value="registration">Datum registracije - uzlazno</option>
+                    <option value="registration_desc">Datum registracije - silazno</option>
+                    <option value="status">Status</option>
                 </select>
                 <i class="fa-solid fa-chevron-down pointer-events-none absolute right-3 top-1/2 -translate-y-1/2 text-[10px] text-emerald-300/80"></i>
             </div>
@@ -51,8 +69,16 @@
         </div>
     </div>
 
-    <div id="student-list">
-        @await Html.PartialAsync("_StudentsList", Model.StudentsPage)
+    <div class="relative min-h-[200px]">
+        <div id="student-list-indicator" class="htmx-indicator absolute inset-0 z-10 flex items-center justify-center bg-emerald-950/40 backdrop-blur-[2px]">
+            <div class="flex flex-col items-center gap-3">
+                <div class="h-10 w-10 animate-spin rounded-full border-4 border-emerald-500/20 border-t-emerald-500"></div>
+                <span class="text-xs font-medium text-emerald-300">Učitavanje...</span>
+            </div>
+        </div>
+        <div id="student-list">
+            @await Html.PartialAsync("_StudentsList", Model.StudentsPage)
+        </div>
     </div>
 
        
