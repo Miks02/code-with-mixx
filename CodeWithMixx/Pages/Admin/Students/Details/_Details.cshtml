@@ -1,0 +1,157 @@
+@using CodeWithMixx.Domain.Entities.AppUsers
+@model StudentDetailsViewModel
+
+<div class="relative flex flex-col gap-6 p-4 sm:p-6 min-h-[400px]">
+    <div id="details-indicator" class="htmx-indicator absolute inset-0 z-50 flex items-center justify-center bg-emerald-950/40 backdrop-blur-[2px] rounded-2xl">
+        <div class="flex flex-col items-center gap-3">
+            <div class="h-10 w-10 animate-spin rounded-full border-4 border-emerald-500/20 border-t-emerald-500"></div>
+            <span class="text-emerald-400 text-sm font-medium">Obrađujem...</span>
+        </div>
+    </div>
+
+    <div class="flex flex-wrap gap-6">
+        <section class="flex-1 min-w-[300px] flex flex-col gap-6">
+            <div class="bg-emerald-950/80 rounded-2xl p-6 shadow-xl">
+                <div class="flex items-center gap-5 mb-8">
+                    <div class="flex h-20 w-20 shrink-0 items-center justify-center rounded-2xl bg-emerald-500/20 text-2xl font-bold text-emerald-300 border border-emerald-500/30">
+                        @Model.Initials
+                    </div>
+                    <div>
+                        <h1 class="text-2xl font-bold text-white mb-1">@Model.FullName</h1>
+                        <p class="text-emerald-300/80 flex items-center gap-2">
+                            <i class="fa-solid fa-graduation-cap"></i>
+                            @Model.University
+                        </p>
+                    </div>
+                </div>
+
+                <div class="grid gap-y-4">
+                    <div class="flex flex-col sm:flex-row sm:items-center gap-2 sm:gap-4 p-3 rounded-xl hover:bg-white/5 transition-colors">
+                        <div class="flex h-10 w-10 shrink-0 items-center justify-center rounded-lg bg-emerald-500/10 text-emerald-400">
+                            <i class="fa-regular fa-envelope"></i>
+                        </div>
+                        <div class="flex flex-col">
+                            <span class="text-xs text-emerald-300/50 uppercase tracking-wider font-semibold">Email adresa</span>
+                            <span class="text-white">@Model.Email</span>
+                        </div>
+                    </div>
+
+                    <div class="flex flex-col sm:flex-row sm:items-center gap-2 sm:gap-4 p-3 rounded-xl hover:bg-white/5 transition-colors">
+                        <div class="flex h-10 w-10 shrink-0 items-center justify-center rounded-lg bg-emerald-500/10 text-emerald-400">
+                            <i class="fa-solid fa-phone"></i>
+                        </div>
+                        <div class="flex flex-col">
+                            <span class="text-xs text-emerald-300/50 uppercase tracking-wider font-semibold">Broj telefona</span>
+                            <span class="text-white">@Model.PhoneNumber</span>
+                        </div>
+                    </div>
+
+                    <div class="flex flex-col sm:flex-row sm:items-center gap-2 sm:gap-4 p-3 rounded-xl hover:bg-white/5 transition-colors">
+                        <div class="flex h-10 w-10 shrink-0 items-center justify-center rounded-lg bg-emerald-500/10 text-emerald-400">
+                            <i class="fa-regular fa-calendar-check"></i>
+                        </div>
+                        <div class="flex flex-col">
+                            <span class="text-xs text-emerald-300/50 uppercase tracking-wider font-semibold">Član od</span>
+                            <span class="text-white">@Model.RegisteredAt</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="bg-emerald-950/50 rounded-2xl p-6 shadow-xl">
+                <h3 class="text-lg font-bold text-white mb-6 flex items-center gap-3">
+                    <i class="fa-solid fa-chart-simple text-emerald-400"></i>
+                    Statistika aktivnosti
+                </h3>
+                <div class="flex flex-wrap gap-4">
+                    <div class="flex-1 min-w-[140px] bg-emerald-500/5 rounded-xl p-4 border border-emerald-500/10">
+                        <span class="block text-2xl font-bold text-white mb-1">@Model.UpcomingClasses</span>
+                        <span class="text-xs text-emerald-300/60 uppercase font-semibold">Predstojeći časovi</span>
+                    </div>
+                    <div class="flex-1 min-w-[140px] bg-emerald-500/5 rounded-xl p-4 border border-emerald-500/10">
+                        <span class="block text-2xl font-bold text-white mb-1">@Model.TotalClasses</span>
+                        <span class="text-xs text-emerald-300/60 uppercase font-semibold">Ukupno časova</span>
+                    </div>
+                    <div class="flex-1 min-w-[140px] bg-emerald-500/5 rounded-xl p-4 border border-emerald-500/10">
+                        <div class="flex items-center gap-2 mb-1">
+                            <span class="text-2xl font-bold text-white">@Model.ActiveProjects</span>
+                            @if (Model.HasActiveProjects)
+                            {
+                                <span class="flex h-2 w-2 rounded-full bg-emerald-400 animate-pulse"></span>
+                            }
+                        </div>
+                        <span class="text-xs text-emerald-300/60 uppercase font-semibold">Aktivni projekti</span>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <aside class="w-full lg:w-[400px] flex flex-col gap-6">
+            <div class="bg-emerald-950/50 rounded-2xl p-6 shadow-xl">
+                <h3 class="text-lg font-bold text-white mb-6 flex items-center gap-3">
+                    <i class="fa-solid fa-bolt text-emerald-400"></i>
+                    Brze akcije
+                </h3>
+                
+                <div class="flex flex-col gap-3">
+                    <div class="p-4 bg-white/5 rounded-xl border border-white/10">
+                        <label class="block text-xs text-emerald-300/50 uppercase font-bold mb-2">Status naloga</label>
+                        <form hx-post="/admin/students/details?handler=UpdateStatus&id=@Model.Id"
+                              hx-trigger="change"
+                              hx-target="#content"
+                              hx-indicator="#details-indicator"
+                              hx-swap="innerHTML"
+                              class="relative">
+                            @Html.AntiForgeryToken()
+                            <select name="status"
+                                    class="w-full bg-emerald-900/50 border border-emerald-500/20 text-white text-sm rounded-lg p-2.5 outline-none focus:border-emerald-500/50 transition-colors appearance-none">
+                                <option value="@AccountStatus.Active" selected="@(Model.Status == AccountStatus.Active)">Aktivan</option>
+                                <option value="@AccountStatus.Deactivated" selected="@(Model.Status == AccountStatus.Deactivated)">Deaktiviran</option>
+                                <option value="@AccountStatus.Suspended" selected="@(Model.Status == AccountStatus.Suspended)">Suspendovan</option>
+                            </select>
+    
+                            <i class="fa-solid fa-chevron-down absolute right-3 top-1/2 -translate-y-1/2 text-xs text-emerald-300/50 pointer-events-none"></i>
+                        </form>
+                    </div>
+
+                    <button disabled class="w-full flex items-center justify-center gap-2 p-3 bg-white/5 text-white/30 rounded-xl border border-white/5 cursor-not-allowed">
+                        <i class="fa-solid fa-calendar-plus"></i>
+                        Registruj sledeći čas
+                    </button>
+
+                    <form hx-post="/admin/students/details?handler=DeleteAccount&id=@Model.Id"
+                          hx-confirm="Da li ste sigurni da želite da obrišete ovaj nalog? Ova akcija je nepovratna."
+                          hx-target="#content"
+                          hx-indicator="#details-indicator"
+                          hx-push-url="true"
+                          hx-swap="innerHTML">
+                        @Html.AntiForgeryToken()
+                        <button type="submit"
+                                class="w-full flex items-center justify-center gap-2 p-3 bg-red-500/10 text-red-400 rounded-xl border border-red-500/20 hover:bg-red-500/20 transition-colors">
+                            <i class="fa-solid fa-trash-can"></i>
+                            Obriši nalog
+                        </button>
+                    </form>
+                </div>
+            </div>
+
+            <div class="bg-emerald-950/50 rounded-2xl p-6 shadow-xl h-full">
+                <h3 class="text-lg font-bold text-white mb-6 flex items-center gap-3">
+                    <i class="fa-solid fa-clock-rotate-left text-emerald-400"></i>
+                    Prethodni časovi
+                </h3>
+                
+                <div class="flex flex-col items-center justify-center py-12 px-4 text-center border-2 border-dashed border-white/10 rounded-xl">
+                    <div class="h-16 w-16 bg-white/5 rounded-full flex items-center justify-center mb-4">
+                        <i class="fa-solid fa-layer-group text-2xl text-emerald-300/20"></i>
+                    </div>
+                    <h4 class="text-white font-medium mb-1">Nema podataka</h4>
+                    <p class="text-sm text-emerald-300/40 max-w-[200px]">
+                        Istorija časova će biti dostupna nakon implementacije modula.
+                    </p>
+                </div>
+            </div>
+        </aside>
+    </div>
+</div>
+
