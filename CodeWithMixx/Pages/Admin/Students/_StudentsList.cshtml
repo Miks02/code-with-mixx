@@ -1,0 +1,68 @@
+@using CodeWithMixx.Domain.Entities.AppUsers
+@model CodeWithMixx.Common.Results.PagedResult<StudentListItem>
+
+<div class="grid gap-4 px-5 pb-5 sm:grid-cols-2 lg:grid-cols-3 sm:px-6">
+    @foreach (var student in Model.Items)
+    {
+        <article class="rounded-xl bg-white/5 p-4 shadow-md hover:bg-white/10 cursor-pointer active:scale-95 active:opacity-70 transition-all duration-100">
+            <div class="mb-3 flex items-center gap-3">
+                <div class="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-emerald-500/20 text-sm font-bold text-emerald-300">@student.Initials</div>
+                <div>
+                    <h4 class="font-semibold text-white">@student.FullName</h4>
+                    <p class="text-xs text-emerald-300/70">@student.University</p>
+                </div>
+            </div>
+            <div class="flex justify-between items-center gap-2 flex-wrap text-sm text-emerald-100/80">
+                <div class="flex flex-col gap-2">
+                    @switch (student.Status)
+                    {
+                        case AccountStatus.Active:
+                            <p class="text-green-400 font-semibold"><i class="fa-solid fa-circle-check mr-2"></i>Aktivan</p>
+                            break;
+                        case AccountStatus.Deactivated:
+                            <p class="text-amber-400"><i class="fa-solid fa-circle-xmark mr-2"></i>Deaktiviran</p>
+                            break;
+                        case AccountStatus.Suspended:
+                            <p class="text-red-400"><i class="fa-solid fa-trash mr-2"></i>Suspendovan</p>
+                            break; 
+                    }
+                    <p><i class="fa-regular fa-calendar mr-2 text-emerald-400/80"></i>Registrovan: @student.RegisteredAt</p>
+                </div>
+                <div class="flex flex-col gap-2">
+                    <p><i class="fa-regular fa-envelope mr-2 text-emerald-400/80"></i>@student.Email</p>
+                    <p><i class="fa-solid fa-phone mr-2 text-emerald-400/80"></i>@student.PhoneNumber</p>
+                </div>
+            </div>
+        </article>
+    }
+         
+</div>
+<div class="flex items-center justify-between bg-emerald-900/30 px-5 py-3 sm:px-6">
+    <p class="text-xs text-emerald-300/50">Prikazan broj studenata: @Model.PaginatedCount</p>
+            
+    <div class="flex gap-2">
+        <button hx-push-url="true" 
+                hx-get="/admin/students?handler=Students" 
+                hx-vals='{"page": "@(Model.PageNumber - 1)"}'
+                hx-target="#student-list" 
+                hx-swap="innerHTML" 
+                class="bg-emerald-400 flex items-center justify-center px-4 py-1 rounded-md hover:bg-emerald-500 active:scale-95 disabled:opacity-50 transition duration-200" 
+                @(Model.HasPreviousPage ? "" : "disabled")>
+            <i class="fa-solid fa-chevron-left text-amber-600"></i>
+        </button>
+        <div class="bg-emerald-400 px-4 py-1 rounded-md text-amber-600 font-semibold">
+            @Model.PageNumber
+        </div>
+
+        <button hx-push-url="true" 
+                hx-get="/admin/students?handler=Students" 
+                hx-vals='{"page": "@(Model.PageNumber + 1)"}'
+                hx-target="#student-list" 
+                hx-swap="innerHTML" 
+                class="bg-emerald-400 flex items-center justify-center px-4 py-1 rounded-md hover:bg-emerald-500 active:scale-95 disabled:opacity-50 transition duration-200" 
+                @(Model.HasNextPage ? "" : "disabled")>
+            <i class="fa-solid fa-chevron-right text-amber-600"></i>
+        </button>
+
+    </div>
+</div>

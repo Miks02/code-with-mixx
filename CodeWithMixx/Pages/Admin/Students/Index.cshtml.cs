@@ -10,17 +10,30 @@ namespace CodeWithMixx.Pages.Admin.Students;
 public class IndexModel : PageModel
 {
     public StudentsViewModel ViewModel { get; set; } = null!;
+    private const int PageSize = 9;
     
-    public IActionResult OnGet()
+    public IActionResult OnGet([FromQuery]int page = 1)
     {
         ViewModel = new StudentsViewModel
         {
-            StudentsPage = CreatePagedStudents(1, 10)
+            StudentsPage = CreatePagedStudents(page)
         };
         
         if (Request.IsHtmx())
             return Partial("_Students", ViewModel);
         
+        return Page();
+    }
+
+    public IActionResult OnGetStudents([FromQuery]int page = 1)
+    {
+        ViewModel = new StudentsViewModel
+        {
+            StudentsPage = CreatePagedStudents(page)
+        };
+        
+        if(Request.IsHtmx())
+            return Partial("_StudentsList", ViewModel.StudentsPage);
         return Page();
     }
 
@@ -154,12 +167,12 @@ public class IndexModel : PageModel
         return students;
     }
 
-    private PagedResult<StudentListItem> CreatePagedStudents(int page, int pageSize)
+    private PagedResult<StudentListItem> CreatePagedStudents(int page)
     {
         var students = StudentsFactory();
-        var paginatedStudents = students.Skip((page - 1) * pageSize).Take(pageSize).ToList();
+        var paginatedStudents = students.Skip((page - 1) * PageSize).Take(PageSize).ToList();
         
-        return new PagedResult<StudentListItem>(paginatedStudents, page, pageSize, students.Count);
+        return new PagedResult<StudentListItem>(paginatedStudents, page, PageSize, students.Count);
     }
     
 }
