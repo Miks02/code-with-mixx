@@ -1,45 +1,12 @@
-using CodeWithMixx.Common.Interfaces;
 using CodeWithMixx.Domain.Entities.AppUsers;
-using CodeWithMixx.Infrastructure.Persistence;
 using Htmx;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
-using Microsoft.EntityFrameworkCore;
 
 namespace CodeWithMixx.Pages.Admin.Students.Details;
 
-public class StudentDetailsHandler(AppDbContext context) : IHandler
-{
-    public async Task<StudentDetailsViewModel> HandleAsync(string studentId, CancellationToken ct = default)
-    {
-        var student = await context.Students
-            .Where(s => s.AppUserId == studentId)
-            .Select(s => new StudentDetailsViewModel
-            {
-                Id = s.AppUserId,
-                Initials = $"{s.AppUser.FirstName[0]}{s.AppUser.LastName[0]}",
-                FullName = $"{s.AppUser.FirstName} {s.AppUser.LastName}",
-                Email = s.AppUser.Email!,
-                PhoneNumber = s.AppUser.PhoneNumber ?? "N/A",
-                University = s.University ?? "N/A",
-                RegisteredAt = s.AppUser.CreatedAt.ToString("MMMM dd, yyyy"),
-                UpcomingClasses = 0,
-                TotalClasses = 0,
-                ActiveProjects = 0,
-                Status = s.AppUser.AccountStatus
-            })
-            .FirstOrDefaultAsync(ct);
-
-        if (student is null)
-        {
-            throw new Exception($"Student with ID {studentId} not found.");
-        }
-
-        return student;
-    }
-}
 public class IndexModel(
-    StudentDetailsHandler handler,
+    GetStudentDetailsHandler handler,
     UpdateAccountStatusHandler updateStatusHandler,
     DeleteAccountHandler deleteAccountHandler) : PageModel
 {
@@ -47,9 +14,8 @@ public class IndexModel(
     
     public async Task<IActionResult> OnGet([FromQuery] string id, CancellationToken ct = default)
     {
-        if (string.IsNullOrEmpty(id)) return BadRequest("Student ID is required.");
-        var student = await handler.HandleAsync(id, ct);
-        ViewModel = student;
+        var result = await handler.HandleAsync(id, ct);
+        ViewModel = result.Payload!;
         
         if(Request.IsHtmx())
             return Partial("_Details", ViewModel);
@@ -64,11 +30,11 @@ public class IndexModel(
         if (!result.IsSuccess)
         {
             TempData["ErrorMessage"] = "Student nije pronadjen.";
-            return Partial("_Details", student);
+            return Partial("_Details", student.Payload);
         }
         
         TempData["SuccessMessage"] = "Status studenta je uspešno ažuriran.";    
-        return Partial("_Details", student);
+        return Partial("_Details", student.Payload);
     }
 
     public async Task<IActionResult> OnPostDeleteAccount([FromQuery] string id, CancellationToken ct = default)

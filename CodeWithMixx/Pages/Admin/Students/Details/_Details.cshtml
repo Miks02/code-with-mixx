@@ -1,7 +1,7 @@
 @using CodeWithMixx.Domain.Entities.AppUsers
 @model StudentDetailsViewModel
 
-<div class="relative flex flex-col gap-6 p-4 sm:p-6 min-h-[400px]">
+<div class="relative flex flex-col gap-6 p-4 sm:p-6 min-h-100">
     <div id="details-indicator" class="htmx-indicator absolute inset-0 z-50 flex items-center justify-center bg-emerald-950/40 backdrop-blur-[2px] rounded-2xl">
         <div class="flex flex-col items-center gap-3">
             <div class="h-10 w-10 animate-spin rounded-full border-4 border-emerald-500/20 border-t-emerald-500"></div>
@@ -10,7 +10,7 @@
     </div>
 
     <div class="flex flex-wrap gap-6">
-        <section class="flex-1 min-w-[300px] flex flex-col gap-6">
+        <section class="flex-1 min-w-75 flex flex-col gap-6">
             <div class="bg-emerald-950/80 rounded-2xl p-6 shadow-xl">
                 <div class="flex items-center gap-5 mb-8">
                     <div class="flex h-20 w-20 shrink-0 items-center justify-center rounded-2xl bg-emerald-500/20 text-2xl font-bold text-emerald-300 border border-emerald-500/30">
@@ -64,15 +64,15 @@
                     Statistika aktivnosti
                 </h3>
                 <div class="flex flex-wrap gap-4">
-                    <div class="flex-1 min-w-[140px] bg-emerald-500/5 rounded-xl p-4 border border-emerald-500/10">
+                    <div class="flex-1 min-w-35 bg-emerald-500/5 rounded-xl p-4 border border-emerald-500/10">
                         <span class="block text-2xl font-bold text-white mb-1">@Model.UpcomingClasses</span>
                         <span class="text-xs text-emerald-300/60 uppercase font-semibold">Predstojeći časovi</span>
                     </div>
-                    <div class="flex-1 min-w-[140px] bg-emerald-500/5 rounded-xl p-4 border border-emerald-500/10">
+                    <div class="flex-1 min-w-35 bg-emerald-500/5 rounded-xl p-4 border border-emerald-500/10">
                         <span class="block text-2xl font-bold text-white mb-1">@Model.TotalClasses</span>
                         <span class="text-xs text-emerald-300/60 uppercase font-semibold">Ukupno časova</span>
                     </div>
-                    <div class="flex-1 min-w-[140px] bg-emerald-500/5 rounded-xl p-4 border border-emerald-500/10">
+                    <div class="flex-1 min-w-35 bg-emerald-500/5 rounded-xl p-4 border border-emerald-500/10">
                         <div class="flex items-center gap-2 mb-1">
                             <span class="text-2xl font-bold text-white">@Model.ActiveProjects</span>
                             @if (Model.HasActiveProjects)
@@ -86,7 +86,7 @@
             </div>
         </section>
 
-        <aside class="w-full lg:w-[400px] flex flex-col gap-6">
+        <aside class="w-full lg:w-75 flex flex-col gap-6">
             <div class="bg-emerald-950/50 rounded-2xl p-6 shadow-xl">
                 <h3 class="text-lg font-bold text-white mb-6 flex items-center gap-3">
                     <i class="fa-solid fa-bolt text-emerald-400"></i>
@@ -146,7 +146,7 @@
                         <i class="fa-solid fa-layer-group text-2xl text-emerald-300/20"></i>
                     </div>
                     <h4 class="text-white font-medium mb-1">Nema podataka</h4>
-                    <p class="text-sm text-emerald-300/40 max-w-[200px]">
+                    <p class="text-sm text-emerald-300/40 max-w-50">
                         Istorija časova će biti dostupna nakon implementacije modula.
                     </p>
                 </div>
@@ -155,3 +155,4 @@
     </div>
 </div>
 
+@await Html.PartialAsync("Shared/_Partials/Dashboard/_Toast");
