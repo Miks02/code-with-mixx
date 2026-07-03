@@ -1,0 +1,51 @@
+@if (TempData["SuccessMessage"] != null || TempData["ErrorMessage"] != null)
+{
+    var isError = TempData["ErrorMessage"] != null;
+    var message = isError ? TempData["ErrorMessage"] : TempData["SuccessMessage"];
+    var title = isError ? "Greška!" : "Uspešno poslato!";
+    var bgColor = isError ? "from-red-600/90 to-red-700/90" : "from-green-600/90 to-green-700/90";
+    var iconBg = isError ? "bg-red-700" : "bg-green-700";
+    var iconBorder = isError ? "border-red-500" : "border-green-500";
+    var icon = isError ? "fa-triangle-exclamation" : "fa-check";
+
+    <div class="toast rounded-lg transform translate-x-110 transition duration-400 shadow-xl bg-linear-to-br @bgColor backdrop-blur-xl z-100  fixed top-0 w-[90%] mx-auto left-0 right-0 mt-4 p-4 flex items-center gap-4 md:top-auto md:w-1/5 md:right-5 md:left-auto md:bottom-5">
+        <div class="w-full">
+            <div class="flex gap-2 items-center justify-between w-full">
+                <div class="flex items-center justify-between gap-2">
+                    <div class="w-8 h-8 @iconBg text-white border @iconBorder rounded-full flex items-center justify-center">
+                        <i class="fa-solid @icon"></i>
+                    </div>
+                    <h2 class="text-lg font-bold text-white">@title</h2>
+                </div>
+                <i class="fa-solid fa-xmark text-xl text-slate-100 hover:opacity-70 active:opacity-50 transition duration-200 cursor-pointer close"></i>
+            </div>
+            <p class="text-white mt-2">@message</p>
+        </div>
+    </div>
+}
+
+<script>
+    function toggleToast() {
+        const toast = document.querySelector(".toast");
+        if(!toast) return;
+
+        const closeBtn = toast.querySelector(".close");
+        
+        closeBtn.addEventListener("click", () => {
+             toast.classList.remove("translate-x-0");
+             toast.classList.add("translate-x-110");
+        });
+        
+        toast.classList.remove("translate-x-110");
+        toast.classList.add("translate-x-0");
+
+        setTimeout(() => {
+            toast.classList.remove("translate-x-0");
+            toast.classList.add("translate-x-110");
+        }, 4000);
+    }
+    
+    toggleToast();
+    
+</script>
+

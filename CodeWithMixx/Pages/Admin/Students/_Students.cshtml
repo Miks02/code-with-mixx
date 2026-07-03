@@ -1,0 +1,88 @@
+@using CodeWithMixx.Common.Extensions
+@using CodeWithMixx.Domain.Entities.AppUsers
+@model StudentsViewModel
+
+<title hx-swap-oob="outerHTML">CodeWithMixx | Studenti</title>
+
+    
+@await Html.PartialAsync("_Partials/Dashboard/_PageHeading", ("Spisak i upravljanje studentima/učenicima", "Studenti"))
+
+<div class="w-full min-w-0 max-w-full overflow-hidden rounded-2xl bg-emerald-950/80 shadow-xl shadow-black/20">
+
+    <div class="flex flex-col gap-3 px-5 pb-4 pt-5 sm:flex-row sm:items-center sm:justify-between sm:px-6">
+        <div>
+            <h3 class="font-semibold text-white">Spisak studenata</h3>
+            <p class="mt-0.5 text-xs text-emerald-300/60">Lista svih studenata koji se nalaze u sistemu</p>
+        </div>
+        <div class="grid w-full gap-2 sm:w-auto sm:grid-cols-[minmax(180px,1fr)_170px_230px_auto] sm:items-center">
+            <div class="flex items-center rounded-lg bg-emerald-800 px-3 py-2 text-sm text-emerald-100/80">
+                <i class="fa-solid fa-magnifying-glass mr-2 text-emerald-300/80"></i>
+                <input
+                    type="text"
+                    name="search"
+                    placeholder="Pretraži studenta"
+                    hx-get="/admin/students?handler=Students"
+                    hx-trigger="keyup changed delay:500ms"
+                    hx-target="#student-list"
+                    hx-indicator="#student-list-indicator"
+                    hx-include="[name='filter'], [name='sort']"
+                    class="w-full bg-transparent text-sm text-emerald-100/80 placeholder:text-emerald-200/50 outline-none" />
+            </div>
+
+            <div class="relative">
+                <i class="fa-solid fa-filter pointer-events-none absolute left-3 top-1/2 -translate-y-1/2 text-xs text-emerald-300/80"></i>
+                <select 
+                    name="filter"
+                    hx-get="/admin/students?handler=Students"
+                    hx-target="#student-list"
+                    hx-indicator="#student-list-indicator"
+                    hx-include="[name='search'], [name='sort']"
+                    class="w-full appearance-none rounded-lg bg-emerald-800 py-2 pl-8 pr-8 text-sm text-emerald-100/80 outline-none">
+                    <option value="" selected>Svi statusi</option>
+                    <option value="active">Aktivan</option>
+                    <option value="deactivated">Deaktiviran</option>
+                    <option value="suspended">Suspendovan</option>
+                </select>
+                <i class="fa-solid fa-chevron-down pointer-events-none absolute right-3 top-1/2 -translate-y-1/2 text-[10px] text-emerald-300/80"></i>
+            </div>
+
+            <div class="relative">
+                <i class="fa-solid fa-arrow-down-a-z pointer-events-none absolute left-3 top-1/2 -translate-y-1/2 text-xs text-emerald-300/80"></i>
+                <select 
+                    name="sort"
+                    hx-get="/admin/students?handler=Students"
+                    hx-target="#student-list"
+                    hx-indicator="#student-list-indicator"
+                    hx-include="[name='search'], [name='filter']"
+                    class="w-full appearance-none rounded-lg bg-emerald-800 py-2 pl-8 pr-8 text-sm text-emerald-100/80 outline-none">
+                    <option value="name" selected>Ime</option>
+                    <option value="registration">Datum registracije - uzlazno</option>
+                    <option value="registration_desc">Datum registracije - silazno</option>
+                    <option value="status">Status</option>
+                </select>
+                <i class="fa-solid fa-chevron-down pointer-events-none absolute right-3 top-1/2 -translate-y-1/2 text-[10px] text-emerald-300/80"></i>
+            </div>
+
+            <button hx-get="/admin/students/create" hx-target="#content" hx-swap="innerHTML" hx-push-url="true" type="button" class="inline-flex items-center justify-center rounded-lg bg-emerald-500 px-3 py-2 text-sm font-semibold text-white shadow-lg shadow-emerald-900/40 transition-all hover:bg-emerald-400 active:scale-[.98]" aria-label="Dodaj studenta">
+                <i class="fa-solid fa-plus"></i>
+            </button>
+        </div>
+    </div>
+
+    <div class="relative min-h-[200px]">
+        <div id="student-list-indicator" class="htmx-indicator absolute inset-0 z-10 flex items-center justify-center bg-emerald-950/40 backdrop-blur-[2px]">
+            <div class="flex flex-col items-center gap-3">
+                <div class="h-10 w-10 animate-spin rounded-full border-4 border-emerald-500/20 border-t-emerald-500"></div>
+                <span class="text-xs font-medium text-emerald-300">Učitavanje...</span>
+            </div>
+        </div>
+        <div id="student-list">
+            @await Html.PartialAsync("_StudentsList", Model.StudentsPage)
+        </div>
+    </div>
+
+       
+
+</div>
+
+@await Html.PartialAsync("Shared/_Partials/Dashboard/_Toast");
