@@ -92,9 +92,7 @@ public class IndexModel(
         if (!validationResult.IsValid)
         {
             foreach (var error in validationResult.Errors)
-            {
                 ModelState.AddModelError(error.PropertyName, error.ErrorMessage);
-            }
 
             Response.Headers.Append("HX-Retarget", "#edit-info");
             Response.Headers.Append("HX-Reswap", "outerHTML");

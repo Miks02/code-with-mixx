@@ -9,7 +9,7 @@
         </div>
     </div>
 
-    <div class="flex flex-wrap gap-6">
+    <div class="flex flex-wrap grow gap-6">
         <section class="flex-1 min-w-75 flex flex-col gap-6">
             <div id="student-info" class="bg-emerald-950/80 rounded-2xl p-6 shadow-xl">
                 <div class="flex items-center gap-5 mb-8">
@@ -19,7 +19,7 @@
                     <div class="w-full">
                         <div class="flex justify-between w-full">
                             <h1 class="text-2xl font-bold text-white mb-1">@Model.FullName</h1>
-                            <button hx-get="/admin/students/details?handler=Edit&id=@Model.Id" hx-swap="outerHTML" hx-target="#student-info" class="text-2xl text-amber-400 hover:opacity-70 active:opacity-50 transition duration-200"><i class="fa-solid fa-pen-to-square"></i></button>
+                            <button hx-get="/admin/students/details?handler=Edit&id=@Model.Id" hx-swap="outerHTML" hx-target="#student-info" class="hidden md:block text-2xl text-amber-400 hover:opacity-70 active:opacity-50 transition duration-200"><i class="fa-solid fa-pen-to-square"></i></button>
                         </div>
                         <p class="text-emerald-300/80 flex items-center gap-2">
                             <i class="fa-solid fa-graduation-cap"></i>
@@ -59,6 +59,17 @@
                         </div>
                     </div>
                 </div>
+                <div class="md:hidden flex justify-center mt-2 w-full max-w-sm">
+                    <button type="submit"
+                            hx-get="/admin/students/details?handler=Edit&id=@Model.Id" 
+                            hx-swap="outerHTML" 
+                            hx-target="#student-info" 
+                            class="flex items-center justify-center gap-2 px-5 py-2.5 bg-amber-500/20 text-amber-300 rounded-xl active:opacity-50 transition-opacity duration-200">
+                        <i class="fa-solid fa-floppy-disk"></i>
+                        Izmeni
+                    </button>
+                </div>
+
             </div>
 
             <div class="bg-emerald-950/50 rounded-2xl p-6 shadow-xl">
@@ -89,7 +100,7 @@
             </div>
         </section>
 
-        <aside class="w-full lg:w-75 flex flex-col gap-6">
+        <aside class="w-full min-w-75 lg:w-110 flex flex-col gap-6">
             <div class="bg-emerald-950/50 rounded-2xl p-6 shadow-xl">
                 <h3 class="text-lg font-bold text-white mb-6 flex items-center gap-3">
                     <i class="fa-solid fa-bolt text-emerald-400"></i>
@@ -119,7 +130,11 @@
 
                     <button disabled class="w-full flex items-center justify-center gap-2 p-3 bg-white/5 text-white/30 rounded-xl border border-white/5 cursor-not-allowed">
                         <i class="fa-solid fa-calendar-plus"></i>
-                        Registruj sledeći čas
+                        Dodaj sledeći čas
+                    </button>
+                    <button disabled class="w-full flex items-center justify-center gap-2 p-3 bg-white/5 text-white/30 rounded-xl border border-white/5 cursor-not-allowed">
+                        <i class="fa-solid fa-folder-plus"></i>
+                        Dodaj projekat/seminarski
                     </button>
 
                     <form hx-post="/admin/students/details?handler=DeleteAccount&id=@Model.Id"
