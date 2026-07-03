@@ -1,0 +1,89 @@
+﻿@model StudentDetailsInputModel
+
+
+<form method="post" hx-post="/admin/students/details?handler=Edit" hx-swap="innerHTML" hx-target="#content" id="edit-info" class="bg-emerald-950/80 rounded-2xl p-6 shadow-xl w-full">
+    <div class="flex items-center gap-5 mb-8">
+        <div class="flex h-20 w-20 shrink-0 items-center justify-center rounded-2xl bg-emerald-500/20 text-2xl font-bold text-emerald-300 border border-emerald-500/30">
+            @Model.Initials
+        </div>
+        <div class="flex-1 min-w-0 flex flex-col gap-3">
+            <div class="flex items-center gap-2 ">
+                <div class="flex flex-col flex-1">
+                    <input asp-for="FirstName" value="@Model.FirstName"
+                           class="w-full text-2xl font-bold text-white bg-emerald-900/50 border border-emerald-500/20 rounded-xl px-3 py-2 outline-none focus:border-emerald-500/50 transition-colors" />
+                    <span asp-validation-for="FirstName" class="text-xs text-red-400 mt-1"></span>
+                </div>
+                <div class="flex flex-col flex-1">
+                    <input asp-for="LastName" value="@Model.LastName"
+                           class="w-full text-2xl font-bold text-white bg-emerald-900/50 border border-emerald-500/20 rounded-xl px-3 py-2 outline-none focus:border-emerald-500/50 transition-colors" />
+                    <span asp-validation-for="LastName" class="text-xs text-red-400 mt-1"></span>
+                </div>
+            </div>
+            <div class="flex items-center gap-2 text-emerald-300/80">
+                <i class="fa-solid fa-graduation-cap"></i>
+                <div class="flex flex-col flex-1">
+                    <input asp-for="University" value="@Model.University"
+                           class="w-full bg-transparent border border-emerald-500/20 rounded-lg px-3 py-1.5 text-emerald-200 outline-none focus:border-emerald-500/50 transition-colors" />
+                    <span asp-validation-for="University" class="text-xs text-red-400 mt-1"></span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="grid gap-y-4">
+        <input type="hidden" asp-for="Id" value="@Model.Id" />
+        <input type="hidden" asp-for="Initials" value="@Model.Initials" />
+        <input type="hidden" asp-for="RegisteredAt" value="@Model.RegisteredAt" />
+        
+        <div class="flex flex-col sm:flex-row sm:items-center gap-2 sm:gap-4 p-3 rounded-xl hover:bg-white/5 transition-colors">
+            <div class="flex h-10 w-10 shrink-0 items-center justify-center rounded-lg bg-emerald-500/10 text-emerald-400">
+                <i class="fa-regular fa-envelope"></i>
+            </div>
+            <div class="flex flex-col flex-1 min-w-0">
+                <span class="text-xs text-emerald-300/50 uppercase tracking-wider font-semibold">Email adresa</span>
+                <input asp-for="Email" value="@Model.Email"
+                       class="mt-1 w-full bg-emerald-900/50 border border-emerald-500/20 rounded-lg px-3 py-2 text-white outline-none focus:border-emerald-500/50 transition-colors" />
+                <span asp-validation-for="Email" class="text-xs text-red-400 mt-1"></span>
+            </div>
+        </div>
+
+        <div class="flex flex-col sm:flex-row sm:items-center gap-2 sm:gap-4 p-3 rounded-xl hover:bg-white/5 transition-colors">
+            <div class="flex h-10 w-10 shrink-0 items-center justify-center rounded-lg bg-emerald-500/10 text-emerald-400">
+                <i class="fa-solid fa-phone"></i>
+            </div>
+            <div class="flex flex-col flex-1 min-w-0">
+                <span class="text-xs text-emerald-300/50 uppercase tracking-wider font-semibold">Broj telefona</span>
+                <input asp-for="PhoneNumber" value="@(Model.PhoneNumber == "N/A" ? "" : Model.PhoneNumber)"
+                       class="mt-1 w-full bg-emerald-900/50 border border-emerald-500/20 rounded-lg px-3 py-2 text-white outline-none focus:border-emerald-500/50 transition-colors" />
+                <span asp-validation-for="PhoneNumber" class="text-xs text-red-400 mt-1"></span>
+            </div>
+        </div>
+
+        <div class="flex flex-col sm:flex-row sm:items-center gap-2 sm:gap-4 p-3 rounded-xl hover:bg-white/5 transition-colors">
+            <div class="flex h-10 w-10 shrink-0 items-center justify-center rounded-lg bg-emerald-500/10 text-emerald-400">
+                <i class="fa-regular fa-calendar-check"></i>
+            </div>
+            <div class="flex flex-col">
+                <span class="text-xs text-emerald-300/50 uppercase tracking-wider font-semibold">Član od</span>
+                <span class="text-white">@Model.RegisteredAt</span>
+            </div>
+        </div>
+    </div>
+
+    <div class="mt-6 flex justify-center gap-4">
+        <button type="button"
+                hx-get="/admin/students/details?id=@Model.Id"
+                hx-push-url="true"
+                hx-target="#content"
+                hx-swap="innerHTML"
+                class="inline-flex items-center justify-center gap-2 px-5 py-2.5 bg-emerald-500/20 text-emerald-300 rounded-xl border border-emerald-500/30 hover:bg-emerald-500/30 transition-colors">
+            <i class="fa-solid fa-floppy-disk"></i>
+            Nazad
+        </button>
+        <button type="submit"
+                class="inline-flex items-center justify-center gap-2 px-5 py-2.5 bg-emerald-500/20 text-emerald-300 rounded-xl border border-emerald-500/30 hover:bg-emerald-500/30 transition-colors">
+            <i class="fa-solid fa-floppy-disk"></i>
+            Sačuvaj izmene
+        </button>
+    </div>
+</form>
