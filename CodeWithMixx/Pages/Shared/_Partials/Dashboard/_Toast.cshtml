@@ -1,51 +1,103 @@
-@if (TempData["SuccessMessage"] != null || TempData["ErrorMessage"] != null)
-{
-    var isError = TempData["ErrorMessage"] != null;
-    var message = isError ? TempData["ErrorMessage"] : TempData["SuccessMessage"];
-    var title = isError ? "Greška!" : "Uspešno poslato!";
-    var bgColor = isError ? "from-red-600/90 to-red-700/90" : "from-green-600/90 to-green-700/90";
-    var iconBg = isError ? "bg-red-700" : "bg-green-700";
-    var iconBorder = isError ? "border-red-500" : "border-green-500";
-    var icon = isError ? "fa-triangle-exclamation" : "fa-check";
-
-    <div class="toast rounded-lg transform translate-x-110 transition duration-400 shadow-xl bg-linear-to-br @bgColor backdrop-blur-xl z-100  fixed top-0 w-[90%] mx-auto left-0 right-0 mt-4 p-4 flex items-center gap-4 md:top-auto md:w-1/5 md:right-5 md:left-auto md:bottom-5">
-        <div class="w-full">
-            <div class="flex gap-2 items-center justify-between w-full">
-                <div class="flex items-center justify-between gap-2">
-                    <div class="w-8 h-8 @iconBg text-white border @iconBorder rounded-full flex items-center justify-center">
-                        <i class="fa-solid @icon"></i>
-                    </div>
-                    <h2 class="text-lg font-bold text-white">@title</h2>
-                </div>
-                <i class="fa-solid fa-xmark text-xl text-slate-100 hover:opacity-70 active:opacity-50 transition duration-200 cursor-pointer close"></i>
-            </div>
-            <p class="text-white mt-2">@message</p>
-        </div>
-    </div>
-}
+<div id="toast-container" class="fixed top-0 w-[90%] mx-auto left-0 right-0 mt-4 z-100 md:top-auto md:w-1/5 md:right-5 md:left-auto md:bottom-5"></div>
 
 <script>
-    function toggleToast() {
-        const toast = document.querySelector(".toast");
-        if(!toast) return;
+    (() => {
+        if (window.__dashboardToastInitialized)
+            return;
 
-        const closeBtn = toast.querySelector(".close");
-        
-        closeBtn.addEventListener("click", () => {
-             toast.classList.remove("translate-x-0");
-             toast.classList.add("translate-x-110");
+        window.__dashboardToastInitialized = true;
+
+        const container = document.getElementById("toast-container");
+
+        if (!container)
+            return;
+
+        const toastTypes = {
+            success: {
+                title: "Uspešno",
+                bgColor: "from-green-600/90 to-green-700/90",
+                iconBg: "bg-green-700",
+                iconBorder: "border-green-500",
+                icon: "fa-check"
+            },
+            error: {
+                title: "Greška",
+                bgColor: "from-red-600/90 to-red-700/90",
+                iconBg: "bg-red-700",
+                iconBorder: "border-red-500",
+                icon: "fa-triangle-exclamation"
+            },
+            warning: {
+                title: "Upozorenje",
+                bgColor: "from-amber-500/90 to-amber-600/90",
+                iconBg: "bg-amber-700",
+                iconBorder: "border-amber-500",
+                icon: "fa-exclamation"
+            },
+            info: {
+                title: "Informacija",
+                bgColor: "from-sky-600/90 to-sky-700/90",
+                iconBg: "bg-sky-700",
+                iconBorder: "border-sky-500",
+                icon: "fa-circle-info"
+            }
+        };
+
+        function removeToast(toast) {
+            toast.classList.remove("translate-x-0", "opacity-100");
+            toast.classList.add("translate-x-110", "opacity-0");
+
+            setTimeout(() => toast.remove(), 400);
+        }
+
+        function createToast(message, type) {
+            const config = toastTypes[type] || toastTypes.success;
+            const toast = document.createElement("div");
+            toast.className = `toast rounded-lg transform translate-x-110 opacity-0 transition duration-400 shadow-xl bg-linear-to-br ${config.bgColor} backdrop-blur-xl p-4 flex items-center gap-4`;
+
+            toast.innerHTML = `
+                <div class="w-full">
+                    <div class="flex gap-2 items-center justify-between w-full">
+                        <div class="flex items-center justify-between gap-2">
+                            <div class="w-8 h-8 ${config.iconBg} text-white border ${config.iconBorder} rounded-full flex items-center justify-center">
+                                <i class="fa-solid ${config.icon}"></i>
+                            </div>
+                            <h2 class="text-lg font-bold text-white">${config.title}!</h2>
+                        </div>
+                        <button type="button" class="close text-xl text-slate-100 hover:opacity-70 active:opacity-50 transition duration-200 cursor-pointer">
+                            <i class="fa-solid fa-xmark"></i>
+                        </button>
+                    </div>
+                    <p class="text-white mt-2"></p>
+                </div>
+            `;
+
+            toast.querySelector("p").textContent = message;
+
+            const closeBtn = toast.querySelector(".close");
+            closeBtn.addEventListener("click", () => removeToast(toast));
+
+            container.appendChild(toast);
+
+            requestAnimationFrame(() => {
+                toast.classList.remove("translate-x-110", "opacity-0");
+                toast.classList.add("translate-x-0", "opacity-100");
+            });
+
+            setTimeout(() => {
+                if (toast.isConnected)
+                    removeToast(toast);
+            }, 4000);
+        }
+
+        document.body.addEventListener("showToast", (e) => {
+            const message = e?.detail?.message;
+            const type = e?.detail?.type || "success";
+            if (!message)
+                return;
+
+            createToast(message, type);
         });
-        
-        toast.classList.remove("translate-x-110");
-        toast.classList.add("translate-x-0");
-
-        setTimeout(() => {
-            toast.classList.remove("translate-x-0");
-            toast.classList.add("translate-x-110");
-        }, 4000);
-    }
-    
-    toggleToast();
-    
+    })();
 </script>
 

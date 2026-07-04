@@ -1,4 +1,5 @@
 using CodeWithMixx.Domain.Entities.AppUsers;
+using CodeWithMixx.Infrastructure.Web;
 using FluentValidation;
 using Htmx;
 using Microsoft.AspNetCore.Mvc;
@@ -21,9 +22,9 @@ public class IndexModel(
     {
         var result = await handler.HandleAsync(id, ct);
         ViewModel = result.Payload!;
-        
         if(Request.IsHtmx())
             return Partial("_Details", ViewModel);
+
         return Page();
     }
 
@@ -34,11 +35,11 @@ public class IndexModel(
 
         if (!result.IsSuccess)
         {
-            TempData["ErrorMessage"] = "Student nije pronadjen.";
+            Response.ShowToast("Student nije pronadjen", "error");
             return Partial("_Details", student.Payload);
         }
         
-        TempData["SuccessMessage"] = "Status studenta je uspešno ažuriran.";    
+        Response.ShowToast("Status studenta je uspešno ažuriran.");    
         return Partial("_Details", student.Payload);
     }
 
@@ -48,12 +49,11 @@ public class IndexModel(
 
         if (!result.IsSuccess)
         {
-            TempData["ErrorMessage"] = "Student nije pronadjen.";
+            Response.ShowToast("Student nije pronadjen", "error");
             return Partial("_Details", ViewModel);
         }
 
-        TempData["SuccessMessage"] = "Student je uspešno obrisan.";
-        
+        Response.ShowToast("Student je uspešno obrisan.");        
         return RedirectToPage("/Admin/Students/Index");
     }
 
@@ -63,7 +63,7 @@ public class IndexModel(
         
         if (!result.IsSuccess)
         {
-            TempData["ErrorMessage"] = "Student nije pronadjen.";
+            Response.ShowToast("Student nije pronadjen", "error");
             return Partial("_Details", ViewModel);
         }
         
@@ -103,11 +103,11 @@ public class IndexModel(
         
         if (!result.IsSuccess)
         {
-            TempData["ErrorMessage"] = "Student nije pronadjen.";
+            Response.ShowToast("Student nije pronadjen", "error");
             return Partial("_Edit", Input);
         }
         
-        TempData["SuccessMessage"] = "Student je uspešno ažuriran.";
+        Response.ShowToast("Informacije o studentu su uspešno ažurirane.");
         
         return Partial("_Details", result.Payload);
     }
