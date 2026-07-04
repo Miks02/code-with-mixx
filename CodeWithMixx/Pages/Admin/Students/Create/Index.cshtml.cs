@@ -1,4 +1,5 @@
 using CodeWithMixx.Common.Results;
+using CodeWithMixx.Infrastructure.Web;
 using FluentValidation;
 using Htmx;
 using Microsoft.AspNetCore.Mvc;
@@ -23,15 +24,15 @@ public class IndexModel(IValidator<StudentInput> validator, CreateStudentHandler
     public async Task<IActionResult> OnPost(CancellationToken ct = default)
     {
         var validationResult = await validator.ValidateAsync(Input, ct);
-        
-        if(!validationResult.IsValid)
+
+        if (!validationResult.IsValid)
         {
             foreach (var error in validationResult.Errors)
             {
                 Console.WriteLine(error.PropertyName);
                 ModelState.AddModelError(error.PropertyName, error.ErrorMessage);
             }
-            
+
             return Partial("_Create", Input);
         }
 
@@ -39,11 +40,10 @@ public class IndexModel(IValidator<StudentInput> validator, CreateStudentHandler
 
         if (!result.IsSuccess)
         {
-            TempData["ErrorMessage"] = GetErrorMessage(result.Errors[0]);
+            Response.ShowToast(GetErrorMessage(result.Errors[0]), "error");
             return Partial("_Create", Input);
         }
 
-        TempData["SuccessMessage"] = "Student je uspešno kreiran!";
         return RedirectToPage("/Admin/Students/Index");
     }
 
