@@ -1,4 +1,5 @@
 using CodeWithMixx.Infrastructure;
+using CodeWithMixx.Infrastructure.Filters;
 using CodeWithMixx.Pages;
 using Microsoft.AspNetCore.HttpOverrides;
 using Serilog;
@@ -9,7 +10,11 @@ builder.Services.AddRazorPages(options =>
 {
     options.Conventions.AuthorizeFolder("/Admin", "AdminPolicy");
     options.Conventions.AuthorizeFolder("/Student", "StudentPolicy");
-}).AddMvcOptions(options => options.SuppressImplicitRequiredAttributeForNonNullableReferenceTypes = true);
+}).AddMvcOptions(options =>
+{
+    options.SuppressImplicitRequiredAttributeForNonNullableReferenceTypes = true;
+    options.Filters.Add(new ToastFilter());
+});
 
 builder.Services.Configure<RouteOptions>(options => options.LowercaseUrls = true);
 
