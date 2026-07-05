@@ -9,8 +9,8 @@ public class Subject
     public int Id { get; set; }
     public string Name { get; set; } = null!;
     
-    public Admin Admin { get; set; } = null!;
-    public string AdminId { get; set; }
+    public Admin? Admin { get; set; } = null!;
+    public string? AdminId { get; set; }
 
     public ICollection<Class> Classes { get; set; } = [];
 }

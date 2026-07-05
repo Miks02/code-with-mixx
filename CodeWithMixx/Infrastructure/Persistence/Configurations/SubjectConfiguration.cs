@@ -22,5 +22,15 @@ public class SubjectConfiguration : IEntityTypeConfiguration<Subject>
             .HasForeignKey(c => c.SubjectId)
             .OnDelete(DeleteBehavior.Restrict);
         
+        builder.HasData(
+            new Subject { Id = 1, Name = "Programerski alati"},
+            new Subject { Id = 2, Name = "Praktikum primenjenog programiranja"},
+            new Subject { Id = 3, Name = "Web programiranje"},
+            new Subject { Id = 4, Name = "Osnove C programiranja"},
+            new Subject { Id = 5, Name = "Objektno orijentisano programiranje"},
+            new Subject { Id = 6, Name = "Internet programerski alati"},
+            new Subject { Id = 7, Name = "Baza podataka"}
+        );
+        
     }
 }
