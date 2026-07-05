@@ -3,6 +3,7 @@ using System;
 using CodeWithMixx.Infrastructure.Persistence;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
@@ -11,9 +12,11 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace CodeWithMixx.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    partial class AppDbContextModelSnapshot : ModelSnapshot
+    [Migration("20260705211528_MakeAdminRelationOptionalInSubject")]
+    partial class MakeAdminRelationOptionalInSubject
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -154,7 +157,7 @@ namespace CodeWithMixx.Migrations
 
                     b.HasIndex("SubjectId");
 
-                    b.ToTable("Classes", t =>
+                    b.ToTable("Class", t =>
                         {
                             t.HasCheckConstraint("CK_Classes_Price_Positive", "\"Price\" >= 0");
                         });
@@ -200,7 +203,7 @@ namespace CodeWithMixx.Migrations
 
                     b.HasIndex("StudentId");
 
-                    b.ToTable("Reservations", t =>
+                    b.ToTable("Reservation", t =>
                         {
                             t.HasCheckConstraint("CK_Reservations_TotalPrice_Positive", "\"TotalPrice\" >= 0");
                         });
@@ -240,44 +243,7 @@ namespace CodeWithMixx.Migrations
 
                     b.HasIndex("AdminId");
 
-                    b.ToTable("Subjects");
-
-                    b.HasData(
-                        new
-                        {
-                            Id = 1,
-                            Name = "Programerski alati"
-                        },
-                        new
-                        {
-                            Id = 2,
-                            Name = "Praktikum primenjenog programiranja"
-                        },
-                        new
-                        {
-                            Id = 3,
-                            Name = "Web programiranje"
-                        },
-                        new
-                        {
-                            Id = 4,
-                            Name = "Osnove C programiranja"
-                        },
-                        new
-                        {
-                            Id = 5,
-                            Name = "Objektno orijentisano programiranje"
-                        },
-                        new
-                        {
-                            Id = 6,
-                            Name = "Internet programerski alati"
-                        },
-                        new
-                        {
-                            Id = 7,
-                            Name = "Baza podataka"
-                        });
+                    b.ToTable("Subject");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRole", b =>
