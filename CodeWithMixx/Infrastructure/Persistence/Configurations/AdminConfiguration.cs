@@ -12,6 +12,12 @@ public class AdminConfiguration : IEntityTypeConfiguration<Admin>
         
         builder.HasOne(x => x.AppUser)
             .WithOne(x => x.Admin)
-            .HasForeignKey<Admin>(x => x.AppUserId);
+            .HasForeignKey<Admin>(x => x.AppUserId)
+            .OnDelete(DeleteBehavior.Cascade);
+        
+        builder.HasMany(x => x.Reservations)
+            .WithOne(x => x.Admin)
+            .HasForeignKey(x => x.AdminId)
+            .OnDelete(DeleteBehavior.Restrict);
     }
 }
