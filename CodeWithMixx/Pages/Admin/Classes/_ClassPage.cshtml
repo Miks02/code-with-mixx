@@ -1,0 +1,134 @@
+@model CodeWithMixx.Pages.Admin.Classes.ClassPageViewModel
+
+@await Html.PartialAsync("Shared/_Partials/Dashboard/_PageHeading", ("Spisak časova i rezervisanih termina", "Časovi i rezervacije"))
+
+
+
+<div class="grid gap-4 lg:grid-cols-3">
+    <div class="w-full grow min-w-0 max-w-full overflow-hidden rounded-2xl bg-emerald-950/80 shadow-xl shadow-black/20 lg:col-span-2">
+
+        <div class="flex flex-col gap-3 px-5 pb-4 pt-5 sm:flex-row sm:items-center sm:justify-between sm:px-6">
+            <div>
+                <h3 class="font-semibold text-white">Spisak časova</h3>
+                <p class="mt-0.5 text-xs text-emerald-300/60">Lista svih časova koji se nalaze u sistemu</p>
+            </div>
+            <div class="grid w-full gap-2 sm:w-auto sm:grid-cols-[minmax(180px,1fr)_170px_230px_auto] sm:items-center">
+
+                <div class="relative">
+                    <i class="fa-solid fa-filter pointer-events-none absolute left-3 top-1/2 -translate-y-1/2 text-xs text-emerald-300/80"></i>
+                    <select name="filter"
+                            hx-get="/admin/classes?handler=Classes"
+                            hx-target="#class-list"
+                            hx-indicator="#list-indicator"
+                            hx-include="[name='sort'], [name='subject']"
+                            class="w-full appearance-none rounded-lg bg-emerald-800 py-2 pl-8 pr-8 text-sm text-emerald-100/80 outline-none">
+                        <option value="" selected>Svi statusi</option>
+                        <option value="upcoming">Predstojeći</option>
+                        <option value="completed">Završeni</option>
+                        <option value="cancelled">Otkazani</option>
+                    </select>
+                    <i class="fa-solid fa-chevron-down pointer-events-none absolute right-3 top-1/2 -translate-y-1/2 text-[10px] text-emerald-300/80"></i>
+                </div>
+            
+                <div class="relative">
+                    <i class="fa-solid fa-filter pointer-events-none absolute left-3 top-1/2 -translate-y-1/2 text-xs text-emerald-300/80"></i>
+                    <select name="subject"
+                            hx-get="/admin/classes?handler=Classes"
+                            hx-target="#class-list"
+                            hx-indicator="#list-indicator"
+                            hx-include="[name='sort'], [name='filter']"
+                            class="w-full appearance-none rounded-lg bg-emerald-800 py-2 pl-8 pr-8 text-sm text-emerald-100/80 outline-none">
+                        <option value="" selected>Svi predmeti</option>
+                        @foreach (var subject in Model.Subjects)
+                        {
+                            <option value="@subject.Id">@subject.SubjectName</option>
+                        }
+                    </select>
+                    <i class="fa-solid fa-chevron-down pointer-events-none absolute right-3 top-1/2 -translate-y-1/2 text-[10px] text-emerald-300/80"></i>
+                </div>
+
+                <div class="relative">
+                    <i class="fa-solid fa-arrow-down-a-z pointer-events-none absolute left-3 top-1/2 -translate-y-1/2 text-xs text-emerald-300/80"></i>
+                    <select name="sort"
+                            hx-get="/admin/students?handler=Students"
+                            hx-target="#student-list"
+                            hx-indicator="#student-list-indicator"
+                            hx-include="[name='search'], [name='filter']"
+                            class="w-full appearance-none rounded-lg bg-emerald-800 py-2 pl-8 pr-8 text-sm text-emerald-100/80 outline-none">
+                        <option value="subject" selected>Predmet</option>
+                        <option value="date">Datum - uzlazno</option>
+                        <option value="date_desc">Datum - silazno</option>
+                    </select>
+                    <i class="fa-solid fa-chevron-down pointer-events-none absolute right-3 top-1/2 -translate-y-1/2 text-[10px] text-emerald-300/80"></i>
+                </div>
+
+                <button hx-get="/admin/classes/create" hx-target="#content" hx-swap="innerHTML" hx-push-url="true" type="button" class="inline-flex items-center justify-center rounded-lg bg-emerald-500 px-3 py-2 text-sm font-semibold text-white shadow-lg shadow-emerald-900/40 transition-all hover:bg-emerald-400 active:scale-[.98]" aria-label="Dodaj studenta">
+                    <i class="fa-solid fa-plus"></i>
+                </button>
+            </div>
+        </div>
+
+        <div class="relative min-h-50 max-h-[42rem] overflow-hidden">
+            <div id="list-indicator" class="htmx-indicator absolute inset-0 z-10 flex items-center justify-center bg-emerald-950/40 backdrop-blur-[2px]">
+                <div class="flex flex-col items-center gap-3">
+                    <div class="h-10 w-10 animate-spin rounded-full border-4 border-emerald-500/20 border-t-emerald-500"></div>
+                    <span class="text-xs font-medium text-emerald-300">Učitavanje...</span>
+                </div>
+            </div>
+            <div id="class-list">
+                @await Html.PartialAsync("_ClassList", Model.Classes)
+            </div>
+        </div>
+        
+       
+       
+
+    </div>
+    <div class="flex flex-col gap-4">
+        <div class="rounded-2xl bg-emerald-950/80 p-6 shadow-xl shadow-black/20 grow relative">
+            <div class="mb-4 flex items-center gap-3">
+                <div class="flex h-10 w-10 items-center justify-center rounded-xl bg-emerald-500/15 text-emerald-300">
+                    <i class="fa-solid fa-book-open-reader"></i>
+                </div>
+                <h3 class="text-base font-semibold text-white">Detalji rezervacije</h3>
+            </div>
+            <div id="reservation-details" class="flex w-full h-full justify-center items-center pb-10">
+                <div class="text-xl flex flex-col items-center gap-2 leading-relaxed text-emerald-200/75 bg-slate-900/20 p-6 rounded-lg shadow-lg text-center w-[80%]">
+                    <i class="fa-solid fa-circle-info text-3xl text-blue-400"></i>
+                    <p>Izaberite jedan od rezervisanih termina iz liste kako bi prikazali detalje rezervacije.</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="rounded-2xl bg-emerald-950/80 p-6 shadow-xl shadow-black/20">
+            <div class="mb-4 flex items-center gap-3">
+                <div class="flex h-10 w-10 items-center justify-center rounded-xl bg-emerald-500/15 text-emerald-300">
+                    <i class="fa-solid fa-pie-chart"></i>
+                </div>
+                <h3 class="text-base font-semibold text-white">Statistika časova</h3>
+            </div>
+
+            <div class="grid grid-cols-2 grid-rows-2 gap-3">
+                <div class="flex items-center justify-between rounded-xl border border-emerald-500/20 bg-emerald-900/30 px-4 py-3">
+                    <p class="text-sm text-emerald-200/85">Ukupno časova</p>
+                    <p class="text-lg font-bold text-white">@Model.TotalClasses</p>
+                </div>
+
+                <div class="flex items-center justify-between rounded-xl border border-sky-500/20 bg-sky-900/30 px-4 py-3">
+                    <p class="text-sm text-sky-200/85">Održani</p>
+                    <p class="text-lg font-bold text-white">@Model.FinishedClasses</p>
+                </div>
+
+                <div class="flex items-center justify-between rounded-xl border border-violet-500/20 bg-violet-900/30 px-4 py-3">
+                    <p class="text-sm text-violet-200/85">Zakazani</p>
+                    <p class="text-lg font-bold text-white">@Model.UpcomingClasses</p>
+                </div>
+
+                <div class="flex items-center justify-between rounded-xl border border-amber-500/20 bg-amber-900/30 px-4 py-3">
+                    <p class="text-sm text-amber-200/85">Otkazani</p>
+                    <p class="text-lg font-bold text-white">@Model.CancelledClasses</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
