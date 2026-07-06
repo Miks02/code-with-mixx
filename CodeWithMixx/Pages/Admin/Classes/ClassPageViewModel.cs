@@ -9,7 +9,7 @@ public record ClassPageViewModel
     public int FinishedClasses { get; init; }
     public int CancelledClasses { get; init; }
     public IReadOnlyList<SubjectDropdownItem> Subjects { get; init; } = [];
-    public PagedResult<ClassListItem> Classes { get; init; } = null!;
+    public PagedResult<ClassReservationListItem> Classes { get; init; } = null!;
 
     public record SubjectDropdownItem
     {
