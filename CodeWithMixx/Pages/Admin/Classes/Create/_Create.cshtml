@@ -1,0 +1,319 @@
+﻿@model CodeWithMixx.Pages.Admin.Classes.Create.CreatePageViewModel
+
+<title hx-swap-oob="outerHTML">CodeWithMixx | Rezervacija časova</title>
+
+
+<div class="grid gap-4 lg:grid-cols-3">
+
+    <div class="lg:col-span-2 space-y-4">
+
+        <div class="rounded-2xl bg-emerald-950/80 shadow-xl shadow-black/20 p-6">
+            <div class="mb-5 flex items-center gap-3">
+                <div class="flex h-10 w-10 items-center justify-center rounded-xl bg-emerald-500/15 text-emerald-300">
+                    <i class="fa-solid fa-book"></i>
+                </div>
+                <div>
+                    <h3 class="font-semibold text-white">Predmet i cena</h3>
+                    <p class="text-xs text-emerald-300/60 mt-0.5">Izaberite predmet i unesite finansijske detalje</p>
+                </div>
+            </div>
+
+            <div class="grid gap-4 sm:grid-cols-2">
+                <div class="sm:col-span-2">
+                    <label class="mb-1.5 block text-xs font-semibold text-emerald-300/70 uppercase tracking-wider">Predmet</label>
+                    <div class="relative">
+                        <i class="fa-solid fa-book-open pointer-events-none absolute left-3 top-1/2 -translate-y-1/2 text-sm text-emerald-400/60"></i>
+                        <select id="SubjectId" name="SubjectId"
+                                class="w-full appearance-none rounded-xl bg-emerald-900/60 border border-emerald-700/40 py-3 pl-9 pr-9 text-sm text-white outline-none focus:border-emerald-500/60 focus:ring-1 focus:ring-emerald-500/30 transition">
+                            <option value="">Izaberite predmet</option>
+                            @foreach (var subject in Model.Subjects)
+                            {
+                                <option value="@subject.Id">@subject.Name</option>
+                            }
+                        </select>
+                        <i class="fa-solid fa-chevron-down pointer-events-none absolute right-3 top-1/2 -translate-y-1/2 text-[10px] text-emerald-300/60"></i>
+                    </div>
+                </div>
+
+                <div>
+                    <label class="mb-1.5 block text-xs font-semibold text-emerald-300/70 uppercase tracking-wider">Cena po času (RSD)</label>
+                    <div class="relative">
+                        <i class="fa-solid fa-tag pointer-events-none absolute left-3 top-1/2 -translate-y-1/2 text-sm text-emerald-400/60"></i>
+                        <input type="number" id="ClassPrice" min="0" step="100" value="1300"
+                               class="w-full rounded-xl bg-emerald-900/60 border border-emerald-700/40 py-3 pl-9 pr-4 text-sm text-white outline-none placeholder:text-emerald-300/30 focus:border-emerald-500/60 focus:ring-1 focus:ring-emerald-500/30 transition" />
+                    </div>
+                </div>
+
+                <div>
+                    <label class="mb-1.5 block text-xs font-semibold text-emerald-300/70 uppercase tracking-wider">Ukupna cena (RSD)</label>
+                    <div class="relative">
+                        <i class="fa-solid fa-money-bill-wave absolute left-3 top-1/2 -translate-y-1/2 text-sm text-emerald-400/60"></i>
+                        <input type="number" id="TotalPrice" name="TotalPrice" readonly tabindex="-1"
+                               class="w-full rounded-xl bg-emerald-900/20 border border-emerald-700/20 py-3 pl-9 pr-4 text-sm text-emerald-300/60 outline-none cursor-not-allowed" />
+                    </div>
+                </div>
+
+                <div>
+                    <label class="mb-1.5 block text-xs font-semibold text-emerald-300/70 uppercase tracking-wider">Plaćeno (RSD)</label>
+                    <div class="relative">
+                        <i class="fa-solid fa-wallet pointer-events-none absolute left-3 top-1/2 -translate-y-1/2 text-sm text-emerald-400/60"></i>
+                        <input type="number" id="PaidAmount" name="PaidAmount" min="0" step="100" placeholder="0"
+                               class="w-full rounded-xl bg-emerald-900/60 border border-emerald-700/40 py-3 pl-9 pr-4 text-sm text-white outline-none placeholder:text-emerald-300/30 focus:border-emerald-500/60 focus:ring-1 focus:ring-emerald-500/30 transition" />
+                    </div>
+                </div>
+
+                <div>
+                    <label class="mb-1.5 block text-xs font-semibold text-emerald-300/70 uppercase tracking-wider">Napomene</label>
+                    <div class="relative">
+                        <i class="fa-solid fa-note-sticky pointer-events-none absolute left-3 top-3 text-sm text-emerald-400/60"></i>
+                        <textarea id="Notes" name="Notes" rows="1" placeholder="Opciono..."
+                                  class="w-full rounded-xl bg-emerald-900/60 border border-emerald-700/40 py-3 pl-9 pr-4 text-sm text-white outline-none placeholder:text-emerald-300/30 focus:border-emerald-500/60 focus:ring-1 focus:ring-emerald-500/30 transition resize-none"></textarea>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="rounded-2xl bg-emerald-950/80 shadow-xl shadow-black/20 p-6">
+            <div class="mb-5 flex items-center gap-3">
+                <div class="flex h-10 w-10 items-center justify-center rounded-xl bg-violet-500/15 text-violet-300">
+                    <i class="fa-solid fa-calendar-plus"></i>
+                </div>
+                <div>
+                    <h3 class="font-semibold text-white">Termini</h3>
+                    <p class="text-xs text-emerald-300/60 mt-0.5">Definišite broj termina i početak prvog</p>
+                </div>
+            </div>
+
+            <div class="grid gap-4 sm:grid-cols-2 mb-5">
+                <div>
+                    <label class="mb-1.5 block text-xs font-semibold text-emerald-300/70 uppercase tracking-wider">Broj termina</label>
+                    <div class="relative">
+                        <i class="fa-solid fa-layer-group pointer-events-none absolute left-3 top-1/2 -translate-y-1/2 text-sm text-emerald-400/60"></i>
+                        <input type="number" id="ClassCount" min="1" value="1"
+                               class="w-full rounded-xl bg-emerald-900/60 border border-emerald-700/40 py-3 pl-9 pr-4 text-sm text-white outline-none focus:border-emerald-500/60 focus:ring-1 focus:ring-emerald-500/30 transition" />
+                    </div>
+                </div>
+
+                <div>
+                    <label class="mb-1.5 block text-xs font-semibold text-emerald-300/70 uppercase tracking-wider">Početak prvog termina</label>
+                    <div class="relative">
+                        <i class="fa-solid fa-hourglass-start pointer-events-none absolute left-3 top-1/2 -translate-y-1/2 text-sm text-emerald-400/60"></i>
+                        <input type="datetime-local" id="FirstClassStart"
+                               class="w-full rounded-xl bg-emerald-900/60 border border-emerald-700/40 py-3 pl-9 pr-4 text-sm text-white outline-none focus:border-emerald-500/60 focus:ring-1 focus:ring-emerald-500/30 transition" />
+                    </div>
+                </div>
+            </div>
+
+            <div id="class-rows" class="space-y-2"></div>
+
+            <div id="no-classes-hint" class="mt-2 text-center text-sm text-emerald-300/40 py-4">
+                <i class="fa-solid fa-calendar-xmark mr-2"></i>Unesite broj termina i početak prvog
+            </div>
+        </div>
+    </div>
+
+    <div class="space-y-4">
+
+        <div class="rounded-2xl bg-emerald-950/80 shadow-xl shadow-black/20 p-6">
+            <div class="mb-5 flex items-center gap-3">
+                <div class="flex h-10 w-10 items-center justify-center rounded-xl bg-sky-500/15 text-sky-300">
+                    <i class="fa-solid fa-user-graduate"></i>
+                </div>
+                <div>
+                    <h3 class="font-semibold text-white">Student</h3>
+                    <p class="text-xs text-emerald-300/60 mt-0.5">Potražite i izaberite studenta</p>
+                </div>
+            </div>
+
+            <div id="selected-student-banner" class="hidden mb-4 flex items-center justify-between gap-3 rounded-xl bg-sky-500/10 border border-sky-500/25 px-4 py-3">
+                <div class="flex items-center gap-3 min-w-0">
+                    <div id="selected-student-initials" class="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-sky-500/20 text-xs font-bold text-sky-300"></div>
+                    <div class="min-w-0">
+                        <p id="selected-student-name" class="text-sm font-semibold text-white truncate"></p>
+                        <p id="selected-student-email" class="text-xs text-sky-300/60 truncate"></p>
+                    </div>
+                </div>
+                <button type="button" onclick="clearStudent()"
+                        class="shrink-0 flex h-7 w-7 items-center justify-center rounded-lg text-sky-300/50 hover:bg-red-500/15 hover:text-red-400 active:scale-90 transition">
+                    <i class="fa-solid fa-xmark text-xs"></i>
+                </button>
+            </div>
+
+            <input type="hidden" id="StudentId" name="StudentId" />
+
+            <div class="relative">
+                <i class="fa-solid fa-magnifying-glass pointer-events-none absolute left-3 top-1/2 -translate-y-1/2 text-sm text-emerald-400/60"></i>
+                <input type="text"
+                       id="student-search"
+                       placeholder="Ime, prezime ili email..."
+                       hx-get="/admin/classes/create?handler=Students"
+                       hx-trigger="keyup changed delay:400ms"
+                       hx-target="#student-search-results"
+                       hx-indicator="#student-search-indicator"
+                       hx-include="#student-search"
+                       name="search"
+                       autocomplete="off"
+                       class="w-full rounded-xl bg-emerald-900/60 border border-emerald-700/40 py-3 pl-9 pr-4 text-sm text-white outline-none placeholder:text-emerald-300/30 focus:border-emerald-500/60 focus:ring-1 focus:ring-emerald-500/30 transition" />
+            </div>
+
+            <div class="relative mt-2 rounded-xl bg-emerald-900/40 border border-emerald-700/30 overflow-hidden min-h-[56px]">
+                <div id="student-search-indicator" class="htmx-indicator absolute inset-0 z-10 flex items-center justify-center bg-emerald-950/50 backdrop-blur-[2px]">
+                    <div class="flex items-center gap-2">
+                        <div class="h-5 w-5 animate-spin rounded-full border-2 border-emerald-500/20 border-t-emerald-400"></div>
+                        <span class="text-xs text-emerald-300/70">Pretraga...</span>
+                    </div>
+                </div>
+                <div id="student-search-results" class="divide-y divide-emerald-800/40">
+                    <div class="flex flex-col items-center justify-center py-6 text-center">
+                        <i class="fa-solid fa-magnifying-glass text-xl text-emerald-500/20 mb-2"></i>
+                        <p class="text-xs text-emerald-300/40">Ukucajte ime studenta za pretragu</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="rounded-2xl bg-emerald-950/80 shadow-xl shadow-black/20 p-6">
+            <div class="mb-4 flex items-center gap-3">
+                <div class="flex h-10 w-10 items-center justify-center rounded-xl bg-emerald-500/15 text-emerald-300">
+                    <i class="fa-solid fa-circle-info"></i>
+                </div>
+                <h3 class="font-semibold text-white">Pregled</h3>
+            </div>
+            <div class="space-y-2 text-sm">
+                <div class="flex items-center justify-between rounded-lg bg-emerald-900/30 px-3 py-2.5">
+                    <span class="text-emerald-300/60">Broj termina</span>
+                    <span id="preview-class-count" class="font-semibold text-white">1</span>
+                </div>
+                <div class="flex items-center justify-between rounded-lg bg-emerald-900/30 px-3 py-2.5">
+                    <span class="text-emerald-300/60">Ukupna cena</span>
+                    <span id="preview-total" class="font-semibold text-white">0 RSD</span>
+                </div>
+                <div class="flex items-center justify-between rounded-lg bg-emerald-900/30 px-3 py-2.5">
+                    <span class="text-emerald-300/60">Plaćeno</span>
+                    <span id="preview-paid" class="font-semibold text-white">0 RSD</span>
+                </div>
+                <div class="flex items-center justify-between rounded-lg bg-emerald-900/30 px-3 py-2.5">
+                    <span class="text-emerald-300/60">Preostalo</span>
+                    <span id="preview-remaining" class="font-semibold text-amber-300">0 RSD</span>
+                </div>
+            </div>
+        </div>
+
+        <button type="button"
+                class="w-full inline-flex items-center justify-center gap-2 rounded-xl bg-emerald-500 px-5 py-3.5 text-sm font-semibold text-white shadow-lg shadow-emerald-900/40 hover:bg-emerald-400 active:scale-[.98] transition">
+            <i class="fa-solid fa-floppy-disk"></i>
+            Sačuvaj rezervaciju
+        </button>
+    </div>
+</div>
+
+<script>
+    const CLASS_DURATION_MINUTES = 45;
+
+    function toLocalDatetimeValue(date) {
+        const pad = n => String(n).padStart(2, '0');
+        return `${date.getFullYear()}-${pad(date.getMonth() + 1)}-${pad(date.getDate())}T${pad(date.getHours())}:${pad(date.getMinutes())}`;
+    }
+
+    function rebuildClassRows() {
+        const count = parseInt(document.getElementById('ClassCount').value) || 0;
+        const firstStart = document.getElementById('FirstClassStart').value;
+        const price = parseFloat(document.getElementById('ClassPrice').value) || 0;
+        const container = document.getElementById('class-rows');
+        const hint = document.getElementById('no-classes-hint');
+
+        container.innerHTML = '';
+
+        if (count < 1 || !firstStart) {
+            hint.classList.remove('hidden');
+            syncTotalPrice();
+            return;
+        }
+
+        hint.classList.add('hidden');
+
+        const base = new Date(firstStart);
+
+        for (let i = 0; i < count; i++) {
+            const start = new Date(base.getTime() + i * CLASS_DURATION_MINUTES * 60000);
+            const end = new Date(start.getTime() + CLASS_DURATION_MINUTES * 60000);
+
+            const row = document.createElement('div');
+            row.className = 'class-row flex items-center gap-3 rounded-xl bg-emerald-900/40 border border-emerald-700/30 px-4 py-3';
+            row.innerHTML = `
+                <div class="flex h-7 w-7 shrink-0 items-center justify-center rounded-lg bg-violet-500/20 text-xs font-bold text-violet-300">${i + 1}</div>
+                <div class="flex flex-1 flex-wrap gap-x-6 gap-y-1 text-sm text-emerald-100/80">
+                    <span class="flex items-center gap-2">
+                        <i class="fa-solid fa-hourglass-start text-emerald-400/60 text-xs"></i>
+                        <span>${toLocalDatetimeValue(start).replace('T', ' ')}</span>
+                    </span>
+                    <span class="flex items-center gap-2 text-emerald-300/50">
+                        <i class="fa-solid fa-hourglass-end text-emerald-400/40 text-xs"></i>
+                        <span>${toLocalDatetimeValue(end).replace('T', ' ')}</span>
+                    </span>
+                    <span class="flex items-center gap-2 text-emerald-300/60">
+                        <i class="fa-solid fa-tag text-emerald-400/40 text-xs"></i>
+                        <span>${price.toLocaleString('sr-Latn-RS')} RSD</span>
+                    </span>
+                </div>
+                <input type="hidden" name="Classes[${i}].StartsAt" value="${toLocalDatetimeValue(start)}" />
+                <input type="hidden" name="Classes[${i}].Price" value="${price}" />
+            `;
+
+            container.appendChild(row);
+        }
+
+        syncTotalPrice();
+        updatePreview();
+    }
+
+    function syncTotalPrice() {
+        const count = parseInt(document.getElementById('ClassCount').value) || 0;
+        const price = parseFloat(document.getElementById('ClassPrice').value) || 0;
+        const total = count * price;
+        document.getElementById('TotalPrice').value = total;
+        updatePreview();
+    }
+
+    function updatePreview() {
+        const count = document.querySelectorAll('.class-row').length;
+        const total = parseFloat(document.getElementById('TotalPrice').value) || 0;
+        const paid = parseFloat(document.getElementById('PaidAmount').value) || 0;
+
+        document.getElementById('preview-class-count').textContent = count;
+        document.getElementById('preview-total').textContent = total.toLocaleString('sr-Latn-RS') + ' RSD';
+        document.getElementById('preview-paid').textContent = paid.toLocaleString('sr-Latn-RS') + ' RSD';
+        document.getElementById('preview-remaining').textContent = Math.max(total - paid, 0).toLocaleString('sr-Latn-RS') + ' RSD';
+    }
+
+    document.getElementById('ClassCount').addEventListener('input', rebuildClassRows);
+    document.getElementById('FirstClassStart').addEventListener('change', rebuildClassRows);
+    document.getElementById('ClassPrice').addEventListener('input', rebuildClassRows);
+    document.getElementById('PaidAmount').addEventListener('input', updatePreview);
+
+    function selectStudent(btn) {
+        const id = btn.dataset.studentId;
+        const name = btn.dataset.studentName;
+        const email = btn.dataset.studentEmail;
+        const initials = name.split(' ').map(p => p[0]).join('').toUpperCase();
+
+        document.getElementById('StudentId').value = id;
+        document.getElementById('selected-student-name').textContent = name;
+        document.getElementById('selected-student-email').textContent = email;
+        document.getElementById('selected-student-initials').textContent = initials;
+        document.getElementById('selected-student-banner').classList.remove('hidden');
+        document.getElementById('student-search').value = '';
+        document.getElementById('student-search-results').innerHTML = `
+            <div class="flex flex-col items-center justify-center py-6 text-center">
+                <i class="fa-solid fa-magnifying-glass text-xl text-emerald-500/20 mb-2"></i>
+                <p class="text-xs text-emerald-300/40">Ukucajte ime studenta za pretragu</p>
+            </div>`;
+    }
+
+    function clearStudent() {
+        document.getElementById('StudentId').value = '';
+        document.getElementById('selected-student-banner').classList.add('hidden');
+    }
+
+    updatePreview();
+</script>
