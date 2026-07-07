@@ -5,7 +5,7 @@
 
 <div class="grid gap-4 lg:grid-cols-3">
 
-    <div class="lg:col-span-2 space-y-4">
+    <div id="create-class-form" class="lg:col-span-2 space-y-4">
 
         <div class="rounded-2xl bg-emerald-950/80 shadow-xl shadow-black/20 p-6">
             <div class="mb-5 flex items-center gap-3">
@@ -39,7 +39,7 @@
                     <label class="mb-1.5 block text-xs font-semibold text-emerald-300/70 uppercase tracking-wider">Cena po času (RSD)</label>
                     <div class="relative">
                         <i class="fa-solid fa-tag pointer-events-none absolute left-3 top-1/2 -translate-y-1/2 text-sm text-emerald-400/60"></i>
-                        <input type="number" id="ClassPrice" min="0" step="100" value="1300"
+                        <input type="number" id="class-price" min="0" step="100" value="1300"
                                class="w-full rounded-xl bg-emerald-900/60 border border-emerald-700/40 py-3 pl-9 pr-4 text-sm text-white outline-none placeholder:text-emerald-300/30 focus:border-emerald-500/60 focus:ring-1 focus:ring-emerald-500/30 transition" />
                     </div>
                 </div>
@@ -48,7 +48,7 @@
                     <label class="mb-1.5 block text-xs font-semibold text-emerald-300/70 uppercase tracking-wider">Ukupna cena (RSD)</label>
                     <div class="relative">
                         <i class="fa-solid fa-money-bill-wave absolute left-3 top-1/2 -translate-y-1/2 text-sm text-emerald-400/60"></i>
-                        <input type="number" id="TotalPrice" name="TotalPrice" readonly tabindex="-1"
+                        <input type="number" id="total-price" name="TotalPrice" readonly
                                class="w-full rounded-xl bg-emerald-900/20 border border-emerald-700/20 py-3 pl-9 pr-4 text-sm text-emerald-300/60 outline-none cursor-not-allowed" />
                     </div>
                 </div>
@@ -79,23 +79,23 @@
                     <i class="fa-solid fa-calendar-plus"></i>
                 </div>
                 <div>
-                    <h3 class="font-semibold text-white">Termini</h3>
-                    <p class="text-xs text-emerald-300/60 mt-0.5">Definišite broj termina i početak prvog</p>
+                    <h3 class="font-semibold text-white">Časovi</h3>
+                    <p class="text-xs text-emerald-300/60 mt-0.5">Definišite broj časova i početak prvog</p>
                 </div>
             </div>
 
             <div class="grid gap-4 sm:grid-cols-2 mb-5">
                 <div>
-                    <label class="mb-1.5 block text-xs font-semibold text-emerald-300/70 uppercase tracking-wider">Broj termina</label>
+                    <label class="mb-1.5 block text-xs font-semibold text-emerald-300/70 uppercase tracking-wider">Broj časova</label>
                     <div class="relative">
                         <i class="fa-solid fa-layer-group pointer-events-none absolute left-3 top-1/2 -translate-y-1/2 text-sm text-emerald-400/60"></i>
-                        <input type="number" id="ClassCount" min="1" value="1"
+                        <input type="number" id="class-count" min="1" value="1"
                                class="w-full rounded-xl bg-emerald-900/60 border border-emerald-700/40 py-3 pl-9 pr-4 text-sm text-white outline-none focus:border-emerald-500/60 focus:ring-1 focus:ring-emerald-500/30 transition" />
                     </div>
                 </div>
 
                 <div>
-                    <label class="mb-1.5 block text-xs font-semibold text-emerald-300/70 uppercase tracking-wider">Početak prvog termina</label>
+                    <label class="mb-1.5 block text-xs font-semibold text-emerald-300/70 uppercase tracking-wider">Početak prvog časa</label>
                     <div class="relative">
                         <i class="fa-solid fa-hourglass-start pointer-events-none absolute left-3 top-1/2 -translate-y-1/2 text-sm text-emerald-400/60"></i>
                         <input type="datetime-local" id="FirstClassStart"
@@ -107,7 +107,7 @@
             <div id="class-rows" class="space-y-2"></div>
 
             <div id="no-classes-hint" class="mt-2 text-center text-sm text-emerald-300/40 py-4">
-                <i class="fa-solid fa-calendar-xmark mr-2"></i>Unesite broj termina i početak prvog
+                <i class="fa-solid fa-calendar-xmark mr-2"></i>Unesite broj časova i početak prvog časa
             </div>
         </div>
     </div>
@@ -206,114 +206,3 @@
         </button>
     </div>
 </div>
-
-<script>
-    const CLASS_DURATION_MINUTES = 45;
-
-    function toLocalDatetimeValue(date) {
-        const pad = n => String(n).padStart(2, '0');
-        return `${date.getFullYear()}-${pad(date.getMonth() + 1)}-${pad(date.getDate())}T${pad(date.getHours())}:${pad(date.getMinutes())}`;
-    }
-
-    function rebuildClassRows() {
-        const count = parseInt(document.getElementById('ClassCount').value) || 0;
-        const firstStart = document.getElementById('FirstClassStart').value;
-        const price = parseFloat(document.getElementById('ClassPrice').value) || 0;
-        const container = document.getElementById('class-rows');
-        const hint = document.getElementById('no-classes-hint');
-
-        container.innerHTML = '';
-
-        if (count < 1 || !firstStart) {
-            hint.classList.remove('hidden');
-            syncTotalPrice();
-            return;
-        }
-
-        hint.classList.add('hidden');
-
-        const base = new Date(firstStart);
-
-        for (let i = 0; i < count; i++) {
-            const start = new Date(base.getTime() + i * CLASS_DURATION_MINUTES * 60000);
-            const end = new Date(start.getTime() + CLASS_DURATION_MINUTES * 60000);
-
-            const row = document.createElement('div');
-            row.className = 'class-row flex items-center gap-3 rounded-xl bg-emerald-900/40 border border-emerald-700/30 px-4 py-3';
-            row.innerHTML = `
-                <div class="flex h-7 w-7 shrink-0 items-center justify-center rounded-lg bg-violet-500/20 text-xs font-bold text-violet-300">${i + 1}</div>
-                <div class="flex flex-1 flex-wrap gap-x-6 gap-y-1 text-sm text-emerald-100/80">
-                    <span class="flex items-center gap-2">
-                        <i class="fa-solid fa-hourglass-start text-emerald-400/60 text-xs"></i>
-                        <span>${toLocalDatetimeValue(start).replace('T', ' ')}</span>
-                    </span>
-                    <span class="flex items-center gap-2 text-emerald-300/50">
-                        <i class="fa-solid fa-hourglass-end text-emerald-400/40 text-xs"></i>
-                        <span>${toLocalDatetimeValue(end).replace('T', ' ')}</span>
-                    </span>
-                    <span class="flex items-center gap-2 text-emerald-300/60">
-                        <i class="fa-solid fa-tag text-emerald-400/40 text-xs"></i>
-                        <span>${price.toLocaleString('sr-Latn-RS')} RSD</span>
-                    </span>
-                </div>
-                <input type="hidden" name="Classes[${i}].StartsAt" value="${toLocalDatetimeValue(start)}" />
-                <input type="hidden" name="Classes[${i}].Price" value="${price}" />
-            `;
-
-            container.appendChild(row);
-        }
-
-        syncTotalPrice();
-        updatePreview();
-    }
-
-    function syncTotalPrice() {
-        const count = parseInt(document.getElementById('ClassCount').value) || 0;
-        const price = parseFloat(document.getElementById('ClassPrice').value) || 0;
-        const total = count * price;
-        document.getElementById('TotalPrice').value = total;
-        updatePreview();
-    }
-
-    function updatePreview() {
-        const count = document.querySelectorAll('.class-row').length;
-        const total = parseFloat(document.getElementById('TotalPrice').value) || 0;
-        const paid = parseFloat(document.getElementById('PaidAmount').value) || 0;
-
-        document.getElementById('preview-class-count').textContent = count;
-        document.getElementById('preview-total').textContent = total.toLocaleString('sr-Latn-RS') + ' RSD';
-        document.getElementById('preview-paid').textContent = paid.toLocaleString('sr-Latn-RS') + ' RSD';
-        document.getElementById('preview-remaining').textContent = Math.max(total - paid, 0).toLocaleString('sr-Latn-RS') + ' RSD';
-    }
-
-    document.getElementById('ClassCount').addEventListener('input', rebuildClassRows);
-    document.getElementById('FirstClassStart').addEventListener('change', rebuildClassRows);
-    document.getElementById('ClassPrice').addEventListener('input', rebuildClassRows);
-    document.getElementById('PaidAmount').addEventListener('input', updatePreview);
-
-    function selectStudent(btn) {
-        const id = btn.dataset.studentId;
-        const name = btn.dataset.studentName;
-        const email = btn.dataset.studentEmail;
-        const initials = name.split(' ').map(p => p[0]).join('').toUpperCase();
-
-        document.getElementById('StudentId').value = id;
-        document.getElementById('selected-student-name').textContent = name;
-        document.getElementById('selected-student-email').textContent = email;
-        document.getElementById('selected-student-initials').textContent = initials;
-        document.getElementById('selected-student-banner').classList.remove('hidden');
-        document.getElementById('student-search').value = '';
-        document.getElementById('student-search-results').innerHTML = `
-            <div class="flex flex-col items-center justify-center py-6 text-center">
-                <i class="fa-solid fa-magnifying-glass text-xl text-emerald-500/20 mb-2"></i>
-                <p class="text-xs text-emerald-300/40">Ukucajte ime studenta za pretragu</p>
-            </div>`;
-    }
-
-    function clearStudent() {
-        document.getElementById('StudentId').value = '';
-        document.getElementById('selected-student-banner').classList.add('hidden');
-    }
-
-    updatePreview();
-</script>
