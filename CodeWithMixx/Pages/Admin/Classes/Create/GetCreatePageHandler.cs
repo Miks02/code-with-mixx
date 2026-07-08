@@ -7,6 +7,8 @@ namespace CodeWithMixx.Pages.Admin.Classes.Create;
 public record CreatePageViewModel
 {
     public IReadOnlyList<SubjectDropdownItem> Subjects { get; init; } = [];
+    
+    public StudentSearchResultItem? SelectedStudent { get; init; }
 
     public record SubjectDropdownItem
     {

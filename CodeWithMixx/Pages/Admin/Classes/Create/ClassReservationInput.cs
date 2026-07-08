@@ -6,7 +6,7 @@ namespace CodeWithMixx.Pages.Admin.Classes.Create
     public record ClassReservationInput
     {
         public int SubjectId { get; init; }
-        public string StudentId { get; init; } = null!;
+        public string StudentId { get; set; } = null!;
 
         [Precision(18, 2)] 
         public Decimal PricePerClass { get; init; } = 1300;
