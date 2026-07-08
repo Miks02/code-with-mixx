@@ -1,11 +1,16 @@
-﻿@model CodeWithMixx.Pages.Admin.Classes.Create.CreatePageViewModel
+﻿@model IndexModel
 
 <title hx-swap-oob="outerHTML">CodeWithMixx | Rezervacija časova</title>
 
 
 <div class="grid gap-4 lg:grid-cols-3">
 
-    <div id="create-class-form" class="lg:col-span-2 space-y-4">
+    <form id="create-class-form" 
+          class="lg:col-span-2 space-y-4"
+          method="post"
+          hx-post="/admin/classes/create"
+          hx-target="#content">
+        @Html.AntiForgeryToken()
 
         <div class="rounded-2xl bg-emerald-950/80 shadow-xl shadow-black/20 p-6">
             <div class="mb-5 flex items-center gap-3">
@@ -23,52 +28,55 @@
                     <label class="mb-1.5 block text-xs font-semibold text-emerald-300/70 uppercase tracking-wider">Predmet</label>
                     <div class="relative">
                         <i class="fa-solid fa-book-open pointer-events-none absolute left-3 top-1/2 -translate-y-1/2 text-sm text-emerald-400/60"></i>
-                        <select id="SubjectId" name="SubjectId"
-                                class="w-full appearance-none rounded-xl bg-emerald-900/60 border border-emerald-700/40 py-3 pl-9 pr-9 text-sm text-white outline-none focus:border-emerald-500/60 focus:ring-1 focus:ring-emerald-500/30 transition">
-                            <option value="">Izaberite predmet</option>
-                            @foreach (var subject in Model.Subjects)
-                            {
-                                <option value="@subject.Id">@subject.Name</option>
-                            }
+                        <select id="SubjectId" asp-for="Input.SubjectId"
+                                class="w-full appearance-none rounded-xl bg-emerald-900/60 border border-emerald-700/40 py-3 pl-9 pr-9 text-sm text-white outline-none focus:border-emerald-500/60 focus:ring-1 focus:ring-emerald-500/30 transition"
+                                asp-items="@(new SelectList(Model.ViewModel.Subjects, "Id", "Name"))">
+                            <option value="0">Izaberite predmet</option>
                         </select>
                         <i class="fa-solid fa-chevron-down pointer-events-none absolute right-3 top-1/2 -translate-y-1/2 text-[10px] text-emerald-300/60"></i>
                     </div>
+                    <span asp-validation-for="Input.SubjectId" class="text-xs text-red-400 mt-1 block"></span>
                 </div>
 
                 <div>
                     <label class="mb-1.5 block text-xs font-semibold text-emerald-300/70 uppercase tracking-wider">Cena po času (RSD)</label>
                     <div class="relative">
                         <i class="fa-solid fa-tag pointer-events-none absolute left-3 top-1/2 -translate-y-1/2 text-sm text-emerald-400/60"></i>
-                        <input type="number" id="class-price" min="0" step="100" value="1300"
+                        <input type="number" id="class-price" min="0" value="@Model.Input.PricePerClass" asp-for="Input.PricePerClass"
                                class="w-full rounded-xl bg-emerald-900/60 border border-emerald-700/40 py-3 pl-9 pr-4 text-sm text-white outline-none placeholder:text-emerald-300/30 focus:border-emerald-500/60 focus:ring-1 focus:ring-emerald-500/30 transition" />
                     </div>
+                    <span asp-validation-for="Input.PricePerClass" class="text-xs text-red-400 mt-1 block"></span>
                 </div>
 
                 <div>
                     <label class="mb-1.5 block text-xs font-semibold text-emerald-300/70 uppercase tracking-wider">Ukupna cena (RSD)</label>
                     <div class="relative">
                         <i class="fa-solid fa-money-bill-wave absolute left-3 top-1/2 -translate-y-1/2 text-sm text-emerald-400/60"></i>
-                        <input type="number" id="total-price" name="TotalPrice" readonly
-                               class="w-full rounded-xl bg-emerald-900/20 border border-emerald-700/20 py-3 pl-9 pr-4 text-sm text-emerald-300/60 outline-none cursor-not-allowed" />
+                        <input id="total-price" asp-for="Input.TotalPrice"  type="number"
+                               class="w-full rounded-xl bg-emerald-900/20 border border-emerald-700/20 py-3 pl-9 pr-4 text-sm text-emerald-300/60 outline-none" />
                     </div>
+                    <span asp-validation-for="Input.TotalPrice" class="text-xs text-red-400 mt-1 block"></span>
                 </div>
 
                 <div>
                     <label class="mb-1.5 block text-xs font-semibold text-emerald-300/70 uppercase tracking-wider">Plaćeno (RSD)</label>
                     <div class="relative">
                         <i class="fa-solid fa-wallet pointer-events-none absolute left-3 top-1/2 -translate-y-1/2 text-sm text-emerald-400/60"></i>
-                        <input type="number" id="PaidAmount" name="PaidAmount" min="0" step="100" placeholder="0"
+                        <input type="number" id="paid-amount" asp-for="Input.PaidAmount" min="0" placeholder="0"
                                class="w-full rounded-xl bg-emerald-900/60 border border-emerald-700/40 py-3 pl-9 pr-4 text-sm text-white outline-none placeholder:text-emerald-300/30 focus:border-emerald-500/60 focus:ring-1 focus:ring-emerald-500/30 transition" />
                     </div>
+                    <p id="paid-amount-info" class="text-xs mt-0.5"></p>
+                    <span asp-validation-for="Input.PaidAmount" class="text-xs text-red-400 mt-1 block"></span>
                 </div>
 
                 <div>
                     <label class="mb-1.5 block text-xs font-semibold text-emerald-300/70 uppercase tracking-wider">Napomene</label>
                     <div class="relative">
                         <i class="fa-solid fa-note-sticky pointer-events-none absolute left-3 top-3 text-sm text-emerald-400/60"></i>
-                        <textarea id="Notes" name="Notes" rows="1" placeholder="Opciono..."
+                        <textarea id="Notes" asp-for="Input.Notes" rows="1" placeholder="Opciono..."
                                   class="w-full rounded-xl bg-emerald-900/60 border border-emerald-700/40 py-3 pl-9 pr-4 text-sm text-white outline-none placeholder:text-emerald-300/30 focus:border-emerald-500/60 focus:ring-1 focus:ring-emerald-500/30 transition resize-none"></textarea>
                     </div>
+                    <span asp-validation-for="Input.Notes" class="text-xs text-red-400 mt-1 block"></span>
                 </div>
             </div>
         </div>
@@ -81,15 +89,16 @@
                 <div>
                     <h3 class="font-semibold text-white">Časovi</h3>
                     <p class="text-xs text-emerald-300/60 mt-0.5">Definišite broj časova i početak prvog</p>
+                    <span asp-validation-for="Input.AmountOfClasses" class="text-xs text-red-400 mt-1 block"></span>
                 </div>
             </div>
 
-            <div class="grid gap-4 sm:grid-cols-2 mb-5">
+            <div class="grid gap-4 sm:grid-cols-3 mb-5">
                 <div>
                     <label class="mb-1.5 block text-xs font-semibold text-emerald-300/70 uppercase tracking-wider">Broj časova</label>
                     <div class="relative">
                         <i class="fa-solid fa-layer-group pointer-events-none absolute left-3 top-1/2 -translate-y-1/2 text-sm text-emerald-400/60"></i>
-                        <input type="number" id="class-count" min="1" value="1"
+                        <input type="number" id="class-count" min="1" value="@Model.Input.AmountOfClasses"
                                class="w-full rounded-xl bg-emerald-900/60 border border-emerald-700/40 py-3 pl-9 pr-4 text-sm text-white outline-none focus:border-emerald-500/60 focus:ring-1 focus:ring-emerald-500/30 transition" />
                     </div>
                 </div>
@@ -98,8 +107,17 @@
                     <label class="mb-1.5 block text-xs font-semibold text-emerald-300/70 uppercase tracking-wider">Početak prvog časa</label>
                     <div class="relative">
                         <i class="fa-solid fa-hourglass-start pointer-events-none absolute left-3 top-1/2 -translate-y-1/2 text-sm text-emerald-400/60"></i>
-                        <input type="datetime-local" id="FirstClassStart"
+                        <input type="datetime-local" id="FirstClassStart" value="@DateTime.Now.ToString("yyyy-MM-ddTHH:mm")" asp-for="Input.FirstClassStart"
                                class="w-full rounded-xl bg-emerald-900/60 border border-emerald-700/40 py-3 pl-9 pr-4 text-sm text-white outline-none focus:border-emerald-500/60 focus:ring-1 focus:ring-emerald-500/30 transition" />
+                    </div>
+                </div>
+
+                <div>
+                    <label class="mb-1.5 block text-xs font-semibold text-emerald-300/70 uppercase tracking-wider">Kraj poslednjeg časa</label>
+                    <div class="relative">
+                        <i class="fa-solid fa-hourglass-end pointer-events-none absolute left-3 top-1/2 -translate-y-1/2 text-sm text-emerald-400/60"></i>
+                        <input type="datetime-local" id="last-class-end" disabled
+                               class="w-full rounded-xl bg-emerald-900/20 border border-emerald-700/20 py-3 pl-9 pr-4 text-sm text-emerald-300/60 outline-none" />
                     </div>
                 </div>
             </div>
@@ -110,7 +128,7 @@
                 <i class="fa-solid fa-calendar-xmark mr-2"></i>Unesite broj časova i početak prvog časa
             </div>
         </div>
-    </div>
+    </form>
 
     <div class="space-y-4">
 
@@ -139,7 +157,8 @@
                 </button>
             </div>
 
-            <input type="hidden" id="StudentId" name="StudentId" />
+            <input type="hidden" id="StudentId" asp-for="Input.StudentId" />
+            <span asp-validation-for="Input.StudentId" class="text-xs text-red-400 mt-1 block"></span>
 
             <div class="relative">
                 <i class="fa-solid fa-magnifying-glass pointer-events-none absolute left-3 top-1/2 -translate-y-1/2 text-sm text-emerald-400/60"></i>
@@ -199,10 +218,18 @@
             </div>
         </div>
 
-        <button type="button"
+        <button type="submit" form="create-class-form"
                 class="w-full inline-flex items-center justify-center gap-2 rounded-xl bg-emerald-500 px-5 py-3.5 text-sm font-semibold text-white shadow-lg shadow-emerald-900/40 hover:bg-emerald-400 active:scale-[.98] transition">
             <i class="fa-solid fa-floppy-disk"></i>
             Sačuvaj rezervaciju
         </button>
     </div>
 </div>
+
+<script type="module">
+    import {initCreateClass} from "/js/dashboard/classes.js";
+
+    initCreateClass();
+</script>
+
+
