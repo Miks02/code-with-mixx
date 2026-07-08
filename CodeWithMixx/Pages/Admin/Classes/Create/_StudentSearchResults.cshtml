@@ -9,21 +9,25 @@
 }
 else
 {
-    @foreach (var student in Model)
-    {
-        <button type="button"
-                data-student-id="@student.Id"
-                data-student-name="@student.FullName"
-                data-student-email="@student.Email"
-                onclick="selectStudent(this)"
-                class="student-result w-full flex items-center gap-3 px-4 py-3 hover:bg-emerald-800/60 active:bg-emerald-800 transition-colors duration-100 text-left">
-            <div class="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-emerald-500/20 text-xs font-bold text-emerald-300">
-                @student.Initials
-            </div>
-            <div class="min-w-0">
-                <p class="text-sm font-semibold text-white truncate">@student.FullName</p>
-                <p class="text-xs text-emerald-300/60 truncate">@student.Email · @student.University</p>
-            </div>
-        </button>
-    }
+    <div id="student-results">
+        @foreach (var student in Model)
+        {
+            <button id="select-student"
+                    type="button"
+                    data-student-id="@student.Id"
+                    hx-get="/admin/classes/create?studentId=@student.Id"
+                    hx-target="#content"
+                    hx-swap="innerHTML"
+                    hx-push-url="true"
+                    class="student-result w-full flex items-center gap-3 px-4 py-3 hover:bg-emerald-800/60 active:bg-emerald-800 transition-colors duration-100 text-left">
+                <div class="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-emerald-500/20 text-xs font-bold text-emerald-300">
+                    @student.Initials
+                </div>
+                <div class="min-w-0">
+                    <p class="text-sm font-semibold text-white truncate">@student.FullName</p>
+                    <p class="text-xs text-emerald-300/60 truncate">@student.Email · @student.University</p>
+                </div>
+            </button>
+        }
+    </div>
 }
