@@ -19,13 +19,14 @@
      
 
      let totalPrice = document.getElementById("total-price");
-     totalPrice.value = classPrice.value * numberOfClasses.value;
+     totalPrice.value = Number(classPrice.value * numberOfClasses.value).toFixed(2);
      previewTotalPrice.textContent = totalPrice.value;
      calculateEndTime();
 
      classForm.addEventListener("input", (e) => {
          if (e.target.id === "class-count") {
-             totalPrice.value = e.target.value * classPrice.value;
+             totalPrice.value = Number(e.target.value * classPrice.value).toFixed(2);
+             console.log("Total price: " + totalPrice.value);
              previewClassCount.textContent = e.target.value;
              previewTotalPrice.textContent = totalPrice.value;
              togglePaidAmountClasses(info, paidAmount.value, totalPrice.value);
@@ -37,19 +38,20 @@
              return;
          }
          if (e.target.id === "class-price") {
-             totalPrice.value = e.target.value * numberOfClasses.value;
+             totalPrice.value = (e.target.value * numberOfClasses.value).toFixed(2);
              previewTotalPrice.textContent = totalPrice.value;
              togglePaidAmountClasses(info, paidAmount.value, totalPrice.value);
              return;
          }
          if (e.target.id === "paid-amount") {
              previewPaidAmount.textContent = paidAmount.value;
+             previewRemaining.textContent = Number(totalPrice.value - paidAmount.value).toFixed(2);
              togglePaidAmountClasses(info, paidAmount.value, totalPrice.value);
              return;
          }
          if (e.target.id === "total-price") {
              previewTotalPrice.textContent = totalPrice.value;
-             previewRemaining.textContent = totalPrice.value - paidAmount.value;
+             previewRemaining.textContent = (totalPrice.value - paidAmount.value).toFixed(2);
              return;
          }
      })
