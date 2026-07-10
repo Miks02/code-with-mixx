@@ -14,9 +14,11 @@ public class Reservation
     public Decimal TotalPrice { get; set; }
     public Decimal PaidAmount { get; set; }
 
-    public Decimal DiscountRate { get; init; }
+    public Decimal DiscountRate { get; set; }
 
-    public Decimal Bonus { get; init; }
+    public Decimal Bonus { get; set; }
+    
+    public string? Notes { get; set; }
 
     public Admin Admin { get; set; } = null!;
     public string AdminId { get; set; } = null!;  

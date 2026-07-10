@@ -28,6 +28,9 @@ public class ReservationConfiguration : IEntityTypeConfiguration<Reservation>
         builder.Property(r => r.ServiceType)
             .HasConversion<string>();
         
+        builder.Property(r => r.Notes)
+            .HasMaxLength(500);
+        
         builder.HasOne(r => r.Admin)
             .WithMany(a => a.Reservations)
             .HasForeignKey(r => r.AdminId)
