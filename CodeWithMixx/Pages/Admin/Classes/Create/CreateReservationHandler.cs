@@ -66,18 +66,6 @@ public class CreateReservationHandler(AppDbContext context) : IHandler
         
         context.Reservations.Add(reservation);
         
-        Console.WriteLine("-------------------");
-        Console.WriteLine("Reservation Details");
-        Console.WriteLine("Admin: " + reservation.AdminId);
-        Console.WriteLine("Student: " + reservation.StudentId);
-        Console.WriteLine("Total Price: " + reservation.TotalPrice);
-        Console.WriteLine("Paid Amount: " + reservation.PaidAmount);
-        Console.WriteLine("Payment Status: " + reservation.PaymentStatus);
-        Console.WriteLine("Discount rate: " + reservation.DiscountRate);
-        Console.WriteLine("Bonus: " + reservation.Bonus);
-        Console.WriteLine("Created at: " + reservation.CreatedAt);
-        Console.WriteLine("-------------------");
-        
         var createClassDto = new CreateClassDto
         {
             Reservation = reservation,
@@ -184,15 +172,6 @@ public class CreateReservationHandler(AppDbContext context) : IHandler
                 newClass.EndsAt = DateTime.SpecifyKind(currentStartTime, DateTimeKind.Utc);
             }
             classes.Add(newClass);
-        }
-
-        foreach(var reservedClass in classes)
-        {
-            Console.WriteLine("-------------------");
-            Console.WriteLine("Subject id: " + reservedClass.SubjectId);
-            Console.WriteLine("Starts at: " + reservedClass.StartsAt);
-            Console.WriteLine("Ends at: " + reservedClass.EndsAt);
-            Console.WriteLine("------------------");
         }
 
         return classes;
