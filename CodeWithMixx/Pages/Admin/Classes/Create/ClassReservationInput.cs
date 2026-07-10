@@ -11,12 +11,13 @@ namespace CodeWithMixx.Pages.Admin.Classes.Create
         [Precision(18, 2)] 
         public Decimal PricePerClass { get; init; } = 1300;
         [Precision(18,2)]
-        public Decimal TotalPrice { get; init; }
+        public Decimal? TotalPrice { get; init; }
         [Precision(18,2)]
         public Decimal PaidAmount { get; init; }
 
         public string? Notes { get; init; }
-        public double AmountOfClasses { get; init; } = 1;
+        [Precision(5,1)]
+        public Decimal AmountOfClasses { get; init; } = 1;
         public DateTime FirstClassStart { get; init; }
     }
 
