@@ -17,9 +17,11 @@ namespace CodeWithMixx.Pages.Admin.Classes.Details
         public decimal PricePerClass => Classes.Any() ? Classes[0].Price : 0;
         public decimal TotalPrice { get; init; }
         public decimal PaidAmount { get; init; }
+        public decimal DiscountRate { get; init; }
+        public Decimal BonusAmount { get; init; }
         public DateTime TermStartDate => Classes.First().StartsAt;
         public DateTime TermEndDate => Classes.Last().EndsAt;
-        public int TotalClasses => Classes.Count;
+        public decimal TotalClasses => Classes.Count;
         public IReadOnlyList<ClassItem> Classes { get; init; } = [];
 
         public record ClassItem
