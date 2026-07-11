@@ -142,22 +142,27 @@
         </div>
     </div>
     <div class="flex flex-col gap-4 row-2 md:row-1">
-        <div id="term-details" class="rounded-2xl bg-emerald-950/80 p-6 shadow-xl shadow-black/20 grow relative">
-            <div class="mb-4 flex items-center gap-3">
-                <div class="flex h-10 w-10 items-center justify-center rounded-xl bg-emerald-500/15 text-emerald-300">
-                    <i class="fa-solid fa-book-open-reader"></i>
+        @if (Model.CurrentTerm != null)
+        {
+            @await Html.PartialAsync("Admin/Classes/Details/_TermDetails", Model.CurrentTerm)
+        }
+        else
+        {
+            <div id="term-details" class="rounded-2xl bg-emerald-950/80 p-6 shadow-xl shadow-black/20 grow relative">
+                <div class="mb-4 flex items-center gap-3">
+                    <div class="flex h-10 w-10 items-center justify-center rounded-xl bg-emerald-500/15 text-emerald-300">
+                        <i class="fa-solid fa-book-open-reader"></i>
+                    </div>
+                    <h3 class="text-base font-semibold text-white">Detalji rezervacije</h3>
                 </div>
-                <h3 class="text-base font-semibold text-white">Detalji rezervacije</h3>
-            </div>
-            <div id="reservation-details" class="flex w-full h-full justify-center items-center pb-10">
-                <div class="text-xl flex flex-col items-center gap-2 leading-relaxed text-emerald-200/75 bg-slate-900/20 p-6 rounded-lg shadow-lg text-center w-[80%]">
-                    <i class="fa-solid fa-circle-info text-3xl text-blue-400"></i>
-                    <p>Izaberite jedan od rezervisanih termina iz liste kako bi prikazali detalje rezervacije.</p>
+                <div id="reservation-details" class="flex w-full h-full justify-center items-center pb-10">
+                    <div class="text-xl flex flex-col items-center gap-2 leading-relaxed text-emerald-200/75 bg-slate-900/20 p-6 rounded-lg shadow-lg text-center w-[80%]">
+                        <i class="fa-solid fa-circle-info text-3xl text-blue-400"></i>
+                        <p>Izaberite jedan od rezervisanih termina iz liste kako bi prikazali detalje rezervacije.</p>
+                    </div>
                 </div>
             </div>
-        </div>
-
-        
+        }
     </div>
     
     <div class="rounded-2xl bg-emerald-950/80 p-6 shadow-xl shadow-black/20 lg:col-span-3">
