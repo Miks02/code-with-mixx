@@ -1,3 +1,5 @@
+using System.Security.Claims;
+using CodeWithMixx.Common.Results;
 using CodeWithMixx.Infrastructure.Web;
 using FluentValidation;
 using Htmx;
@@ -10,6 +12,7 @@ public class IndexModel(
     GetCreatePageHandler getPageHandler,
     SearchStudentsHandler searchStudentsHandler,
     GetStudentHandler getStudentHandler,
+    CreateReservationHandler createReservationHandler,
     IValidator<ClassReservationInput> validator) : PageModel
 {
     [BindProperty] 
@@ -74,7 +77,28 @@ public class IndexModel(
             ViewModel = ViewModel with { SelectedStudent = studentResult.Payload };
             return Partial("_Create", this);
         }
-        // Privremeno
-        return new OkResult();
+
+        var result = await createReservationHandler.HandleAsync(Input, User.FindFirstValue(ClaimTypes.NameIdentifier)!, ct);
+
+        if (!result.IsSuccess)
+        {
+            Response.ShowToast(GetErrorMessage(result.Errors[0]), "error");
+            return Partial("_Create", this);
+        }
+        
+        
+        Response.ShowToast("Rezervacija je kreirana");
+        return RedirectToPage("/Admin/Classes/Index");
+    }
+    
+    private string GetErrorMessage(Error error)
+    {
+        return error.Code switch
+        {
+            "Admin.NotFound" => "Administrator nije pronadjen.",
+            "Student.NotFound" => "Student nije pronadjen.",
+            "Subject.NotFound" => "Predmet nije pronadjen.",
+            _ => "Došlo je do nepoznate greške. Pogledaj logove za detalje"
+        };
     }
 }
