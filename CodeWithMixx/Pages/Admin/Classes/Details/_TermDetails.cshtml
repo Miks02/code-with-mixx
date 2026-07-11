@@ -5,6 +5,8 @@
 
 @{
     var remaining = Model.TotalPrice - Model.PaidAmount;
+    var showBonus = Model.BonusAmount > 0;
+    var showDiscount = Model.DiscountRate > 0;
 }
 
 <div id="term-details" class="rounded-2xl bg-emerald-950/80 p-6 shadow-xl shadow-black/20 grow relative flex flex-col min-h-0 h-160 md:h-100">
@@ -19,7 +21,8 @@
                 <p class="text-xs text-emerald-300/60">@Model.TermStartDate.ToString("f", new CultureInfo("sr-Latn-RS"))</p>
             </div>
         </div>
-        <div class="flex gap-2">
+        <div class="flex flex-col gap-2 mr-2">
+            <div class="flex gap-2 justify-end">
             @switch (Model.ClassStatus)
             {
                 case ClassStatus.Ongoing:
@@ -54,6 +57,17 @@
                 }
             }
         </div>
+        <div class="flex gap-2">
+            @if (showBonus)
+            {
+                <span class="text-emerald-200 bg-emerald-900 px-2 py-1 rounded-md shadow-sm text-xs font-semibold"><i class="fa-solid fa-gift mr-1"></i>Bonus: @Model.BonusAmount RSD</span>
+            }
+            @if (showDiscount)
+            {
+                <span class="text-emerald-200 bg-emerald-900 px-2 py-1 rounded-md shadow-sm text-xs font-semibold"><i class="fa-solid fa-percent mr-1"></i>Popust: @Model.DiscountRate %</span>
+            }
+        </div>
+        </div>
     </div>
 
     <div id="reservation-details" class="flex flex-col gap-5 h-20 flex-1 min-h-0 pr-1 overflow-y-auto">
@@ -79,7 +93,7 @@
             </div>
         </div>
 
-        <div class="grid grid-cols-2  gap-3">
+        <div class="grid grid-cols-2 gap-3">
             <div class="rounded-xl bg-white/5 p-3 flex flex-col gap-1 justify-between grow">
                 <p class="text-xs text-emerald-300/60"><i class="fa-solid fa-tag mr-1"></i>Cena / čas</p>
                 <p class="font-bold text-white">@Model.PricePerClass RSD</p>
@@ -102,9 +116,11 @@
             <h4 class="text-sm font-semibold text-emerald-300 mb-3"><i class="fa-solid fa-sliders mr-2"></i>Izmena rezervacije</h4>
             <div class="grid grid-cols-1 sm:grid-cols-3 gap-3">
 
-                <form hx-post="/admin/classes/index?handler=UpdateClassStatus"
-                      hx-target="#term-details"
-                      hx-swap="outerHTML"
+                <form method="post"
+                      hx-post="/admin/classes/index?handler=UpdateTermStatus"
+                      hx-target="#content"
+                      hx-swap="innerHTML"
+                      hx-include="[name='filter'], [name='sort'], [name='subjectId'], [name='page']"
                       class="flex flex-col gap-2">
                     <input type="hidden" name="reservationId" value="@Model.ReservationId" />
                     <label class="text-xs text-emerald-300/70 font-medium">Status termina</label>
@@ -129,36 +145,31 @@
                     </button>
                 </form>
 
-                <form hx-post="/admin/classes/index?handler=UpdatePaymentStatus"
-                      hx-target="#term-details"
-                      hx-swap="outerHTML"
+                <form method="post"
+                      hx-post="/admin/classes/index?handler=UpdateTotalPrice"
+                      hx-target="#content"
+                      hx-swap="innerHTML"
+                      hx-include="[name='filter'], [name='sort'], [name='subjectId'], [name='page']"
                       class="flex flex-col gap-2">
                     <input type="hidden" name="reservationId" value="@Model.ReservationId" />
-                    <label class="text-xs text-emerald-300/70 font-medium">Status plaćanja</label>
-                    <select name="paymentStatus"
-                            class="w-full rounded-lg bg-emerald-900/60 border border-emerald-700/40 text-white text-sm px-3 py-2 focus:outline-none focus:ring-1 focus:ring-emerald-500">
-                        @foreach (PaymentStatus status in Enum.GetValues(typeof(PaymentStatus)))
-                        {
-                            <option value="@((int)status)" selected="@(status == Model.PaymentStatus)">
-                                @switch (status)
-                                {
-                                    case PaymentStatus.Pending: <text>Neplaćeno</text> break;
-                                    case PaymentStatus.Paid: <text>Plaćeno</text> break;
-                                    case PaymentStatus.Overdue: <text>Dugovanje</text> break;
-                                    case PaymentStatus.PartiallyPaid: <text>Delimično plaćeno</text> break;
-                                }
-                            </option>
-                        }
-                    </select>
+                    <label class="text-xs text-emerald-300/70 font-medium">Ukupna cena (RSD)</label>
+                    <input type="number"
+                           name="totalPrice"
+                           value="@Model.TotalPrice"
+                           min="0"
+                           step="0.01"
+                           class="w-full rounded-lg bg-emerald-900/60 border border-emerald-700/40 text-white text-sm px-3 py-2 focus:outline-none focus:ring-1 focus:ring-emerald-500" />
                     <button type="submit"
                             class="w-full rounded-lg bg-emerald-600 hover:bg-emerald-500 active:scale-95 transition-all duration-100 text-white text-xs font-semibold py-2 px-3">
-                        <i class="fa-solid fa-rotate-right mr-1"></i>Primeni
+                        <i class="fa-solid fa-floppy-disk mr-1"></i>Sačuvaj
                     </button>
                 </form>
 
-                <form hx-post="/admin/classes/index?handler=UpdatePricing"
-                      hx-target="#term-details"
-                      hx-swap="outerHTML"
+                <form method="post"
+                      hx-post="/admin/classes/index?handler=UpdatePaymentStatus"
+                      hx-target="#content"
+                      hx-swap="innerHTML"
+                      hx-include="[name='filter'], [name='sort'], [name='subjectId'], [name='page']"
                       class="flex flex-col gap-2">
                     <input type="hidden" name="reservationId" value="@Model.ReservationId" />
                     <label class="text-xs text-emerald-300/70 font-medium">Plaćeni iznos (RSD)</label>
@@ -174,17 +185,18 @@
                     </button>
                 </form>
 
-                <form hx-post="/admin/classes/index?handler=UpdateNumberOfClasses"
-                      hx-target="#term-details"
-                      hx-swap="outerHTML"
+                <form method="post"
+                      hx-post="/admin/classes/index?handler=UpdateNumberOfClasses"
+                      hx-target="#content"
+                      hx-swap="innerHTML"
+                      hx-include="[name='filter'], [name='sort'], [name='subjectId'], [name='page']"
                       class="flex flex-col gap-2">
                     <input type="hidden" name="reservationId" value="@Model.ReservationId" />
                     <label class="text-xs text-emerald-300/70 font-medium"><i class="fa-solid fa-chalkboard-user mr-1"></i>Broj časova</label>
                     <input type="number"
-                           name="numberOfClasses"
+                           step="any"
+                           name="amountOfClasses"
                            value="@Model.TotalClasses"
-                           min="1"
-                           step="1"
                            class="w-full rounded-lg bg-emerald-900/60 border border-emerald-700/40 text-white text-sm px-3 py-2 focus:outline-none focus:ring-1 focus:ring-emerald-500" />
                     <button type="submit"
                             class="w-full rounded-lg bg-emerald-600 hover:bg-emerald-500 active:scale-95 transition-all duration-100 text-white text-xs font-semibold py-2 px-3 mt-auto">
@@ -192,9 +204,11 @@
                     </button>
                 </form>
 
-                <form hx-post="/admin/classes/index?handler=UpdateFirstClassStart"
-                      hx-target="#term-details"
-                      hx-swap="outerHTML"
+                <form method="post"
+                      hx-post="/admin/classes/index?handler=UpdateFirstClassStart"
+                      hx-target="#content"
+                      hx-swap="innerHTML"
+                      hx-include="[name='filter'], [name='sort'], [name='subjectId'], [name='page']"
                       class="flex flex-col gap-2">
                     <input type="hidden" name="reservationId" value="@Model.ReservationId" />
                     <label class="text-xs text-emerald-300/70 font-medium"><i class="fa-solid fa-hourglass-start mr-1"></i>Početak prvog časa</label>
