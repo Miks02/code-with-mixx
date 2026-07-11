@@ -17,6 +17,7 @@ public class GetTermDetailsHandler(AppDbContext context) : IHandler
             .Select(r => new TermDetails
             {
                 ReservationId = r.Id,
+                StudentId = r.StudentId,
                 StudentName = r.Student.AppUser.FirstName + " " + r.Student.AppUser.LastName,
                 SubjectName = r.Classes.Select(c => c.Subject.Name).FirstOrDefault()!,
                 TotalPrice = r.TotalPrice,

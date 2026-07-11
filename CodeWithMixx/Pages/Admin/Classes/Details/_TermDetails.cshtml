@@ -73,12 +73,19 @@
     <div id="reservation-details" class="flex flex-col gap-5 h-20 flex-1 min-h-0 pr-1 overflow-y-auto">
 
         <div class="grid grid-cols-2 gap-3">
-            <div class="rounded-xl bg-white/5 p-4 flex items-center gap-3">
-                <div class="flex h-9 w-9 shrink-0 items-center justify-center rounded-lg bg-emerald-500/15 text-emerald-300">
+            <div 
+                hx-get="/admin/students/details?id=@Model.StudentId"
+                hx-target="#content"
+                hx-push-url="true"
+                hx-swap="innerHTML"
+                class="rounded-xl bg-white/5 p-4 flex items-center gap-3  hover:opacity-70 active:scale-95 transition duration-200 cursor-pointer">
+                <div class="flex h-9 w-9 shrink-0 items-center justify-center rounded-lg bg-emerald-500/15 text-emerald-300 ">
                     <i class="fa-solid fa-user-graduate"></i>
                 </div>
-                <div class="min-w-0">
-                    <p class="text-xs text-emerald-300/60 mb-0.5">Učenik</p>
+                <div 
+                    
+                    class="min-w-0">
+                    <p class="text-xs text-emerald-300/60 mb-0.5">Student</p>
                     <p class="text-sm font-semibold text-white truncate">@Model.StudentName</p>
                 </div>
             </div>
