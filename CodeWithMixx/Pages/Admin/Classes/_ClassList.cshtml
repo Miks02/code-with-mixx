@@ -24,10 +24,12 @@ else
             @foreach (var classItem in Model.Items)
             {
                 <article 
-                    hx-get="/admin/classes/details?id=@classItem.Id"
-                    hx-target="#content"
+                    hx-get="/admin/classes/index?handler=TermDetails&reservationId=@classItem.Id"
+                    hx-target="#term-details"
                     hx-push-url="true"
-                    hx-swap="innerHTML"
+                    hx-swap="outerHTML"
+                    hx-indicator="#list-indicator"
+                    hx-include="[name='subjectId'], [name='sort'], [name='filter'], [name='page']"
                     class="rounded-xl bg-white/5 p-4 shadow-md hover:bg-white/10 cursor-pointer active:scale-95 active:opacity-70 transition-all duration-100 flex flex-col justify-between">
                     <div class="mb-3 flex justify-between gap-3 items-start ">
                         <div>
