@@ -12,8 +12,6 @@ public class GetTermDetailsHandler(AppDbContext context) : IHandler
 {
     public async Task<Result<TermDetails>> HandleAsync(int reservationId, CancellationToken ct = default)
     {
-        var culture = new CultureInfo("sr-Latn-RS");
-        
         var reservation = await context.Reservations
             .Where(r => r.Id == reservationId)
             .Select(r => new TermDetails
@@ -24,6 +22,8 @@ public class GetTermDetailsHandler(AppDbContext context) : IHandler
                 TotalPrice = r.TotalPrice,
                 PaidAmount = r.PaidAmount,
                 Notes = r.Notes ?? "",
+                DiscountRate = r.DiscountRate,
+                BonusAmount = r.Bonus,
                 PaymentStatus = r.PaymentStatus,
                 ClassStatus = r.Classes.Any(c => c.ClassStatus == ClassStatus.Ongoing) ? ClassStatus.Ongoing :
                     r.Classes.All(c => c.ClassStatus == ClassStatus.Completed) ? ClassStatus.Completed :
