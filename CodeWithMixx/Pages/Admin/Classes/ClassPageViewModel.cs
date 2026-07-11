@@ -1,4 +1,5 @@
 using CodeWithMixx.Common.Results;
+using CodeWithMixx.Pages.Admin.Classes.Details;
 
 namespace CodeWithMixx.Pages.Admin.Classes;
 
@@ -10,6 +11,7 @@ public record ClassPageViewModel
     public int CancelledClasses { get; init; }
     public IReadOnlyList<SubjectDropdownItem> Subjects { get; init; } = [];
     public PagedResult<ClassReservationListItem> Classes { get; init; } = null!;
+    public TermDetails? CurrentTerm { get; init; }
 
     public record SubjectDropdownItem
     {
@@ -17,4 +19,3 @@ public record ClassPageViewModel
         public string SubjectName { get; set; } = null!;
     }
 }
-    
