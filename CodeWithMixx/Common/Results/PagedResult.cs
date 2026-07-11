@@ -1,3 +1,5 @@
+using Microsoft.EntityFrameworkCore;
+
 namespace CodeWithMixx.Common.Results;
 
 public class PagedResult<T>(IReadOnlyList<T> items, int pageNumber, int pageSize, int totalCount)
@@ -10,4 +12,12 @@ public class PagedResult<T>(IReadOnlyList<T> items, int pageNumber, int pageSize
     public bool HasNextPage => PageNumber < TotalPages;
     public int PaginatedCount => Items.Count;
     public int TotalCount { get; init; } = totalCount;
+
+    public static async Task<PagedResult<T>> CreateAsync(IQueryable<T> query, int pageNumber, int pageSize,
+        CancellationToken ct = default)
+    {
+        var totalCount = await query.CountAsync(ct);
+        return new PagedResult<T>(await query.Skip((pageNumber - 1) * pageSize).Take(pageSize).ToListAsync(ct), pageNumber, pageSize, totalCount);
+    }
+    
 }

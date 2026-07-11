@@ -1,0 +1,13 @@
+@model StudentSearchResultItem
+
+
+<div class="mb-4 flex items-center justify-between gap-3 rounded-xl bg-sky-500/10 border border-sky-500/25 px-4 py-3">
+    <div class="flex items-center gap-3 min-w-0">
+        <div id="selected-student-initials" class="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-sky-500/20 text-xs font-bold text-sky-300">@Model.Initials</div>
+        <div class="min-w-0">
+            <p id="selected-student-name" class="text-sm font-semibold text-white truncate">@Model.FullName</p>
+            <p id="selected-student-email" class="text-xs text-sky-300/60 truncate">@Model.Email</p>
+        </div>
+    </div>
+</div>
+

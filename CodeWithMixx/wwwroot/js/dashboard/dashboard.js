@@ -8,7 +8,6 @@ window.addEventListener("DOMContentLoaded", () => {
     document.addEventListener("htmx:afterOnLoad", () => {
         initCharts();
     })
-   
 })
 
 

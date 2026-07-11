@@ -3,6 +3,7 @@ using System;
 using CodeWithMixx.Infrastructure.Persistence;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
@@ -11,9 +12,11 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace CodeWithMixx.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    partial class AppDbContextModelSnapshot : ModelSnapshot
+    [Migration("20260705212437_AddSeedDataForSubjects")]
+    partial class AddSeedDataForSubjects
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -150,17 +153,11 @@ namespace CodeWithMixx.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("ClassStatus");
-
-                    b.HasIndex("EndsAt");
-
                     b.HasIndex("ReservationId");
-
-                    b.HasIndex("StartsAt");
 
                     b.HasIndex("SubjectId");
 
-                    b.ToTable("Classes", t =>
+                    b.ToTable("Class", t =>
                         {
                             t.HasCheckConstraint("CK_Classes_Price_Positive", "\"Price\" >= 0");
                         });
@@ -178,20 +175,8 @@ namespace CodeWithMixx.Migrations
                         .IsRequired()
                         .HasColumnType("text");
 
-                    b.Property<decimal>("Bonus")
-                        .HasPrecision(18, 2)
-                        .HasColumnType("numeric(18,2)");
-
                     b.Property<DateTime>("CreatedAt")
                         .HasColumnType("timestamp with time zone");
-
-                    b.Property<decimal>("DiscountRate")
-                        .HasPrecision(5, 2)
-                        .HasColumnType("numeric(5,2)");
-
-                    b.Property<string>("Notes")
-                        .HasMaxLength(500)
-                        .HasColumnType("character varying(500)");
 
                     b.Property<decimal>("PaidAmount")
                         .HasColumnType("numeric");
@@ -216,20 +201,10 @@ namespace CodeWithMixx.Migrations
 
                     b.HasIndex("AdminId");
 
-                    b.HasIndex("PaymentStatus");
-
-                    b.HasIndex("ServiceType");
-
                     b.HasIndex("StudentId");
 
-                    b.ToTable("Reservations", t =>
+                    b.ToTable("Reservation", t =>
                         {
-                            t.HasCheckConstraint("CK_Reservations_Bonus_Positive", "\"Bonus\" >= 0");
-
-                            t.HasCheckConstraint("CK_Reservations_DiscountRate_LessThan100", "\"DiscountRate\" <= 100");
-
-                            t.HasCheckConstraint("CK_Reservations_DiscountRate_Positive", "\"DiscountRate\" >= 0");
-
                             t.HasCheckConstraint("CK_Reservations_TotalPrice_Positive", "\"TotalPrice\" >= 0");
                         });
                 });
@@ -268,7 +243,7 @@ namespace CodeWithMixx.Migrations
 
                     b.HasIndex("AdminId");
 
-                    b.ToTable("Subjects");
+                    b.ToTable("Subject");
 
                     b.HasData(
                         new

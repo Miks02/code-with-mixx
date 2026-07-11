@@ -1,0 +1,11 @@
+﻿@page
+@model CodeWithMixx.Pages.Admin.Classes.Create.IndexModel
+
+@{
+    ViewData["Title"] = "Rezervacija časova";
+    Layout = "Shared/_DashboardLayout";
+}
+
+<div id="content">
+    @await Html.PartialAsync("_Create", Model)
+</div>
