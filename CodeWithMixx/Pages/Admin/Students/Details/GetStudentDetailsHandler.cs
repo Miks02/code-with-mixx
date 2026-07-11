@@ -2,6 +2,7 @@ using System.Globalization;
 using CodeWithMixx.Common.Interfaces;
 using CodeWithMixx.Common.Results;
 using CodeWithMixx.Domain.Entities.AppUsers;
+using CodeWithMixx.Domain.Entities.Classes;
 using CodeWithMixx.Infrastructure.Persistence;
 using Microsoft.EntityFrameworkCore;
 
@@ -22,10 +23,25 @@ public class GetStudentDetailsHandler(AppDbContext context) : IHandler
                 PhoneNumber = s.AppUser.PhoneNumber ?? "N/A",
                 University = s.University ?? "N/A",
                 RegisteredAt = s.AppUser.CreatedAt.ToString("MMMM dd, yyyy", new CultureInfo("sr-Latn-RS")),
-                UpcomingClasses = 0,
-                TotalClasses = 0,
+                UpcomingClasses = s.Reservations.SelectMany(r => r.Classes).Count(c => c.ClassStatus == ClassStatus.Scheduled && c.StartsAt > DateTime.UtcNow),
+                TotalClasses = s.Reservations.SelectMany(r => r.Classes).Count(),
                 ActiveProjects = 0,
-                Status = s.AppUser.AccountStatus
+                Status = s.AppUser.AccountStatus,
+                PreviousClasses = s.Reservations
+                    .Where(r => r.Classes.Any(c => c.StartsAt < DateTime.UtcNow))
+                    .Select(r => new StudentDetailsViewModel.ClassReservationItem
+                    {
+                        ReservationId = r.Id,
+                        SubjectName = r.Classes.Select(c => c.Subject.Name).FirstOrDefault() ?? "N/A",
+                        StartDate = r.Classes.Min(c => c.StartsAt),
+                        EndDate = r.Classes.Max(c => c.EndsAt),
+                        ClassStatus = r.Classes.Any(c => c.ClassStatus == ClassStatus.Ongoing) ? ClassStatus.Ongoing :
+                            r.Classes.All(c => c.ClassStatus == ClassStatus.Completed) ? ClassStatus.Completed :
+                            r.Classes.All(c => c.ClassStatus == ClassStatus.Cancelled) ? ClassStatus.Cancelled :
+                            ClassStatus.Scheduled,
+                        PaymentStatus = r.PaymentStatus
+                    })
+                    .ToList()
             })
             .FirstOrDefaultAsync(ct);
 

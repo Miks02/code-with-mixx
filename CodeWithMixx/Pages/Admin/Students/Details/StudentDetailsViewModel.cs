@@ -1,3 +1,7 @@
+using CodeWithMixx.Domain.Entities.AppUsers;
+using CodeWithMixx.Domain.Entities.Classes;
+using CodeWithMixx.Domain.Entities.Reservations;
+
 namespace CodeWithMixx.Pages.Admin.Students.Details;
 
 public record StudentDetailsViewModel
@@ -12,6 +16,18 @@ public record StudentDetailsViewModel
     public int UpcomingClasses { get; init; }
     public int TotalClasses { get; init; }
     public int ActiveProjects { get; init; }
-    public CodeWithMixx.Domain.Entities.AppUsers.AccountStatus Status { get; init; }
+    public AccountStatus Status { get; init; }
     public bool HasActiveProjects => ActiveProjects > 0;
+    public List<ClassReservationItem> PreviousClasses { get; init; } = [];
+
+    public record ClassReservationItem
+    {
+        public int ReservationId { get; init; }
+        public string SubjectName { get; init; } = string.Empty;
+        public DateTime StartDate { get; init; }
+        public DateTime EndDate { get; init; }
+        public ClassStatus ClassStatus { get; init; }
+        public PaymentStatus PaymentStatus { get; init; }
+    }
+    
 };

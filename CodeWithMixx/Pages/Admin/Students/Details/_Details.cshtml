@@ -1,4 +1,6 @@
 @using CodeWithMixx.Domain.Entities.AppUsers
+@using CodeWithMixx.Domain.Entities.Classes
+@using CodeWithMixx.Domain.Entities.Reservations
 @model StudentDetailsViewModel
 
 <div class="relative flex flex-col gap-6 p-4 sm:p-6 min-h-100">
@@ -161,15 +163,84 @@
                     Prethodni časovi
                 </h3>
                 
-                <div class="flex flex-col items-center justify-center py-12 px-4 text-center border-2 border-dashed border-white/10 rounded-xl">
-                    <div class="h-16 w-16 bg-white/5 rounded-full flex items-center justify-center mb-4">
-                        <i class="fa-solid fa-layer-group text-2xl text-emerald-300/20"></i>
+                @if (Model.PreviousClasses.Any())
+                {
+                    <div class="flex flex-col gap-4 h-70 overflow-y-auto">
+                        @foreach (var classItem in Model.PreviousClasses)
+                        {
+                            <a 
+                                href="/admin/classes/index?handler=TermDetails&reservationId=@classItem.ReservationId"
+                                class="group relative flex flex-col gap-3 p-4 bg-white/5 hover:bg-white/10 border border-white/10 rounded-xl transition-all duration-200 cursor-pointer">
+                                
+                                <div class="flex justify-between items-start gap-3">
+                                    <div class="min-w-0">
+                                        <h4 class="text-sm font-bold text-white group-hover:text-emerald-400 transition-colors truncate">@classItem.SubjectName</h4>
+                                        <div class="flex items-center gap-2 mt-1">
+                                            <i class="fa-solid fa-calendar-day text-[10px] text-emerald-400/60"></i>
+                                            <span class="text-xs text-emerald-300/60 font-medium">@classItem.StartDate.ToString("dd.MM.yyyy")</span>
+                                        </div>
+                                    </div>
+                                    
+                                    <div class="flex flex-col items-end gap-1 shrink-0">
+                                        @switch (classItem.ClassStatus)
+                                        {
+                                            case ClassStatus.Completed:
+                                                <span class="text-[10px] px-2 py-0.5 bg-sky-500/10 text-sky-400 rounded-full border border-sky-500/20 font-bold uppercase tracking-wider">Završen</span>
+                                                break;
+                                            case ClassStatus.Cancelled:
+                                                <span class="text-[10px] px-2 py-0.5 bg-red-500/10 text-red-400 rounded-full border border-red-500/20 font-bold uppercase tracking-wider">Otkazan</span>
+                                                break;
+                                            case ClassStatus.Ongoing:
+                                                <span class="text-[10px] px-2 py-0.5 bg-green-500/10 text-green-400 rounded-full border border-green-500/20 font-bold uppercase tracking-wider">U toku</span>
+                                                break;
+                                            default:
+                                                <span class="text-[10px] px-2 py-0.5 bg-amber-500/10 text-amber-400 rounded-full border border-amber-500/20 font-bold uppercase tracking-wider">Zakazan</span>
+                                                break;
+                                        }
+                                    </div>
+                                </div>
+            
+                                <div class="flex items-center justify-between pt-3 border-t border-white/5">
+                                    <div class="flex items-center gap-2 text-xs text-emerald-300/60">
+                                        <i class="fa-regular fa-clock text-emerald-400/60"></i>
+                                        <span>@classItem.StartDate.ToString("HH:mm") - @classItem.EndDate.ToString("HH:mm")</span>
+                                    </div>
+                                    
+                                    @if (classItem.ClassStatus != ClassStatus.Cancelled)
+                                    {
+                                        @switch (classItem.PaymentStatus)
+                                        {
+                                            case PaymentStatus.Paid:
+                                                <i class="fa-solid fa-circle-check text-sky-400 text-xs" title="Plaćeno"></i>
+                                                break;
+                                            case PaymentStatus.Overdue:
+                                                <i class="fa-solid fa-circle-exclamation text-red-400 text-xs" title="Dugovanje"></i>
+                                                break;
+                                            case PaymentStatus.PartiallyPaid:
+                                                <i class="fa-solid fa-circle-half-stroke text-yellow-400 text-xs" title="Delimično plaćeno"></i>
+                                                break;
+                                            default:
+                                                <i class="fa-regular fa-circle text-amber-400/40 text-xs" title="Neplaćeno"></i>
+                                                break;
+                                        }
+                                    }
+                                </div>
+                            </a>
+                        }
                     </div>
-                    <h4 class="text-white font-medium mb-1">Nema podataka</h4>
-                    <p class="text-sm text-emerald-300/40 max-w-50">
-                        Istorija časova će biti dostupna nakon implementacije modula.
-                    </p>
-                </div>
+                }
+                else
+                {
+                    <div class="flex flex-col items-center justify-center py-12 px-4 text-center border-2 border-dashed border-white/10 rounded-xl">
+                        <div class="h-16 w-16 bg-white/5 rounded-full flex items-center justify-center mb-4">
+                            <i class="fa-solid fa-layer-group text-2xl text-emerald-300/20"></i>
+                        </div>
+                        <h4 class="text-white font-medium mb-1">Nema podataka</h4>
+                        <p class="text-sm text-emerald-300/40 max-w-50">
+                            Istorija časova će biti dostupna nakon što student završi svoj prvi čas.
+                        </p>
+                    </div>
+                }
             </div>
         </aside>
     </div>
