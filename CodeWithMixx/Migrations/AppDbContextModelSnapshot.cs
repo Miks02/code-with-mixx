@@ -150,7 +150,13 @@ namespace CodeWithMixx.Migrations
 
                     b.HasKey("Id");
 
+                    b.HasIndex("ClassStatus");
+
+                    b.HasIndex("EndsAt");
+
                     b.HasIndex("ReservationId");
+
+                    b.HasIndex("StartsAt");
 
                     b.HasIndex("SubjectId");
 
@@ -180,8 +186,8 @@ namespace CodeWithMixx.Migrations
                         .HasColumnType("timestamp with time zone");
 
                     b.Property<decimal>("DiscountRate")
-                        .HasPrecision(5, 4)
-                        .HasColumnType("numeric(5,4)");
+                        .HasPrecision(5, 2)
+                        .HasColumnType("numeric(5,2)");
 
                     b.Property<string>("Notes")
                         .HasMaxLength(500)
@@ -209,6 +215,10 @@ namespace CodeWithMixx.Migrations
                     b.HasKey("Id");
 
                     b.HasIndex("AdminId");
+
+                    b.HasIndex("PaymentStatus");
+
+                    b.HasIndex("ServiceType");
 
                     b.HasIndex("StudentId");
 
