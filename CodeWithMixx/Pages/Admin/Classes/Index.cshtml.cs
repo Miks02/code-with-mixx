@@ -1,4 +1,3 @@
-using CodeWithMixx.Pages.Admin.Classes.Create;
 using Htmx;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;

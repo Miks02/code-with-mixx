@@ -4,7 +4,7 @@ using CodeWithMixx.Common.Results;
 using CodeWithMixx.Domain.Entities.Classes;
 using CodeWithMixx.Infrastructure.Persistence;
 
-namespace CodeWithMixx.Pages.Admin.Classes.Create;
+namespace CodeWithMixx.Pages.Admin.Classes;
 
 public class GetClassesHandler(AppDbContext context) : IHandler
 {
