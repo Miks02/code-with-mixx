@@ -12,6 +12,10 @@ public class ClassConfiguration : IEntityTypeConfiguration<Class>
 
         builder.Property(r => r.Price)
             .HasPrecision(18, 2);
+
+        builder.HasIndex(c => c.ClassStatus);
+        builder.HasIndex(c => c.StartsAt);
+        builder.HasIndex(c => c.EndsAt);
         
         builder.HasOne(c => c.Subject)
             .WithMany(s => s.Classes)

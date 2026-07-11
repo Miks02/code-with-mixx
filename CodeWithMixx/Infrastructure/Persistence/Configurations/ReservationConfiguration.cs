@@ -12,7 +12,7 @@ public class ReservationConfiguration : IEntityTypeConfiguration<Reservation>
         builder.ToTable(t => t.HasCheckConstraint("CK_Reservations_Bonus_Positive", "\"Bonus\" >= 0"));
         builder.ToTable(t => t.HasCheckConstraint("CK_Reservations_DiscountRate_Positive", "\"DiscountRate\" >= 0"));
         builder.ToTable(t => t.HasCheckConstraint("CK_Reservations_DiscountRate_LessThan100", "\"DiscountRate\" <= 100"));
-
+        
         builder.Property(r => r.TotalPrice)
             .HasPrecision(18, 2);
 
@@ -20,7 +20,7 @@ public class ReservationConfiguration : IEntityTypeConfiguration<Reservation>
             .HasPrecision(18, 2);
 
         builder.Property(r => r.DiscountRate)
-            .HasPrecision(5, 4);
+            .HasPrecision(5, 2);
     
         builder.Property(r => r.PaymentStatus)
             .HasConversion<string>();
@@ -30,6 +30,9 @@ public class ReservationConfiguration : IEntityTypeConfiguration<Reservation>
         
         builder.Property(r => r.Notes)
             .HasMaxLength(500);
+
+        builder.HasIndex(r => r.PaymentStatus);
+        builder.HasIndex(r => r.ServiceType);
         
         builder.HasOne(r => r.Admin)
             .WithMany(a => a.Reservations)
