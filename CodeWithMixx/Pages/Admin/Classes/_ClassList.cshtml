@@ -19,98 +19,102 @@
 }
 else
 {
-    <div class="grid max-h-[34rem] gap-4 overflow-y-auto px-3 pb-4 sm:grid-cols-2 sm:px-6 sm:pb-5 sm:pr-2">
-        @foreach (var classItem in Model.Items)
-        {
-            <article 
-                hx-get="/admin/classes/details?id=@classItem.Id"
-                hx-target="#content"
-                hx-push-url="true"
-                hx-swap="innerHTML"
-                class="rounded-xl bg-white/5 p-4  shadow-md hover:bg-white/10 cursor-pointer active:scale-95 active:opacity-70 transition-all duration-100">
-                <div class="mb-3 flex justify-between gap-3">
-                    <div>
-                        <h4 class="font-semibold text-white md:w-50">@classItem.SubjectName</h4>
-                        <p class="text-xs text-emerald-300/70">@classItem.StudentName</p>
-                    </div>
-                    <div class="flex justify-end items-start flex-wrap md:flex-nowrap gap-2 items-center font-semibold text-sm">
-                        @switch (classItem.ClassStatus) 
-                        {
-                            case ClassStatus.Ongoing:
-                                <p class="text-green-200 sm:bg-green-900 sm:px-2 sm:py-1 sm:rounded-md sm:shadow-sm"><i class="hidden sm:inline-block fa-solid fa-hourglass-half mr-2"></i>U toku</p>
-                                break;
-                            case ClassStatus.Scheduled:
-                                <p class="text-amber-200 sm:bg-amber-900 sm:px-2 sm:py-1 sm:rounded-md sm:shadow-sm"><i class="fa-solid fa-circle-xmark mr-2"></i>Zakazan</p>
-                                break;
-                            case ClassStatus.Cancelled:
-                                <p class="text-red-200 sm:bg-red-900 sm:px-2 sm:py-1 sm:rounded-md sm:shadow-sm"><i class="fa-solid fa-trash mr-2"></i>Otkazan</p>
-                                break;
-                            case ClassStatus.Completed:
-                                <p class="text-blue-200 sm:px-2 sm:py-1 sm:bg-sky-900 sm:rounded-md sm:shadow-sm"><i class="fa-solid fa-check mr-2"></i>Završen</p>
-                                break;
-                        }
-                        
-                        @if (classItem.ClassStatus != ClassStatus.Cancelled)
-                        {
-                            @switch (classItem.PaymentStatus)
+    <div class="flex min-h-0 flex-col h-125">
+        <div class="grid  min-h-0 gap-4 overflow-y-auto px-3 pb-4 sm:grid-cols-2 sm:px-6 sm:pb-5 sm:pr-2">
+            @foreach (var classItem in Model.Items)
+            {
+                <article 
+                    hx-get="/admin/classes/details?id=@classItem.Id"
+                    hx-target="#content"
+                    hx-push-url="true"
+                    hx-swap="innerHTML"
+                    class="rounded-xl bg-white/5 p-4 shadow-md hover:bg-white/10 cursor-pointer active:scale-95 active:opacity-70 transition-all duration-100 flex flex-col justify-between">
+                    <div class="mb-3 flex justify-between gap-3 items-start ">
+                        <div>
+                            <h4 class="font-semibold text-white md:w-50">@classItem.SubjectName</h4>
+                            <p class="text-xs text-emerald-300/70">@classItem.StudentName</p>
+                        </div>
+                        <div class="flex justify-end flex-wrap md:flex-nowrap gap-2 items-center font-semibold text-sm">
+                            @switch (classItem.ClassStatus) 
                             {
-                                case PaymentStatus.Pending:
-                                    <p class="text-amber-200 sm:bg-amber-900 sm:px-2 sm:py-1 sm:rounded-md sm:shadow-sm font-semibold"><i class="fa-solid fa-circle-check mr-2"></i>Neplaćeno</p>
+                                case ClassStatus.Ongoing:
+                                    <p class="text-green-200 sm:bg-green-900 sm:px-2 sm:py-1 sm:rounded-md sm:shadow-sm"><i class="hidden sm:inline-block fa-solid fa-hourglass-half mr-2"></i>U toku</p>
                                     break;
-                                case PaymentStatus.Paid:
-                                    <p class="text-sky-200 sm:bg-sky-900 sm:px-2 sm:py-1 sm:rounded-md sm:shadow-sm font-semibold"><i class="fa-solid fa-circle-check mr-2"></i>Plaćeno</p>
+                                case ClassStatus.Scheduled:
+                                    <p class="text-amber-200 sm:bg-amber-900 sm:px-2 sm:py-1 sm:rounded-md sm:shadow-sm"><i class="fa-solid fa-circle-xmark mr-2"></i>Zakazan</p>
                                     break;
-                                case PaymentStatus.Overdue:
-                                    <p class="text-red-200 sm:bg-red-900 sm:px-2 sm:py-1 sm:rounded-md sm:shadow-sm font-semibold"><i class="fa-solid fa-circle-exclamation mr-2"></i>Dugovanje</p>
+                                case ClassStatus.Cancelled:
+                                    <p class="text-red-200 sm:bg-red-900 sm:px-2 sm:py-1 sm:rounded-md sm:shadow-sm"><i class="fa-solid fa-trash mr-2"></i>Otkazan</p>
+                                    break;
+                                case ClassStatus.Completed:
+                                    <p class="text-blue-200 sm:px-2 sm:py-1 sm:bg-sky-900 sm:rounded-md sm:shadow-sm"><i class="fa-solid fa-check mr-2"></i>Završen</p>
                                     break;
                             }
-                        }
+                            
+                            @if (classItem.ClassStatus != ClassStatus.Cancelled)
+                            {
+                                @switch (classItem.PaymentStatus)
+                                {
+                                    case PaymentStatus.Pending:
+                                        <p class="text-amber-200 sm:bg-amber-900 sm:px-2 sm:py-1 sm:rounded-md sm:shadow-sm font-semibold"><i class="fa-solid fa-circle-check mr-2"></i>Neplaćeno</p>
+                                        break;
+                                    case PaymentStatus.Paid:
+                                        <p class="text-sky-200 sm:bg-sky-900 sm:px-2 sm:py-1 sm:rounded-md sm:shadow-sm font-semibold"><i class="fa-solid fa-circle-check mr-2"></i>Plaćeno</p>
+                                        break;
+                                    case PaymentStatus.Overdue:
+                                        <p class="text-red-200 sm:bg-red-900 sm:px-2 sm:py-1 sm:rounded-md sm:shadow-sm font-semibold"><i class="fa-solid fa-circle-exclamation mr-2"></i>Dugovanje</p>
+                                        break;
+                                    case PaymentStatus.PartiallyPaid:
+                                        <p class="text-yellow-200 sm:bg-yellow-900 px-2 sm:py-1 sm:rounded-md sm:shadow-sm font-semibold w-20 md:w-auto"><i class="fa-solid fa-circle-half-stroke mr-2"></i>Del. plaćeno</p>
+                                        break;
+                                }   
+                            }
+                        </div>
                     </div>
+                    <div class="flex justify-between items-center gap-2 flex-wrap text-sm text-emerald-100/80">
+                        <div class="flex flex-col gap-2">
+                            
+                            <p class="sm:p-2 sm:bg-emerald-900 sm:rounded-md sm:shadow-sm"><i class="fa-solid fa-chalkboard-user mr-2 text-emerald-400/80"></i>Časovi: @classItem.AmountOfClasses</p>
+                            <p class="sm:p-2 sm:bg-emerald-900 sm:rounded-md sm:shadow-sm"><i class="fa-solid fa-money-bill mr-2 text-emerald-400/80"></i>Cena: @classItem.TotalPrice</p>
+                        </div>
+                        <div class="flex flex-col gap-2">
+                            <p class="sm:p-2 sm:bg-emerald-900 sm:rounded-md sm:shadow-sm"><i class="fa-solid fa-hourglass-start mr-2 text-emerald-400/80"></i>@classItem.StartsAt</p>
+                            <p class="sm:p-2 sm:bg-emerald-900 sm:rounded-md sm:shadow-sm"><i class="fa-solid fa-hourglass-end mr-2 text-emerald-400/80"></i>@classItem.EndsAt</p>
+                        </div>
+                    </div>
+                </article>
+            }
+        </div>
+        <div class="flex shrink-0 items-center justify-between bg-emerald-900/30 px-5 py-3 sm:px-6 mt-auto">
+            <p class="text-xs text-emerald-300/50">Ukupan broj strana: @Model.TotalPages</p>
+                    
+            <div class="flex gap-2">
+                <button hx-push-url="true" 
+                        hx-get="/admin/classes/index?handler=Classes&page=@(Model.PageNumber - 1)" 
+                        hx-target="#class-list" 
+                        hx-indicator="#list-indicator"
+                        hx-swap="innerHTML" 
+                        hx-include="[name='subjectId'], [name='sort'], [name='filter']"
+                        class="bg-emerald-400 flex items-center justify-center px-4 py-1 rounded-md hover:bg-emerald-500 active:scale-95 disabled:opacity-50 transition duration-200" 
+                        @(Model.HasPreviousPage ? "" : "disabled")>
+                    <i class="fa-solid fa-chevron-left text-amber-600"></i>
+                </button>
+                <div class="bg-emerald-400 px-4 py-1 rounded-md text-amber-600 font-semibold">
+                    @Model.PageNumber
                 </div>
-                <div class="flex justify-between items-center gap-2 flex-wrap text-sm text-emerald-100/80">
-                    <div class="flex flex-col gap-2">
-                        
-                        <p class="sm:p-2 sm:bg-emerald-900 sm:rounded-md sm:shadow-sm"><i class="fa-solid fa-chalkboard-user mr-2 text-emerald-400/80"></i>Časovi: @classItem.AmountOfClasses</p>
-                        <p class="sm:p-2 sm:bg-emerald-900 sm:rounded-md sm:shadow-sm"><i class="fa-solid fa-money-bill mr-2 text-emerald-400/80"></i>Cena: @classItem.TotalPrice</p>
-                    </div>
-                    <div class="flex flex-col gap-2">
-                        <p class="sm:p-2 sm:bg-emerald-900 sm:rounded-md sm:shadow-sm"><i class="fa-solid fa-hourglass-start mr-2 text-emerald-400/80"></i>@classItem.StartsAt</p>
-                        <p class="sm:p-2 sm:bg-emerald-900 sm:rounded-md sm:shadow-sm"><i class="fa-solid fa-hourglass-end mr-2 text-emerald-400/80"></i>@classItem.EndsAt</p>
-                    </div>
-                </div>
-            </article>
-        }
-             
-    </div>
-    <div class="flex items-center justify-between bg-emerald-900/30 px-5 py-3 sm:px-6">
-        <p class="text-xs text-emerald-300/50">Prikazan broj časova: @Model.PaginatedCount</p>
-                
-        <div class="flex gap-2">
-            <button hx-push-url="true" 
-                    hx-get="/admin/students?handler=Students" 
-                    hx-vals='js:{"page": "@(Model.PageNumber - 1)", "search": document.getElementsByName("search")[0]?.value, "filter": document.getElementsByName("filter")[0]?.value, "sort": document.getElementsByName("sort")[0]?.value}'
-                    hx-target="#student-list" 
-                    hx-indicator="#student-list-indicator"
-                    hx-swap="innerHTML" 
-                    class="bg-emerald-400 flex items-center justify-center px-4 py-1 rounded-md hover:bg-emerald-500 active:scale-95 disabled:opacity-50 transition duration-200" 
-                    @(Model.HasPreviousPage ? "" : "disabled")>
-                <i class="fa-solid fa-chevron-left text-amber-600"></i>
-            </button>
-            <div class="bg-emerald-400 px-4 py-1 rounded-md text-amber-600 font-semibold">
-                @Model.PageNumber
+
+                <button hx-push-url="true" 
+                        hx-get="/admin/classes/index?handler=Classes&page=@(Model.PageNumber + 1)" 
+                        hx-target="#class-list" 
+                        hx-indicator="#list-indicator"
+                        hx-swap="innerHTML" 
+                        hx-include="[name='subjectId'], [name='sort'], [name='filter']"
+                        class="bg-emerald-400 flex items-center justify-center px-4 py-1 rounded-md hover:bg-emerald-500 active:scale-95 disabled:opacity-50 transition duration-200" 
+                        @(Model.HasNextPage ? "" : "disabled")>
+                    <i class="fa-solid fa-chevron-right text-amber-600"></i>
+                </button>
+
             </div>
-
-            <button hx-push-url="true" 
-                    hx-get="/admin/students?handler=Students" 
-                    hx-vals='js:{"page": "@(Model.PageNumber + 1)", "search": document.getElementsByName("search")[0]?.value, "filter": document.getElementsByName("filter")[0]?.value, "sort": document.getElementsByName("sort")[0]?.value}'
-                    hx-target="#student-list" 
-                    hx-indicator="#student-list-indicator"
-                    hx-swap="innerHTML" 
-                    class="bg-emerald-400 flex items-center justify-center px-4 py-1 rounded-md hover:bg-emerald-500 active:scale-95 disabled:opacity-50 transition duration-200" 
-                    @(Model.HasNextPage ? "" : "disabled")>
-                <i class="fa-solid fa-chevron-right text-amber-600"></i>
-            </button>
-
         </div>
     </div>
 }
