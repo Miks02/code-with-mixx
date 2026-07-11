@@ -128,7 +128,9 @@
                         </form>
                     </div>
 
-                    <button disabled class="w-full flex items-center justify-center gap-2 p-3 bg-white/5 text-white/30 rounded-xl border border-white/5 cursor-not-allowed">
+                    <button 
+                        hx-get="/admin/classes/create?studentId=@Model.Id" hx-target="#content" hx-swap="innerHTML" hx-push-url="true"
+                        class="w-full flex items-center justify-center gap-2 p-3 bg-emerald-500/50 text-white rounded-xl border border-white/5 hover:bg-emerald-500/70 active:scale-95 transition duration-200">
                         <i class="fa-solid fa-calendar-plus"></i>
                         Dodaj sledeći čas
                     </button>
