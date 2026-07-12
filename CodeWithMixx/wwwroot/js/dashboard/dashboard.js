@@ -3,11 +3,11 @@ import {initHeroAnimation} from "../hero.js";
 
 
 window.addEventListener("DOMContentLoaded", () => {
-    initCharts();
+    // initCharts();
     initHeroAnimation();
-    document.addEventListener("htmx:afterOnLoad", () => {
-        initCharts();
-    })
+    // document.addEventListener("htmx:afterOnLoad", () => {
+    //     initCharts();
+    // })
 })
 
 

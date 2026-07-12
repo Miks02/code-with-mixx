@@ -66,18 +66,19 @@ function getFinanceChart() {
 
 }
 
-function getSubjectsChart() {
+export function getSubjectsChart() {
     const ctx = document.getElementById('subjects-chart').getContext('2d');
-
-
+    
+    const chartDataRaw = document.getElementById('subjects-chart').dataset.chartData;
+    const chartData = JSON.parse(chartDataRaw);
+    
     const subjectsChart = new Chart(ctx, {
         type: 'doughnut',
         data: {
-            labels: ['OOP (C# / Java)', 'Osnove C-a', 'Baze podataka', 'Web Dev', "Desktop App"],
+            labels: Object.keys(chartData),
             datasets: [{
                 label: 'Broj održanih časova',
-                data: [25, 18, 12, 15, 9],
-
+                data: Object.values(chartData),
                 backgroundColor: [
                     '#34d399',
                     '#fbbf24',
@@ -95,7 +96,7 @@ function getSubjectsChart() {
             maintainAspectRatio: false,
             plugins: {
                 legend: {
-                    display: true,
+                    display: false,
                     position: 'right',
                     labels: {
                         color: '#a7f3d0',

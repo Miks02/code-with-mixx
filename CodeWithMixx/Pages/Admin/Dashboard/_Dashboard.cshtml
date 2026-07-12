@@ -104,7 +104,7 @@
             <p class="mt-0.5 text-xs text-emerald-300/60">Naziv časa - broj održanih</p>
         </div>
         <div class="flex h-56 flex-col items-center justify-center rounded-xl bg-indigo-900/25 shadow-sm p-4">
-            <canvas id="subjects-chart"></canvas>
+            <canvas id="subjects-chart" data-chart-data='@Json.Serialize(Model.SubjectsChart)'></canvas>
         </div>
     </div>
 
@@ -238,3 +238,9 @@
         </div>
         </div>
         
+<script type="module">
+    import { getSubjectsChart } from '/js/dashboard/charts.js';
+    
+    getSubjectsChart();
+    
+</script>
