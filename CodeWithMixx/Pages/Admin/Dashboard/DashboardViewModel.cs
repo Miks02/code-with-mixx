@@ -6,5 +6,6 @@ public record DashboardViewModel
     public int CompletedClasses { get; init; }
     public int ActiveStudents { get; init; }
     public int ProjectsCount { get; init; }
-    public IReadOnlyList<UpcomingTermItem> UpcomingTerms { get; init; } = [];
+    public Dictionary<string, int> SubjectsChart { get; init; } = [];
+    public IReadOnlyList<UpcomingTermItem> UpcomingTerms { get; init; } = []; 
 }

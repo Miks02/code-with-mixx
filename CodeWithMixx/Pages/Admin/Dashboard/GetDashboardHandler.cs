@@ -40,14 +40,34 @@ public class GetDashboardHandler(AppDbContext context) : IHandler
             })
             .Take(6)
             .ToListAsync(ct);
+        
+        var classCountBySubject = await GetClassCountBySubject(ct);
+
+        foreach (var item in classCountBySubject)
+        {
+            var subject = item.Key;
+            var count = item.Value;
+            
+            Console.WriteLine($"Subject: {subject}, Count: {count}");
+            
+        }
 
         return new DashboardViewModel
         {
             TotalIncome = totalIncome,
             CompletedClasses = completedClasses,
             ActiveStudents = activeStudents,
+            SubjectsChart = classCountBySubject,
             UpcomingTerms = upcomingTerms
         };
 
+    }
+    
+    private async Task<Dictionary<string, int>> GetClassCountBySubject(CancellationToken ct)
+    {
+        return await context.Classes
+            .GroupBy(c => c.Subject.Name)
+            .Select(g => new {SubjectName = g.Key, Count = g.Count()})
+            .ToDictionaryAsync(g => g.SubjectName, g => g.Count, ct);
     }
 }
