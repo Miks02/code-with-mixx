@@ -1,9 +1,8 @@
-using CodeWithMixx.Domain.Entities.Classes;
 using CodeWithMixx.Domain.Entities.Reservations;
 
-namespace CodeWithMixx.Pages.Admin.Classes;
+namespace CodeWithMixx.Pages.Admin.Dashboard;
 
-public record ClassReservationListItem
+public record UpcomingTermItem
 {
     public int Id { get; set; }
     public string SubjectName { get; set; } = string.Empty;
@@ -13,5 +12,4 @@ public record ClassReservationListItem
     public int AmountOfClasses { get; set; }
     public Decimal TotalPrice { get; set; }
     public PaymentStatus PaymentStatus { get; set; }
-    public ClassStatus ClassStatus { get; set; }
-};
+}
