@@ -1,0 +1,12 @@
+@page
+@model CodeWithMixx.Pages.Admin.Classes.IndexModel
+
+@{
+    Layout = "_DashboardLayout";
+    ViewData["Title"] = "Časovi";
+}
+
+
+<div id="content">
+    @await Html.PartialAsync("_ClassPage", Model.ViewModel)
+</div>

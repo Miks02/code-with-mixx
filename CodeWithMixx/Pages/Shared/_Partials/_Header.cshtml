@@ -1,29 +1,76 @@
+@addTagHelper *, Microsoft.AspNetCore.Mvc.TagHelpers
 
-
+@{
+    var isAdmin = User.IsInRole("Admin");
+    var isStudent = User.IsInRole("Student");
+    var isUnauthenticated = User.Identity?.IsAuthenticated == false;
+}
 
 <header id="header" class="fixed top-0 z-50 w-screen bg-emerald-800/80 backdrop-blur-xl shadow-lg">
     <nav class="flex justify-between items-center">
         <a href="#" class="text-white font-bold text-2xl p-4 hover:opacity-70 active:opacity-50 transition duration-200"><span class="text-amber-600">Code</span>WithMixx</a>
         <ul class="hidden lg:flex gap-6 justify-between items-center text-white font-semibold text-xl">
             <li>
-                <a href="#" class="block hover:opacity-70 hover:text-amber-400 transition duration-200 p-2 active:opacity-50">Početna</a>
+                <a href="/#" class="block hover:opacity-70 hover:text-amber-400 transition duration-200 p-2 active:opacity-50">Početna</a>
             </li>
             <li>
-                <a href="#services" class="block hover:opacity-70 hover:text-amber-400 transition duration-200 p-2 active:opacity-50">Usluge</a>
+                <a href="/#services" class="block hover:opacity-70 hover:text-amber-400 transition duration-200 p-2 active:opacity-50">Usluge</a>
             </li>
             <li>
-                <a href="#how-it-works" class="block hover:opacity-70 hover:text-amber-400 transition duration-200 p-2 active:opacity-50">Princip rada</a>
+                <a href="/#how-it-works" class="block hover:opacity-70 hover:text-amber-400 transition duration-200 p-2 active:opacity-50">Princip rada</a>
             </li>
             <li>
-                <a href="#about" class="block hover:opacity-70 hover:text-amber-400 transition duration-200 p-2 active:opacity-50">Moja priča</a>
+                <a href="/#about" class="block hover:opacity-70 hover:text-amber-400 transition duration-200 p-2 active:opacity-50">Moja priča</a>
             </li>
             <li>
-                <a href="#pricing" class="block hover:opacity-70 hover:text-amber-400 transition duration-200 p-2 active:opacity-50">Cenovnik</a>
+                <a href="/#pricing" class="block hover:opacity-70 hover:text-amber-400 transition duration-200 p-2 active:opacity-50">Cenovnik</a>
             </li>
             <li>
-                <a href="#reviews" class="block hover:opacity-70 hover:text-amber-400 transition duration-200 p-2 active:opacity-50">Utisci</a>
+                <a href="/#reviews" class="block hover:opacity-70 hover:text-amber-400 transition duration-200 p-2 active:opacity-50">Utisci</a>
             </li>
-            <a href="#contact" class="text-emerald-800 bg-emerald-300 font-bold text-lg m-4 p-2 rounded-md hover:opacity-70 active:scale-95 transition duration-200 hidden md:flex">Konsultacije</a>
+            <li>
+                <a href="/#contact" class="block hover:opacity-70 hover:text-amber-400 transition duration-200 p-2 active:opacity-50">Konsultacije</a>
+            </li>
+            @if(isUnauthenticated)
+            {
+            <a asp-page="/Auth/Login/Index" class="text-amber-900 shadow-lg bg-amber-400 font-bold text-lg m-4 py-2 px-4 rounded-md hover:opacity-70 active:scale-95 transition duration-200 hidden md:flex items-center gap-2">
+                <i class="fa-solid fa-arrow-right-to-bracket"></i>
+                Prijava
+            </a>
+            }
+            @if (isAdmin)
+            {
+                <div class="flex gap-4 mr-4">
+                    <a asp-page="/Admin/Dashboard/Index" class="text-sky-900 shadow-lg bg-sky-400 font-bold text-lg my-4 py-2 px-4 rounded-md hover:opacity-70 active:scale-95 transition duration-200 hidden md:flex items-center gap-2">
+                        <i class="fa-solid fa-chart-line"></i>
+                        Analitika
+                    </a>
+                    <form method="post" asp-page="/Auth/Logout" class="hidden md:flex items-center gap-2">
+                        @Html.AntiForgeryToken()
+                        <button type="submit" class="cursor-pointer text-amber-900 shadow-lg bg-amber-400 font-bold text-lg my-4 py-2 px-4 rounded-md hover:opacity-70 active:scale-95 transition duration-200">
+                            <i class="fa-solid fa-arrow-right-from-bracket"></i>
+                            Odjava
+                        </button>
+                    </form>
+                </div>
+            }
+            @if (isStudent)
+            {
+                <div class="flex gap-4 mr-4">
+                    <a asp-page="/Student/Dashboard" class="text-sky-900 shadow-lg bg-sky-400 font-bold text-lg my-4 py-2 px-4 rounded-md hover:opacity-70 active:scale-95 transition duration-200 hidden md:flex items-center gap-2">
+                        <i class="fa-solid fa-user"></i>
+                        Moj Profil
+                    </a>
+                    <form method="post" asp-page="/Auth/Logout" class="hidden md:flex items-center gap-2">
+                        @Html.AntiForgeryToken()
+                        <button type="submit" class="cursor-pointer text-amber-900 shadow-lg bg-amber-400 font-bold text-lg my-4 py-2 px-4 rounded-md hover:opacity-70 active:scale-95 transition duration-200">
+                            <i class="fa-solid fa-arrow-right-from-bracket"></i>
+                            Odjava
+                        </button>
+                    </form>
+                </div>
+            }
+
 
         </ul>
         
@@ -38,26 +85,76 @@
     <nav id="mobile-navbar" class="lg:hidden overflow-hidden max-h-0 opacity-0 flex flex-col gap-4 items-center text-white font-semibold text-lg transform-gpu will-change-[max-height,opacity] duration-300 ease-in-out">
         <ul id="mobile-navbar-list" class="flex flex-col gap-2 justify-center items-center text-white font-semibold text-lg w-full text-center py-4">
             <li class="w-full px-4">
-                <a href="#" class="block hover:bg-emerald-700/50 hover:text-amber-400 active:bg-emerald-600 transition duration-200 p-3 rounded-lg">Početna</a>
+                <a href="/#" class="block hover:bg-emerald-700/50 hover:text-amber-400 active:bg-emerald-600 transition duration-200 p-3 rounded-lg">Početna</a>
             </li>
             <li class="w-full px-4">
-                <a href="#services" class="block hover:bg-emerald-700/50 hover:text-amber-400 active:bg-emerald-600 transition duration-200 p-3 rounded-lg">Usluge</a>
+                <a href="/#services" class="block hover:bg-emerald-700/50 hover:text-amber-400 active:bg-emerald-600 transition duration-200 p-3 rounded-lg">Usluge</a>
             </li>
             <li class="w-full px-4">
-                <a href="#how-it-works" class="block hover:bg-emerald-700/50 hover:text-amber-400 active:bg-emerald-600 transition duration-200 p-3 rounded-lg">Princip rada</a>
+                <a href="/#how-it-works" class="block hover:bg-emerald-700/50 hover:text-amber-400 active:bg-emerald-600 transition duration-200 p-3 rounded-lg">Princip rada</a>
             </li>
             <li class="w-full px-4">
-                <a href="#about" class="block hover:bg-emerald-700/50 hover:text-amber-400 active:bg-emerald-600 transition duration-200 p-3 rounded-lg">Moja priča</a>
+                <a href="/#about" class="block hover:bg-emerald-700/50 hover:text-amber-400 active:bg-emerald-600 transition duration-200 p-3 rounded-lg">Moja priča</a>
             </li>
             <li class="w-full px-4">
-                <a href="#pricing" class="block hover:bg-emerald-700/50 hover:text-amber-400 active:bg-emerald-600 transition duration-200 p-3 rounded-lg">Cenovnik</a>
+                <a href="/#pricing" class="block hover:bg-emerald-700/50 hover:text-amber-400 active:bg-emerald-600 transition duration-200 p-3 rounded-lg">Cenovnik</a>
             </li>
             <li class="w-full px-4">
-                <a href="#reviews" class="block hover:bg-emerald-700/50 hover:text-amber-400 active:bg-emerald-600 transition duration-200 p-3 rounded-lg">Utisci</a>
+                <a href="/#reviews" class="block hover:bg-emerald-700/50 hover:text-amber-400 active:bg-emerald-600 transition duration-200 p-3 rounded-lg">Utisci</a>
             </li>
-            <li class="w-full px-4 mt-2">
-                <a href="#contact" class="block text-emerald-800 bg-emerald-300 font-bold text-lg p-3 rounded-md hover:bg-emerald-200 active:scale-95 transition duration-200">Konsultacije</a>
+            <li class="w-full px-4">
+                <a href="/#contact" class="block hover:bg-emerald-700/50 hover:text-amber-400 active:bg-emerald-600 transition duration-200 p-3 rounded-lg">Konsultacije</a>
             </li>
+            @if (isUnauthenticated)
+            {
+                <li class="w-full px-4 mt-2">
+                    <a asp-page="/Auth/Login/Index" class="mb-6 justify-center text-amber-900 bg-amber-400 font-bold text-lg p-3 rounded-md hover:bg-amber-200 active:scale-95 transition duration-200 flex items-center gap-2">
+                        <i class="fa-solid fa-arrow-right-to-bracket"></i>
+                        Prijava
+                    </a>
+                </li>
+            }
+            @if (isAdmin)
+            {
+                <div class="flex flex-col w-full">
+                    <li class="w-full px-4">
+                        <a asp-page="/Admin/Dashboard/Index" class="mb-6 justify-center text-sky-900 bg-sky-400 font-bold text-lg p-3 rounded-md hover:bg-sky-200 active:scale-95 transition duration-200 flex items-center gap-2">
+                            <i class="fa-solid fa-chart-line"></i>
+                            Analitika
+                        </a>
+                    </li>
+                    <li class="w-full px-4">
+                        <form method="post" asp-page="/Auth/Logout" class="mb-6">
+                            @Html.AntiForgeryToken()
+                            <button type="submit" class="w-full justify-center text-amber-900 bg-amber-400 font-bold text-lg p-3 rounded-md hover:bg-sky-200 active:scale-95 transition duration-200 flex items-center gap-2 cursor-pointer">
+                                <i class="fa-solid fa-arrow-right-from-bracket"></i>
+                                Odjava
+                            </button>
+                        </form>
+                    </li>
+                </div>
+            }
+            @if (isStudent)
+            {
+                <div class="flex flex-col w-full">
+                    <li class="w-full px-4">
+                        <a asp-page="/Admin/Dashboard" class="mb-6 justify-center text-sky-900 bg-sky-400 font-bold text-lg p-3 rounded-md hover:bg-sky-200 active:scale-95 transition duration-200 flex items-center gap-2">
+                            <i class="fa-solid fa-user"></i>
+                            Moj Profil
+                        </a>
+                    </li>
+                    <li class="w-full px-4">
+                        <form method="post" asp-page="/Auth/Logout" class="mb-6">
+                            @Html.AntiForgeryToken()
+                            <button type="submit" class="w-full justify-center text-amber-900 bg-amber-400 font-bold text-lg p-3 rounded-md hover:bg-sky-200 active:scale-95 transition duration-200 flex items-center gap-2 cursor-pointer">
+                                <i class="fa-solid fa-arrow-right-from-bracket"></i>
+                                Odjava
+                            </button>
+                        </form>
+                    </li>
+                </div>
+            }
+            
         </ul>
     </nav>
 </header>

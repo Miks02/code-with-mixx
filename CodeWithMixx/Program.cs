@@ -1,51 +1,49 @@
-using System.Reflection;
-using System.Threading.RateLimiting;
-using CodeWithMixx.Infrastructure.BackgroundJobs;
+using CodeWithMixx.Infrastructure;
+using CodeWithMixx.Infrastructure.Filters;
+using CodeWithMixx.Infrastructure.Persistence;
 using CodeWithMixx.Pages;
-using Discord;
-using Discord.WebSocket;
-using FluentValidation;
 using Microsoft.AspNetCore.HttpOverrides;
-using Microsoft.AspNetCore.RateLimiting;
+using Microsoft.EntityFrameworkCore;
 using Serilog;
+using Serilog.Core;
 
 var builder = WebApplication.CreateBuilder(args);
 
-builder.Services.AddRazorPages()
-    .AddMvcOptions(options => options.SuppressImplicitRequiredAttributeForNonNullableReferenceTypes = true);
+builder.Services.AddRazorPages(options =>
+{
+    options.Conventions.AuthorizeFolder("/Admin", "AdminPolicy");
+    options.Conventions.AuthorizeFolder("/Student", "StudentPolicy");
+}).AddMvcOptions(options =>
+{
+    options.SuppressImplicitRequiredAttributeForNonNullableReferenceTypes = true;
+    options.Filters.Add(new ToastFilter());
+});
+
+builder.Services.Configure<RouteOptions>(options => options.LowercaseUrls = true);
 
 builder.Host.UseSerilog((context, config) => config.ReadFrom.Configuration(context.Configuration));
 
 
-builder.Services
-    .AddValidatorsFromAssembly(Assembly.GetExecutingAssembly())
-    .AddHealthChecks();
-
+builder.Services.AddInfrastructure(builder.Configuration);
 builder.Services.AddScoped<ContactHandler>();
 
-var discordConfig = new DiscordSocketConfig
-{
-    GatewayIntents = GatewayIntents.AllUnprivileged | GatewayIntents.MessageContent
-};
-builder.Services.AddSingleton(new DiscordSocketClient(discordConfig));
-builder.Services.AddHostedService<DiscordBotService>();
-
-var contactLimiter = PartitionedRateLimiter.Create<HttpContext, string>(ctx =>
-    RateLimitPartition.GetSlidingWindowLimiter(
-        partitionKey: ctx.Connection.RemoteIpAddress?.ToString() ?? "unknown",
-        factory: _ => new SlidingWindowRateLimiterOptions
-        {
-            PermitLimit = 2,
-            Window = TimeSpan.FromMinutes(1),
-            SegmentsPerWindow = 5,
-            QueueLimit = 0
-        }
-    )
-);
-
-builder.Services.AddSingleton(contactLimiter);
-
 var app = builder.Build();
+
+using (var scope = app.Services.CreateScope())
+{
+    var services = scope.ServiceProvider;
+    try
+    {
+        var context = services.GetRequiredService<AppDbContext>(); 
+        await context.Database.MigrateAsync();
+    }
+    catch (Exception ex)
+    {
+        Log.Logger.Error($"An error happened during a database migration process: {ex.Message}");
+    }
+}
+
+await app.MapSeeders();
 
 if (!app.Environment.IsDevelopment())
 {
@@ -62,7 +60,6 @@ forwardedOptions.KnownProxies.Clear();
 
 app.UseForwardedHeaders(forwardedOptions);
 
-
 app.UseRouting();
 
 app.UseSerilogRequestLogging();
@@ -70,7 +67,6 @@ app.UseSerilogRequestLogging();
 app.UseAuthentication();
 app.UseAuthorization();
 
-app.MapHealthChecks("/health");
 app.MapStaticAssets();
 app.MapRazorPages()
     .WithStaticAssets();

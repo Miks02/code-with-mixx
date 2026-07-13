@@ -1,0 +1,11 @@
+@page
+@model IndexModel
+
+@{
+    Layout = "_DashboardLayout";
+    ViewData["Title"] = "Analitika";
+}
+
+<div id="content">
+    @await Html.PartialAsync("_Dashboard", Model.ViewModel)
+</div>

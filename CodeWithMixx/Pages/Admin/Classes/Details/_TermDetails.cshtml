@@ -1,0 +1,282 @@
+﻿@using System.Globalization
+@using CodeWithMixx.Domain.Entities.Classes
+@using CodeWithMixx.Domain.Entities.Reservations
+@model TermDetails
+
+@{
+    var remaining = Model.TotalPrice - Model.PaidAmount;
+    var showBonus = Model.BonusAmount > 0;
+    var showDiscount = Model.DiscountRate > 0;
+}
+
+<div id="term-details" class="rounded-2xl bg-emerald-950/80 p-6 shadow-xl shadow-black/20 grow relative flex flex-col min-h-0 h-160 md:h-100">
+
+    <div class="mb-5 flex items-center justify-between gap-3 shrink-0">
+        <div class="flex items-center gap-3">
+            <div class="flex h-10 w-10 items-center justify-center rounded-xl bg-emerald-500/15 text-emerald-300">
+                <i class="fa-solid fa-book-open-reader"></i>
+            </div>
+            <div>
+                <h3 class="text-base font-semibold text-white">Rezervacija #@Model.ReservationId</h3>
+                <p class="text-xs text-emerald-300/60">@Model.TermStartDate.ToString("f", new CultureInfo("sr-Latn-RS"))</p>
+            </div>
+        </div>
+        <div class="flex flex-col gap-2 mr-2">
+            <div class="flex gap-2 justify-end">
+            @switch (Model.ClassStatus)
+            {
+                case ClassStatus.Ongoing:
+                    <span class="text-green-200 bg-green-900 px-2 py-1 rounded-md shadow-sm text-xs font-semibold"><i class="fa-solid fa-hourglass-half mr-1"></i>U toku</span>
+                    break;
+                case ClassStatus.Scheduled:
+                    <span class="text-amber-200 bg-amber-900 px-2 py-1 rounded-md shadow-sm text-xs font-semibold"><i class="fa-solid fa-calendar-days mr-1"></i>Zakazan</span>
+                    break;
+                case ClassStatus.Cancelled:
+                    <span class="text-red-200 bg-red-900 px-2 py-1 rounded-md shadow-sm text-xs font-semibold"><i class="fa-solid fa-trash mr-1"></i>Otkazan</span>
+                    break;
+                case ClassStatus.Completed:
+                    <span class="text-blue-200 bg-sky-900 px-2 py-1 rounded-md shadow-sm text-xs font-semibold"><i class="fa-solid fa-check mr-1"></i>Završen</span>
+                    break;
+            }
+            @if (Model.ClassStatus != ClassStatus.Cancelled)
+            {
+                @switch (Model.PaymentStatus)
+                {
+                    case PaymentStatus.Pending:
+                        <span class="text-amber-200 bg-amber-900 px-2 py-1 rounded-md shadow-sm text-xs font-semibold"><i class="fa-solid fa-clock mr-1"></i>Neplaćeno</span>
+                        break;
+                    case PaymentStatus.Paid:
+                        <span class="text-sky-200 bg-sky-900 px-2 py-1 rounded-md shadow-sm text-xs font-semibold"><i class="fa-solid fa-circle-check mr-1"></i>Plaćeno</span>
+                        break;
+                    case PaymentStatus.Overdue:
+                        <span class="text-red-200 bg-red-900 px-2 py-1 rounded-md shadow-sm text-xs font-semibold"><i class="fa-solid fa-circle-exclamation mr-1"></i>Dugovanje</span>
+                        break;
+                    case PaymentStatus.PartiallyPaid:
+                        <span class="text-yellow-200 bg-yellow-900 px-2 py-1 rounded-md shadow-sm text-xs font-semibold"><i class="fa-solid fa-circle-half-stroke mr-1"></i>Del. plaćeno</span>
+                        break;
+                }
+            }
+        </div>
+        <div class="flex gap-2">
+            @if (showBonus)
+            {
+                <span class="text-emerald-200 bg-emerald-900 px-2 py-1 rounded-md shadow-sm text-xs font-semibold"><i class="fa-solid fa-gift mr-1"></i>Bonus: @Model.BonusAmount RSD</span>
+            }
+            @if (showDiscount)
+            {
+                <span class="text-emerald-200 bg-emerald-900 px-2 py-1 rounded-md shadow-sm text-xs font-semibold"><i class="fa-solid fa-percent mr-1"></i>Popust: @Model.DiscountRate %</span>
+            }
+        </div>
+        </div>
+    </div>
+
+    <div id="reservation-details" class="flex flex-col gap-5 h-20 flex-1 min-h-0 pr-1 overflow-y-auto">
+
+        <div class="grid grid-cols-2 gap-3">
+            <div 
+                hx-get="/admin/students/details?id=@Model.StudentId"
+                hx-target="#content"
+                hx-push-url="true"
+                hx-swap="innerHTML"
+                class="rounded-xl bg-white/5 p-4 flex items-center gap-3  hover:opacity-70 active:scale-95 transition duration-200 cursor-pointer">
+                <div class="flex h-9 w-9 shrink-0 items-center justify-center rounded-lg bg-emerald-500/15 text-emerald-300 ">
+                    <i class="fa-solid fa-user-graduate"></i>
+                </div>
+                <div 
+                    
+                    class="min-w-0">
+                    <p class="text-xs text-emerald-300/60 mb-0.5">Student</p>
+                    <p class="text-sm font-semibold text-white truncate">@Model.StudentName</p>
+                </div>
+            </div>
+            <div class="rounded-xl bg-white/5 p-4 flex items-center gap-3">
+                <div class="flex h-9 w-9 shrink-0 items-center justify-center rounded-lg bg-emerald-500/15 text-emerald-300">
+                    <i class="fa-solid fa-chalkboard"></i>
+                </div>
+                <div class="min-w-0">
+                    <p class="text-xs text-emerald-300/60 mb-0.5">Predmet</p>
+                    <p class="text-sm font-semibold text-white truncate">@Model.SubjectName</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="grid grid-cols-2 gap-3">
+            <div class="rounded-xl bg-white/5 p-3 flex flex-col gap-1 justify-between grow">
+                <p class="text-xs text-emerald-300/60"><i class="fa-solid fa-tag mr-1"></i>Cena / čas</p>
+                <p class="font-bold text-white">@Model.PricePerClass RSD</p>
+            </div>
+            <div class="rounded-xl bg-white/5 p-3 flex flex-col gap-1 justify-between grow">
+                <p class="text-xs text-emerald-300/60"><i class="fa-solid fa-money-bill mr-1"></i>Ukupno</p>
+                <p class="font-bold text-white">@Model.TotalPrice RSD</p>
+            </div>
+            <div class="rounded-xl w-full bg-white/5 p-3 flex flex-col gap-1 grow col-span-2">
+                <p class="text-xs text-emerald-300/60"><i class="fa-solid fa-wallet mr-1"></i>Plaćeno</p>
+                <p class="font-bold @(remaining > 0 ? "text-red-300" : "text-emerald-300")">@Model.PaidAmount RSD</p>
+                @if (remaining > 0)
+                {
+                    <p class="text-xs text-red-400/80">Ostatak: @remaining RSD</p>
+                }
+            </div>
+        </div>
+
+        <div class="rounded-xl bg-white/5 p-4">
+            <h4 class="text-sm font-semibold text-emerald-300 mb-3"><i class="fa-solid fa-sliders mr-2"></i>Izmena rezervacije</h4>
+            <div class="grid grid-cols-1 sm:grid-cols-3 gap-3">
+
+                <form method="post"
+                      hx-post="/admin/classes/index?handler=UpdateTermStatus"
+                      hx-target="#content"
+                      hx-swap="innerHTML"
+                      hx-include="[name='filter'], [name='sort'], [name='subjectId'], [name='page']"
+                      class="flex flex-col gap-2">
+                    <input type="hidden" name="reservationId" value="@Model.ReservationId" />
+                    <label class="text-xs text-emerald-300/70 font-medium">Status termina</label>
+                    <select name="classStatus"
+                            class="w-full rounded-lg bg-emerald-900/60 border border-emerald-700/40 text-white text-sm px-3 py-2 focus:outline-none focus:ring-1 focus:ring-emerald-500">
+                        @foreach (ClassStatus status in Enum.GetValues(typeof(ClassStatus)))
+                        {
+                            <option value="@((int)status)" selected="@(status == Model.ClassStatus)">
+                                @switch (status)
+                                {
+                                    case ClassStatus.Scheduled: <text>Zakazan</text> break;
+                                    case ClassStatus.Ongoing: <text>U toku</text> break;
+                                    case ClassStatus.Completed: <text>Završen</text> break;
+                                    case ClassStatus.Cancelled: <text>Otkazan</text> break;
+                                }
+                            </option>
+                        }
+                    </select>
+                    <button type="submit"
+                            class="w-full rounded-lg bg-emerald-600 hover:bg-emerald-500 active:scale-95 transition-all duration-100 text-white text-xs font-semibold py-2 px-3">
+                        <i class="fa-solid fa-rotate-right mr-1"></i>Primeni
+                    </button>
+                </form>
+
+                <form method="post"
+                      hx-post="/admin/classes/index?handler=UpdateTotalPrice"
+                      hx-target="#content"
+                      hx-swap="innerHTML"
+                      hx-include="[name='filter'], [name='sort'], [name='subjectId'], [name='page']"
+                      class="flex flex-col gap-2">
+                    <input type="hidden" name="reservationId" value="@Model.ReservationId" />
+                    <label class="text-xs text-emerald-300/70 font-medium">Ukupna cena (RSD)</label>
+                    <input type="number"
+                           name="totalPrice"
+                           value="@Model.TotalPrice"
+                           min="0"
+                           step="0.01"
+                           class="w-full rounded-lg bg-emerald-900/60 border border-emerald-700/40 text-white text-sm px-3 py-2 focus:outline-none focus:ring-1 focus:ring-emerald-500" />
+                    <button type="submit"
+                            class="w-full rounded-lg bg-emerald-600 hover:bg-emerald-500 active:scale-95 transition-all duration-100 text-white text-xs font-semibold py-2 px-3">
+                        <i class="fa-solid fa-floppy-disk mr-1"></i>Sačuvaj
+                    </button>
+                </form>
+
+                <form method="post"
+                      hx-post="/admin/classes/index?handler=UpdatePaymentStatus"
+                      hx-target="#content"
+                      hx-swap="innerHTML"
+                      hx-include="[name='filter'], [name='sort'], [name='subjectId'], [name='page']"
+                      class="flex flex-col gap-2">
+                    <input type="hidden" name="reservationId" value="@Model.ReservationId" />
+                    <label class="text-xs text-emerald-300/70 font-medium">Plaćeni iznos (RSD)</label>
+                    <input type="number"
+                           name="paidAmount"
+                           value="@Model.PaidAmount"
+                           min="0"
+                           step="0.01"
+                           class="w-full rounded-lg bg-emerald-900/60 border border-emerald-700/40 text-white text-sm px-3 py-2 focus:outline-none focus:ring-1 focus:ring-emerald-500" />
+                    <button type="submit"
+                            class="w-full rounded-lg bg-emerald-600 hover:bg-emerald-500 active:scale-95 transition-all duration-100 text-white text-xs font-semibold py-2 px-3">
+                        <i class="fa-solid fa-floppy-disk mr-1"></i>Sačuvaj
+                    </button>
+                </form>
+
+                <form method="post"
+                      hx-post="/admin/classes/index?handler=UpdateNumberOfClasses"
+                      hx-target="#content"
+                      hx-swap="innerHTML"
+                      hx-include="[name='filter'], [name='sort'], [name='subjectId'], [name='page']"
+                      class="flex flex-col gap-2">
+                    <input type="hidden" name="reservationId" value="@Model.ReservationId" />
+                    <label class="text-xs text-emerald-300/70 font-medium"><i class="fa-solid fa-chalkboard-user mr-1"></i>Broj časova</label>
+                    <input type="number"
+                           step="any"
+                           name="amountOfClasses"
+                           value="@Model.TotalClasses"
+                           class="w-full rounded-lg bg-emerald-900/60 border border-emerald-700/40 text-white text-sm px-3 py-2 focus:outline-none focus:ring-1 focus:ring-emerald-500" />
+                    <button type="submit"
+                            class="w-full rounded-lg bg-emerald-600 hover:bg-emerald-500 active:scale-95 transition-all duration-100 text-white text-xs font-semibold py-2 px-3 mt-auto">
+                        <i class="fa-solid fa-floppy-disk mr-1"></i>Sačuvaj
+                    </button>
+                </form>
+
+                <form method="post"
+                      hx-post="/admin/classes/index?handler=UpdateFirstClassStart"
+                      hx-target="#content"
+                      hx-swap="innerHTML"
+                      hx-include="[name='filter'], [name='sort'], [name='subjectId'], [name='page']"
+                      class="flex flex-col gap-2">
+                    <input type="hidden" name="reservationId" value="@Model.ReservationId" />
+                    <label class="text-xs text-emerald-300/70 font-medium"><i class="fa-solid fa-hourglass-start mr-1"></i>Početak prvog časa</label>
+                    <input type="datetime-local"
+                           name="firstClassStartsAt"
+                           value="@(Model.TermStartDate.ToString("yyyy-MM-ddTHH:mm"))"
+                           class="w-full rounded-lg bg-emerald-900/60 border border-emerald-700/40 text-white text-sm px-3 py-2 focus:outline-none focus:ring-1 focus:ring-emerald-500" />
+                    <button type="submit"
+                            class="w-full rounded-lg bg-emerald-600 hover:bg-emerald-500 active:scale-95 transition-all duration-100 text-white text-xs font-semibold py-2 px-3 mt-auto">
+                        <i class="fa-solid fa-floppy-disk mr-1"></i>Sačuvaj
+                    </button>
+                </form>
+
+                <div class="flex flex-col gap-2">
+                    <label class="text-xs text-emerald-300/70 font-medium"><i class="fa-solid fa-hourglass-end mr-1"></i>Kraj poslednjeg časa</label>
+                    <div class="w-full rounded-lg bg-emerald-900/30 border border-emerald-700/20 text-emerald-200/60 text-sm px-3 py-2 select-none cursor-not-allowed">
+                        @(Model.TermEndDate.ToString("dd.MM.yy HH:mm"))
+                    </div>
+                    <p class="text-xs text-emerald-300/30 mt-auto">Automatski se računa</p>
+                </div>
+
+            </div>
+        </div>
+
+        @if (!string.IsNullOrWhiteSpace(Model.Notes))
+        {
+            <div class="rounded-xl bg-blue-950/40 border border-blue-700/30 p-4 flex gap-3 items-start">
+                <i class="fa-solid fa-note-sticky text-blue-400 mt-0.5 shrink-0"></i>
+                <div>
+                    <p class="text-xs text-blue-300/70 font-semibold mb-1">Napomena</p>
+                    <p class="text-sm text-blue-100/80 leading-relaxed">@Model.Notes</p>
+                </div>
+            </div>
+        }
+
+        @if (Model.Classes.Any())
+        {
+            <div>
+                <h4 class="text-sm font-semibold text-emerald-300 mb-3"><i class="fa-solid fa-list-check mr-2"></i>Časovi (@Model.TotalClasses)</h4>
+                <div class="grid gap-3 sm:grid-cols-2">
+                    @foreach (var cls in Model.Classes)
+                    {
+                        <article class="rounded-xl bg-white/5 p-4 shadow-md flex flex-col justify-between gap-3">
+                            <div class="flex items-center justify-between gap-2">
+                                <div class="flex items-center gap-2">
+                                    <div class="flex h-8 w-8 shrink-0 items-center justify-center rounded-lg bg-emerald-500/15 text-emerald-300 text-xs">
+                                        <i class="fa-solid fa-chalkboard-user"></i>
+                                    </div>
+                                    <p class="text-xs text-emerald-300/60 font-medium">Čas #@cls.ClassId</p>
+                                </div>
+                            </div>
+                            <div class="flex justify-between items-center gap-2 text-sm text-emerald-100/80">
+                                <p class="bg-emerald-900/50 rounded-md px-2 py-1"><i class="fa-solid fa-hourglass-start mr-1.5 text-emerald-400/80"></i>@cls.StartsAt.ToString("HH:mm")</p>
+                                <i class="fa-solid fa-arrow-right text-emerald-600 text-xs"></i>
+                                <p class="bg-emerald-900/50 rounded-md px-2 py-1"><i class="fa-solid fa-hourglass-end mr-1.5 text-emerald-400/80"></i>@cls.EndsAt.ToString("HH:mm")</p>
+                            </div>
+                        </article>
+                    }
+                </div>
+            </div>
+        }
+
+    </div>
+</div>
