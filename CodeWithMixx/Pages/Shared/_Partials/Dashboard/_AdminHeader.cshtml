@@ -1,14 +1,6 @@
-<header class="flex items-center justify-end bg-emerald-900/80 px-8 py-4 backdrop-blur-3xl shadow-md border-b border-emerald-800/50 w-full text-white">
+<header class="flex items-center justify-between bg-emerald-900/80 px-6 py-4 backdrop-blur-3xl shadow-md border-b border-emerald-800/50 w-full text-white">
     
-    <button id="sidebar-toggle"
-            aria-label="Otvori meni"
-            aria-expanded="false"
-            aria-controls="mobile-sidebar"
-            class="md:hidden mr-auto flex items-center justify-center w-10 h-10 rounded-lg text-emerald-300 hover:text-amber-400 hover:bg-emerald-800 active:scale-95 transition-all duration-150">
-        <i class="fas fa-bars text-xl"></i>
-    </button>
-
-    <div class="flex items-center space-x-4">
+    <div class="flex items-center space-x-4 md:ml-auto">
         <a  hx-get="/admin/dashboard"
             hx-swap="innerHTML"
             hx-target="#content"
@@ -19,4 +11,12 @@
             </div>
         </a>
     </div>
+    
+    <button id="sidebar-toggle"
+            aria-label="Otvori meni"
+            aria-expanded="false"
+            aria-controls="mobile-sidebar"
+            class="md:hidden flex items-center justify-center w-5 h-5 rounded-lg text-emerald-300 hover:text-amber-400 hover:bg-emerald-800 active:scale-95 transition-all duration-150">
+        <i class="fas fa-bars text-2xl"></i>
+    </button>
 </header>
