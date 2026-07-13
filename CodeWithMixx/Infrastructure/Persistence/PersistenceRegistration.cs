@@ -11,14 +11,26 @@ public static class PersistenceRegistration
         if (!string.IsNullOrEmpty(railwayDbUrl))
         {
             var databaseUri = new Uri(railwayDbUrl);
-            var userInfo = databaseUri.UserInfo.Split(':');
+            var host = databaseUri.Host;
+            var port = databaseUri.Port;
+            var database = databaseUri.AbsolutePath.TrimStart('/');
+        
+            string username = "";
+            string password = "";
 
-            connectionString = $"Host={databaseUri.Host};" +
-                               $"Port={databaseUri.Port};" +
-                               $"Username={userInfo[0]};" +
-                               $"Password={userInfo[1]};" +
-                               $"Database={databaseUri.AbsolutePath.TrimStart('/')};" +
-                               $"SSL Mode=Require;Trust Server Certificate=true;";
+            if (!string.IsNullOrEmpty(databaseUri.UserInfo))
+            {
+                var userInfo = databaseUri.UserInfo.Split(':');
+                username = userInfo[0];
+                password = userInfo.Length > 1 ? userInfo[1] : "";
+            }
+
+            connectionString = $"Host={host};Port={port};Database={database};";
+        
+            if (!string.IsNullOrEmpty(username)) connectionString += $"Username={username};";
+            if (!string.IsNullOrEmpty(password)) connectionString += $"Password={password};";
+        
+            connectionString += "SSL Mode=Require;Trust Server Certificate=true;";
         }
         
         services.AddDbContext<AppDbContext>(options =>
