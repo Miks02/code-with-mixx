@@ -26,16 +26,16 @@
             @switch (Model.ClassStatus)
             {
                 case ClassStatus.Ongoing:
-                    <span class="text-green-200 bg-green-900 px-2 py-1 rounded-md shadow-sm text-xs font-semibold"><i class="fa-solid fa-hourglass-half mr-1"></i>U toku</span>
+                    <span class="text-green-200 bg-green-900 px-2 py-1 rounded-md shadow-sm text-xs font-semibold"><i class="fa-solid fa-hourglass-half md:mr-1"></i><span class="hidden md:inline">U toku</span></span>
                     break;
                 case ClassStatus.Scheduled:
-                    <span class="text-amber-200 bg-amber-900 px-2 py-1 rounded-md shadow-sm text-xs font-semibold"><i class="fa-solid fa-calendar-days mr-1"></i>Zakazan</span>
+                    <span class="text-amber-200 bg-amber-900 px-2 py-1 rounded-md shadow-sm text-xs font-semibold"><i class="fa-solid fa-calendar-days md:mr-1"></i><span class="hidden md:inline">Zakazan</span></span>
                     break;
                 case ClassStatus.Cancelled:
-                    <span class="text-red-200 bg-red-900 px-2 py-1 rounded-md shadow-sm text-xs font-semibold"><i class="fa-solid fa-trash mr-1"></i>Otkazan</span>
+                    <span class="text-red-200 bg-red-900 px-2 py-1 rounded-md shadow-sm text-xs font-semibold"><i class="fa-solid fa-trash md:mr-1"></i><span class="hidden md:inline">Otkazan</span></span>
                     break;
                 case ClassStatus.Completed:
-                    <span class="text-blue-200 bg-sky-900 px-2 py-1 rounded-md shadow-sm text-xs font-semibold"><i class="fa-solid fa-check mr-1"></i>Završen</span>
+                    <span class="text-blue-200 bg-sky-900 px-2 py-1 rounded-md shadow-sm text-xs font-semibold"><i class="fa-solid fa-check md:mr-1"></i><span class="hidden md:inline">Završen</span></span>
                     break;
             }
             @if (Model.ClassStatus != ClassStatus.Cancelled)
@@ -43,16 +43,16 @@
                 @switch (Model.PaymentStatus)
                 {
                     case PaymentStatus.Pending:
-                        <span class="text-amber-200 bg-amber-900 px-2 py-1 rounded-md shadow-sm text-xs font-semibold"><i class="fa-solid fa-clock mr-1"></i>Neplaćeno</span>
+                        <span class="text-red-200 bg-amber-900 px-2 py-1 rounded-md shadow-sm text-xs font-semibold"><i class="fa-solid fa-clock md:mr-1"></i><span class="hidden md:inline">Neplaćeno</span></span>
                         break;
                     case PaymentStatus.Paid:
-                        <span class="text-sky-200 bg-sky-900 px-2 py-1 rounded-md shadow-sm text-xs font-semibold"><i class="fa-solid fa-circle-check mr-1"></i>Plaćeno</span>
+                        <span class="text-sky-200 bg-sky-900 px-2 py-1 rounded-md shadow-sm text-xs font-semibold"><i class="fa-solid fa-circle-check md:mr-1"></i><span class="hidden md:inline">Plaćeno</span></span>
                         break;
                     case PaymentStatus.Overdue:
-                        <span class="text-red-200 bg-red-900 px-2 py-1 rounded-md shadow-sm text-xs font-semibold"><i class="fa-solid fa-circle-exclamation mr-1"></i>Dugovanje</span>
+                        <span class="text-red-200 bg-red-900 px-2 py-1 rounded-md shadow-sm text-xs font-semibold"><i class="fa-solid fa-circle-exclamation md:mr-1"></i><span class="hidden md:inline">Dugovanje</span></span>
                         break;
                     case PaymentStatus.PartiallyPaid:
-                        <span class="text-yellow-200 bg-yellow-900 px-2 py-1 rounded-md shadow-sm text-xs font-semibold"><i class="fa-solid fa-circle-half-stroke mr-1"></i>Del. plaćeno</span>
+                        <span class="text-yellow-200 bg-yellow-900 px-2 py-1 rounded-md shadow-sm text-xs font-semibold"><i class="fa-solid fa-circle-half-stroke md:mr-1"></i><span class="hidden md:inline">Del. plaćeno</span></span>
                         break;
                 }
             }
@@ -60,11 +60,11 @@
         <div class="flex gap-2">
             @if (showBonus)
             {
-                <span class="text-emerald-200 bg-emerald-900 px-2 py-1 rounded-md shadow-sm text-xs font-semibold"><i class="fa-solid fa-gift mr-1"></i>Bonus: @Model.BonusAmount RSD</span>
+                <span class="text-emerald-200 bg-emerald-900 px-2 py-1 rounded-md shadow-sm text-xs font-semibold"><i class="fa-solid fa-gift md:mr-1"></i><span class="hidden md:inline">Bonus: @Model.BonusAmount RSD</span></span>
             }
             @if (showDiscount)
             {
-                <span class="text-emerald-200 bg-emerald-900 px-2 py-1 rounded-md shadow-sm text-xs font-semibold"><i class="fa-solid fa-percent mr-1"></i>Popust: @Model.DiscountRate %</span>
+                <span class="text-emerald-200 bg-emerald-900 px-2 py-1 rounded-md shadow-sm text-xs font-semibold"><i class="fa-solid fa-percent md:mr-1"></i><span class="hidden md:inline">Popust: @Model.DiscountRate %</span></span>
             }
         </div>
         </div>
@@ -79,22 +79,26 @@
                 hx-push-url="true"
                 hx-swap="innerHTML"
                 class="rounded-xl bg-white/5 p-4 flex items-center gap-3  hover:opacity-70 active:scale-95 transition duration-200 cursor-pointer">
-                <div class="flex h-9 w-9 shrink-0 items-center justify-center rounded-lg bg-emerald-500/15 text-emerald-300 ">
+                <div class="hidden md:flex h-9 w-9 shrink-0 items-center justify-center rounded-lg bg-emerald-500/15 text-emerald-300 ">
                     <i class="fa-solid fa-user-graduate"></i>
                 </div>
                 <div 
                     
                     class="min-w-0">
-                    <p class="text-xs text-emerald-300/60 mb-0.5">Student</p>
+                    <p class="md:hidden text-xs text-emerald-300/60 mb-0.5">
+                        <i class="md:hidden fa-solid fa-user-graduate mr-1"></i>Student
+                    </p>
                     <p class="text-sm font-semibold text-white truncate">@Model.StudentName</p>
                 </div>
             </div>
             <div class="rounded-xl bg-white/5 p-4 flex items-center gap-3">
-                <div class="flex h-9 w-9 shrink-0 items-center justify-center rounded-lg bg-emerald-500/15 text-emerald-300">
+                <div class="hidden md:flex h-9 w-9 shrink-0 items-center justify-center rounded-lg bg-emerald-500/15 text-emerald-300">
                     <i class="fa-solid fa-chalkboard"></i>
                 </div>
                 <div class="min-w-0">
-                    <p class="text-xs text-emerald-300/60 mb-0.5">Predmet</p>
+                    <p class="text-xs text-emerald-300/60 mb-0.5">
+                        <i class="md:hidden fa-solid fa-chalkboard mr-1"></i>Predmet
+                    </p>
                     <p class="text-sm font-semibold text-white truncate">@Model.SubjectName</p>
                 </div>
             </div>
