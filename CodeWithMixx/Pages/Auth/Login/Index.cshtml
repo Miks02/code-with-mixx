@@ -9,7 +9,7 @@
     <div class="w-full max-w-md bg-emerald-300/10 backdrop-blur-md rounded-2xl p-8 shadow-2xl">
         <div class="text-center mb-10">
             <h2 class="text-4xl font-bold text-white mb-2">Pristup nalogu</h2>
-            <p class="text-emerald-100/80">Spreman/a da rešiš sve ispitne probleme ?</p>
+            <p class="text-emerald-100/80">Pristup je trenutno omogućen samo administratorima.</p>
         </div>
 
         <form id="login-form" method="post" class="flex flex-col gap-4">
@@ -51,7 +51,7 @@
                            class="checkbox-emerald" />
                     <label asp-for="Input.RememberMe" class="ml-2 text-sm text-emerald-100 cursor-pointer select-none">Zapamti me</label>
                 </div>
-                <a href="#" class="text-sm text-emerald-100 hover:text-amber-300 transition-colors">Zaboravljena lozinka?</a>
+                @* <a href="#" class="text-sm text-emerald-100 hover:text-amber-300 transition-colors">Zaboravljena lozinka?</a> *@
             </div>
 
             <button id="login-btn" type="submit" 
@@ -60,10 +60,10 @@
             </button>
 
             <div class="pt-4 border-t border-emerald-500/10 text-center">
-                <p class="text-emerald-100 text-xs mb-1 font-semibold">Nemaš nalog?</p>
+                <p class="text-emerald-100 text-xs mb-1 font-semibold">Pristup studentima</p>
                 <p class="text-emerald-100/80
  text-sm">
-                    Pristup je omogućen isključivo učenicima i administratoru.
+                    U toku je razvoj kontrolne table prilagodjene studentima. Za sada, pristup je omogućen samo administratorima.
                 </p>
             </div>
         </form>
