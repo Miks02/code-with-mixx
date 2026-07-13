@@ -5,13 +5,13 @@ namespace CodeWithMixx.Pages.Admin.Classes;
 
 public record ClassReservationListItem
 {
-    public int Id { get; set; }
-    public string SubjectName { get; set; } = string.Empty;
-    public string StudentName { get; set; } = string.Empty;
-    public string StartsAt { get; set; } = string.Empty;
-    public string EndsAt { get; set; } = string.Empty;
-    public int AmountOfClasses { get; set; }
-    public Decimal TotalPrice { get; set; }
-    public PaymentStatus PaymentStatus { get; set; }
-    public ClassStatus ClassStatus { get; set; }
+    public int Id { get; init; }
+    public string SubjectName { get; init; } = string.Empty;
+    public string StudentName { get; init; } = string.Empty;
+    public string StartsAt { get; init; } = string.Empty;
+    public string EndsAt { get; init; } = string.Empty;
+    public int AmountOfClasses { get; init; }
+    public Decimal TotalPrice { get; init; }
+    public PaymentStatus PaymentStatus { get; init; }
+    public ClassStatus ClassStatus { get; init; }
 };
