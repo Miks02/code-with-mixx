@@ -240,16 +240,16 @@
                             @switch (classItem.PaymentStatus)
                             {
                                 case PaymentStatus.Pending:
-                                    <p class="text-amber-200 sm:bg-amber-900 sm:px-2 sm:py-1 sm:rounded-md sm:shadow-sm font-semibold"><i class="fa-solid fa-warning mr-2"></i>Neplaćeno</p>
+                                    <p class="text-amber-200 sm:bg-amber-900 sm:px-2 sm:py-1 sm:rounded-md sm:shadow-sm font-semibold"><i class="fa-solid fa-warning mr-2 hidden! md:inline!"></i>Neplaćeno</p>
                                     break;
                                 case PaymentStatus.Paid:
-                                    <p class="text-sky-200 sm:bg-sky-900 sm:px-2 sm:py-1 sm:rounded-md sm:shadow-sm font-semibold"><i class="fa-solid fa-circle-check mr-2"></i>Plaćeno</p>
+                                    <p class="text-sky-200 sm:bg-sky-900 sm:px-2 sm:py-1 sm:rounded-md sm:shadow-sm font-semibold"><i class="fa-solid fa-circle-check mr-2 hidden! md:inline!"></i>Plaćeno</p>
                                     break;
                                 case PaymentStatus.Overdue:
-                                    <p class="text-red-200 sm:bg-red-900 sm:px-2 sm:py-1 sm:rounded-md sm:shadow-sm font-semibold"><i class="fa-solid fa-circle-exclamation mr-2"></i>Dugovanje</p>
+                                    <p class="text-red-200 sm:bg-red-900 sm:px-2 sm:py-1 sm:rounded-md sm:shadow-sm font-semibold"><i class="fa-solid fa-circle-exclamation mr-2 hidden! md:inline!"></i>Dugovanje</p>
                                     break;
                                 case PaymentStatus.PartiallyPaid:
-                                    <p class="text-yellow-200 sm:bg-yellow-900 px-2 sm:py-1 sm:rounded-md sm:shadow-sm font-semibold w-20 md:w-auto"><i class="fa-solid fa-circle-half-stroke mr-2"></i>Del. plaćeno</p>
+                                    <p class="text-yellow-200 sm:bg-yellow-900 px-2 sm:py-1 sm:rounded-md sm:shadow-sm font-semibold w-20 md:w-auto"><i class="fa-solid fa-circle-half-stroke mr-2 hidden! md:inline!"></i>Del. plaćeno</p>
                                     break;
                             }
                         </div>
