@@ -6,18 +6,28 @@ export function initCharts() {
     getSubjectsChart();
     
 }
+let financeChartInstance = null;
 
-function getFinanceChart() {
+export function getFinanceChart() {
     const ctx = document.getElementById('finance-chart').getContext('2d');
-    
+    const studentsDataRaw = document.getElementById('finance-chart').dataset.chartStudents;
+    const incomeDataRaw = document.getElementById('finance-chart').dataset.chartIncome;
+    const chartData = {
+        income: JSON.parse(incomeDataRaw),
+        students: JSON.parse(studentsDataRaw)
+    };
 
-    const financeChart = new Chart(ctx, {
+    if (financeChartInstance !== null) {
+        financeChartInstance.destroy();
+    }
+
+    financeChartInstance = new Chart(ctx, {
         type: 'line',
         data: {
-            labels: ['Jan', 'Feb', 'Mar', 'Apr', 'Maj', 'Jun'],
+            labels: ['Jan', 'Feb', 'Mar', 'Apr', 'Maj', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'],
             datasets: [{
                 label: 'Zarada (RSD)',
-                data: [35000, 42000, 60000, 55000, 72000, 85000],
+                data: chartData.income,
                 borderColor: '#34d399',
                 backgroundColor: 'rgba(52, 211, 153, 0.1)',
                 borderWidth: 3,
@@ -27,7 +37,7 @@ function getFinanceChart() {
             },
             {
                 label: 'Učenici',
-                data: [12, 8, 6, 16, 10, 14],
+                data: chartData.students,
                 borderColor: 'orange',
                 borderWidth: 3,
                 tension: 0.4,
@@ -66,18 +76,19 @@ function getFinanceChart() {
 
 }
 
-function getSubjectsChart() {
+export function getSubjectsChart() {
     const ctx = document.getElementById('subjects-chart').getContext('2d');
-
-
+    
+    const chartDataRaw = document.getElementById('subjects-chart').dataset.chartData;
+    const chartData = JSON.parse(chartDataRaw);
+    
     const subjectsChart = new Chart(ctx, {
         type: 'doughnut',
         data: {
-            labels: ['OOP (C# / Java)', 'Osnove C-a', 'Baze podataka', 'Web Dev', "Desktop App"],
+            labels: Object.keys(chartData),
             datasets: [{
                 label: 'Broj održanih časova',
-                data: [25, 18, 12, 15, 9],
-
+                data: Object.values(chartData),
                 backgroundColor: [
                     '#34d399',
                     '#fbbf24',
@@ -95,7 +106,7 @@ function getSubjectsChart() {
             maintainAspectRatio: false,
             plugins: {
                 legend: {
-                    display: true,
+                    display: false,
                     position: 'right',
                     labels: {
                         color: '#a7f3d0',

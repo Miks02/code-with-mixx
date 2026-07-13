@@ -1,0 +1,11 @@
+@model FinanceChart
+
+<canvas id="finance-chart" data-chart-income='@Json.Serialize(Model.IncomeByMonth)' data-chart-students='@Json.Serialize(Model.StudentsCountByMonth)'></canvas>
+
+
+<script type="module">
+    import { getFinanceChart } from '/js/dashboard/charts.js';
+
+    getFinanceChart();
+    
+</script>
