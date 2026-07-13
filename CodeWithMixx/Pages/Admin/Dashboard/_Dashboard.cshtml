@@ -1,4 +1,3 @@
-@using CodeWithMixx.Domain.Entities.Classes
 @using CodeWithMixx.Domain.Entities.Reservations
 @model CodeWithMixx.Pages.Admin.Dashboard.DashboardViewModel;
 
@@ -88,23 +87,56 @@
                 <p class="mt-0.5 text-xs text-amber-300/90">Stopa rasta učenika i profita na mesečnom nivou</p>
             </div>
             <div class="flex gap-1.5">
-                <select class="bg-amber-400 px-2 py-1 rounded-md shadow-md font-semibold text-sky-900">
-                    <option selected disabled hidden value="2026">2026</option>
+                <select 
+                    name="selectedYear"
+                    hx-get="/admin/dashboard?handler=FinanceChart"
+                    hx-target="#finance-chart-wrapper"
+                    hx-swap="innerHTML"
+                    hx-push-url="true"
+                    class="@(!Model.Years.Any() ? "hidden" : "") bg-amber-400 px-2 py-1 rounded-md shadow-md font-semibold text-sky-900">
+                    @if(Model.FinanceChartData.SelectedYear is not null)
+                    {
+                        <option selected disabled hidden value="@Model.FinanceChartData.SelectedYear">@Model.FinanceChartData.SelectedYear</option>
+                    }
+                    @foreach(var year in Model.Years)
+                    {
+                        <option value="@year">@year</option>
+                    }
                 </select>
             </div>
         </div>
-        <div class="flex h-56 flex-col items-center justify-center rounded-xl bg-green-900/30 shadow-sm">
-            <canvas id="finance-chart"></canvas>
+        <div id="finance-chart-wrapper" class="flex h-56 flex-col items-center justify-center rounded-xl bg-green-900/30 shadow-sm">
+            @if (!Model.FinanceChartData.IncomeByMonth.Any() || !Model.FinanceChartData.StudentsCountByMonth.Any())
+            {
+                <div class="flex flex-col items-center justify-center gap-2 text-center">
+                    <i class="fa-solid fa-xmark text-3xl text-amber-100"></i>
+                    <p class="text-lg text-emerald-100 font-semibold">Trenutno nema podataka za grafikon prihoda i broja učenika</p>
+                </div>
+            }
+            else
+            {
+                @await Html.PartialAsync("_FinanceChart", Model.FinanceChartData)
+            }
         </div>
     </div>
 
     <div class="min-w-0 flex-2 rounded-2xl bg-indigo-700/40 p-6 shadow-xl shadow-black/20 backdrop-blur-sm">
         <div class="mb-5">
-            <h3 class="font-semibold text-white">Grafikon broja časova</h3>
+            <h3 class="font-semibold text-white">Grafikon održanih časova</h3>
             <p class="mt-0.5 text-xs text-emerald-300/60">Naziv časa - broj održanih</p>
         </div>
         <div class="flex h-56 flex-col items-center justify-center rounded-xl bg-indigo-900/25 shadow-sm p-4">
-            <canvas id="subjects-chart" data-chart-data='@Json.Serialize(Model.SubjectsChart)'></canvas>
+            @if (!Model.SubjectsChart.Keys.Any())
+            {
+                <div class="flex flex-col items-center justify-center gap-2 text-center">
+                    <i class="fa-solid fa-xmark text-3xl text-amber-100"></i>
+                    <p class="text-lg text-emerald-100 font-semibold">Trenutno nema podataka za grafikon održanih časova</p>
+                </div>
+            }
+            else
+            {
+                <canvas id="subjects-chart" data-chart-data='@Json.Serialize(Model.SubjectsChart)'></canvas>
+            }
         </div>
     </div>
 
