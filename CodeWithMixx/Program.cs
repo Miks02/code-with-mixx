@@ -1,8 +1,11 @@
 using CodeWithMixx.Infrastructure;
 using CodeWithMixx.Infrastructure.Filters;
+using CodeWithMixx.Infrastructure.Persistence;
 using CodeWithMixx.Pages;
 using Microsoft.AspNetCore.HttpOverrides;
+using Microsoft.EntityFrameworkCore;
 using Serilog;
+using Serilog.Core;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -25,6 +28,20 @@ builder.Services.AddInfrastructure(builder.Configuration);
 builder.Services.AddScoped<ContactHandler>();
 
 var app = builder.Build();
+
+using (var scope = app.Services.CreateScope())
+{
+    var services = scope.ServiceProvider;
+    try
+    {
+        var context = services.GetRequiredService<AppDbContext>(); 
+        await context.Database.MigrateAsync();
+    }
+    catch (Exception ex)
+    {
+        Log.Logger.Error($"An error happened during a database migration process: {ex.Message}");
+    }
+}
 
 await app.MapSeeders();
 
