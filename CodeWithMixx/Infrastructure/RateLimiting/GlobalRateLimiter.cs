@@ -2,7 +2,6 @@ using System.Security.Claims;
 using System.Threading.RateLimiting;
 using CodeWithMixx.Infrastructure.Web;
 using Microsoft.AspNetCore.Mvc.ViewFeatures;
-using Microsoft.AspNetCore.RateLimiting;
 
 namespace CodeWithMixx.Infrastructure.RateLimiting;
 
