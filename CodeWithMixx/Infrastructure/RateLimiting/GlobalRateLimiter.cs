@@ -11,23 +11,36 @@ public static class GlobalRateLimiter
     {
         services.AddRateLimiter(options =>
         {
-            options.AddPolicy("GlobalLimiter", context =>
+            options.GlobalLimiter = PartitionedRateLimiter.Create<HttpContext, string>(context =>
             {
-                string? userId = context.User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
-                
-                string partitionKey = userId 
-                    ?? context.Connection.RemoteIpAddress?.ToString() 
-                    ?? "unknown";
+                var path = context.Request.Path.Value ?? "";
 
-                return RateLimitPartition.GetTokenBucketLimiter(
-                    partitionKey: partitionKey,
-                    factory: _ => new TokenBucketRateLimiterOptions()
-                    {
-                        TokenLimit = 100,
-                        ReplenishmentPeriod = TimeSpan.FromSeconds(10),
-                        TokensPerPeriod = 10,
-                        QueueLimit = 0
-                    });
+                var isStatic = path switch
+                {
+                    _ when path.StartsWith("/css", StringComparison.OrdinalIgnoreCase) => true,
+                    _ when path.StartsWith("/js", StringComparison.OrdinalIgnoreCase) => true,
+                    _ when path.StartsWith("/lib", StringComparison.OrdinalIgnoreCase) => true,
+                    _ when path.StartsWith("/images", StringComparison.OrdinalIgnoreCase) => true,
+                    _ when path.StartsWith("/_framework", StringComparison.OrdinalIgnoreCase) => true,
+                    _ => false
+                };
+
+                if (isStatic)
+                    return RateLimitPartition.GetNoLimiter("static");
+                
+
+                var userId = context.User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+                var partitionKey = userId 
+                                   ?? context.Connection.RemoteIpAddress?.ToString() 
+                                   ?? "unknown";
+
+                return RateLimitPartition.GetTokenBucketLimiter(partitionKey, _ => new TokenBucketRateLimiterOptions
+                {
+                    TokenLimit = 100,
+                    ReplenishmentPeriod = TimeSpan.FromSeconds(10),
+                    TokensPerPeriod = 10,
+                    QueueLimit = 0
+                });
             });
 
             options.OnRejected = async (context, ct) =>

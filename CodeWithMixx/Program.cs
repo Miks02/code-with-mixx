@@ -68,7 +68,6 @@ app.UseAuthorization();
 
 app.MapStaticAssets();
 app.MapRazorPages()
-    .WithStaticAssets()
-    .RequireRateLimiting("GlobalLimiter");
+    .WithStaticAssets();
 
 app.Run();
