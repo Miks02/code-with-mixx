@@ -5,7 +5,6 @@ using CodeWithMixx.Pages;
 using Microsoft.AspNetCore.HttpOverrides;
 using Microsoft.EntityFrameworkCore;
 using Serilog;
-using Serilog.Core;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -61,7 +60,7 @@ forwardedOptions.KnownProxies.Clear();
 app.UseForwardedHeaders(forwardedOptions);
 
 app.UseRouting();
-
+app.UseRateLimiter();
 app.UseSerilogRequestLogging();
 
 app.UseAuthentication();

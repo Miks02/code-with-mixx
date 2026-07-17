@@ -1,9 +1,11 @@
 using FluentValidation;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
+using Microsoft.AspNetCore.RateLimiting;
 
 namespace CodeWithMixx.Pages.Auth.Login;
 
+[EnableRateLimiting("LoginLimiter")]
 public class IndexModel(IValidator<LoginInputModel> loginValidator, LoginHandler handler) : PageModel
 {
     [BindProperty]
