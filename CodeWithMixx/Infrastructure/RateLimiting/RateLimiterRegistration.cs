@@ -5,6 +5,7 @@ public static class RateLimiterRegistration
     public static void AddRateLimiters(this IServiceCollection services)
     {
         services.AddGlobalRateLimiter();
+        services.AddLoginRateLimiter();
         services.AddContactFormRateLimiter();
     }
 }
