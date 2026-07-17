@@ -1,0 +1,64 @@
+@page
+@model CodeWithMixx.Pages.Errors.Error429
+
+@{
+    ViewData["Title"] = "Previše zahteva";
+    Layout = "_Layout";
+}
+
+<section id="vanta-bg" class="bg-linear-to-br from-emerald-800 to-emerald-900 min-h-screen w-full flex flex-col justify-center items-center px-8 py-24 shadow-2xl">
+    <div class="max-w-3xl mx-auto w-full text-center p-4 bg-emerald-900/50 rounded-xl shadow-xl">
+        <div class="mb-8">
+            <h1 class="text-8xl md:text-9xl font-bold text-white leading-tight opacity-20">429</h1>
+            <div class="-mt-16 md:-mt-20">
+                <h2 class="text-4xl md:text-6xl font-bold text-white leading-tight">Polako,</h2>
+                <h2 class="text-4xl md:text-6xl font-bold text-emerald-200 leading-tight">previše si brz/a!</h2>
+            </div>
+        </div>
+
+        <p class="text-xl md:text-2xl text-emerald-100 max-w-xl mx-auto mb-10">
+            Izgleda da si poslao/la previše zahteva u kratkom vremenskom periodu. Sačekaj minut-dva i pokušaj ponovo.
+        </p>
+
+        <div class="flex flex-wrap gap-4 justify-center mt-4">
+            <a asp-page="/Index" class="px-8 py-4 bg-emerald-400 text-emerald-950 font-semibold rounded-xl hover:bg-emerald-300 transition duration-200 text-lg shadow-lg active:scale-95">
+                Vrati se na početnu
+            </a>
+            <button onclick="window.location.reload()" class="px-8 py-4 border-2 border-emerald-400 text-emerald-50 font-semibold rounded-xl hover:bg-emerald-400/10 transition duration-200 text-lg active:scale-95">
+                Osveži stranicu
+            </button>
+        </div>
+
+        <div class="mt-16 hidden lg:flex justify-center">
+            <div class="w-full max-w-md bg-green-900/50 rounded-lg shadow-2xl overflow-hidden border border-emerald-500/20 backdrop-blur-sm">
+                <div class="flex items-center justify-between px-4 py-2 bg-emerald-700/40 border-b border-emerald-500/10">
+                    <div class="flex gap-1.5">
+                        <div class="w-3 h-3 rounded-full bg-red-500/80"></div>
+                        <div class="w-3 h-3 rounded-full bg-amber-500/80"></div>
+                        <div class="w-3 h-3 rounded-full bg-emerald-500/80"></div>
+                    </div>
+                    <div class="text-xs text-emerald-100/40 font-mono">rate-limiter.log</div>
+                </div>
+                <div class="p-6 font-mono text-sm text-left leading-relaxed">
+                    <div class="flex gap-4">
+                        <span class="text-emerald-300/40 select-none">$</span>
+                        <span class="text-emerald-100">status --check requests</span>
+                    </div>
+                    <div class="flex gap-4">
+                        <span class="text-emerald-300/40 select-none">></span>
+                        <span class="text-amber-400">HTTP 429: Too Many Requests</span>
+                    </div>
+                    <div class="flex gap-4 mt-2">
+                        <span class="text-emerald-300/40 select-none">$</span>
+                        <span class="text-emerald-100">advice --tell-user</span>
+                    </div>
+                    <div class="flex gap-4">
+                        <span class="text-emerald-300/40 select-none">></span>
+                        <span class="text-emerald-300 italic">Skuvaj kafu, pa se vrati za minut. ☕</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
