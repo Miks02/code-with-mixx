@@ -3,6 +3,7 @@ using System;
 using CodeWithMixx.Infrastructure.Persistence;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
@@ -11,9 +12,11 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace CodeWithMixx.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    partial class AppDbContextModelSnapshot : ModelSnapshot
+    [Migration("20260720142805_AddProjectEntity")]
+    partial class AddProjectEntity
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -164,6 +167,44 @@ namespace CodeWithMixx.Migrations
                         {
                             t.HasCheckConstraint("CK_Classes_Price_Positive", "\"Price\" >= 0");
                         });
+                });
+
+            modelBuilder.Entity("CodeWithMixx.Domain.Entities.Projects.Project", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
+
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<DateTime>("EndDate")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<string>("ProjectStatus")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<int>("ReservationId")
+                        .HasColumnType("integer");
+
+                    b.Property<DateTime>("StartDate")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("EndDate");
+
+                    b.HasIndex("ProjectStatus");
+
+                    b.HasIndex("ReservationId")
+                        .IsUnique();
+
+                    b.HasIndex("StartDate");
+
+                    b.ToTable("Projects");
                 });
 
             modelBuilder.Entity("CodeWithMixx.Domain.Entities.Reservations.Reservation", b =>
@@ -470,6 +511,17 @@ namespace CodeWithMixx.Migrations
                     b.Navigation("Subject");
                 });
 
+            modelBuilder.Entity("CodeWithMixx.Domain.Entities.Projects.Project", b =>
+                {
+                    b.HasOne("CodeWithMixx.Domain.Entities.Reservations.Reservation", "Reservation")
+                        .WithOne("Project")
+                        .HasForeignKey("CodeWithMixx.Domain.Entities.Projects.Project", "ReservationId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.Navigation("Reservation");
+                });
+
             modelBuilder.Entity("CodeWithMixx.Domain.Entities.Reservations.Reservation", b =>
                 {
                     b.HasOne("CodeWithMixx.Domain.Entities.Admins.Admin", "Admin")
@@ -578,6 +630,8 @@ namespace CodeWithMixx.Migrations
             modelBuilder.Entity("CodeWithMixx.Domain.Entities.Reservations.Reservation", b =>
                 {
                     b.Navigation("Classes");
+
+                    b.Navigation("Project");
                 });
 
             modelBuilder.Entity("CodeWithMixx.Domain.Entities.Students.Student", b =>

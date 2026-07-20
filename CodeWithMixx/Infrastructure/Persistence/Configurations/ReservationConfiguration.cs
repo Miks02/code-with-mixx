@@ -1,3 +1,4 @@
+using CodeWithMixx.Domain.Entities.Projects;
 using CodeWithMixx.Domain.Entities.Reservations;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
@@ -43,5 +44,6 @@ public class ReservationConfiguration : IEntityTypeConfiguration<Reservation>
             .WithMany(s => s.Reservations)
             .HasForeignKey(r => r.StudentId)
             .OnDelete(DeleteBehavior.Restrict);
+        
     }
 }

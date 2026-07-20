@@ -1,6 +1,7 @@
 using CodeWithMixx.Domain.Entities.Admins;
 using CodeWithMixx.Domain.Entities.AppUsers;
 using CodeWithMixx.Domain.Entities.Classes;
+using CodeWithMixx.Domain.Entities.Projects;
 using CodeWithMixx.Domain.Entities.Reservations;
 using CodeWithMixx.Domain.Entities.Students;
 using CodeWithMixx.Domain.Entities.Subjects;
@@ -16,6 +17,7 @@ public class AppDbContext(DbContextOptions<AppDbContext> options) : IdentityDbCo
     public DbSet<Student> Students { get; set; }
     public DbSet<Subject> Subjects { get; set; }
     public DbSet<Class> Classes { get; set; }
+    public DbSet<Project> Projects { get; set; }
     public DbSet<Reservation> Reservations { get; set; }
     
     protected override void OnModelCreating(ModelBuilder modelBuilder)

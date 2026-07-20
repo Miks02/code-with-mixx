@@ -1,5 +1,6 @@
 using CodeWithMixx.Domain.Entities.Admins;
 using CodeWithMixx.Domain.Entities.Classes;
+using CodeWithMixx.Domain.Entities.Projects;
 using CodeWithMixx.Domain.Entities.Students;
 
 namespace CodeWithMixx.Domain.Entities.Reservations;
@@ -25,6 +26,8 @@ public class Reservation
     
     public Student Student { get; set; } = null!;
     public string StudentId { get; set; } = null!;
+    
+    public Project? Project { get; set; }
     
     public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
 
