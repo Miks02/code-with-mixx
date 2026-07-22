@@ -1,0 +1,101 @@
+@using CodeWithMixx.Common.Results
+@using CodeWithMixx.Domain.Entities.Projects
+@using CodeWithMixx.Domain.Entities.Reservations
+@model PagedResult<ProjectReservationListItem>
+
+@if (!Model.Items.Any())
+{
+    <div class="flex flex-col items-center justify-center py-20 px-5 text-center">
+        <div class="mb-4 flex h-20 w-20 items-center justify-center rounded-full bg-emerald-500/10">
+            <i class="fa-solid fa-folder-open text-4xl text-emerald-500/40"></i>
+        </div>
+        <h4 class="text-xl font-semibold text-white">Nema rezultata</h4>
+        <p class="mt-2 text-sm text-emerald-300/60 max-w-xs">
+            Podaci sa unetim kriterijumima nisu pronađeni. Pokušajte sa drugim parametrima filtera.
+        </p>
+    </div>
+}
+else
+{
+    <div class="grid gap-4 px-5 pb-5 sm:grid-cols-2 lg:grid-cols-2 sm:px-6">
+        @foreach (var project in Model.Items)
+        {
+            <article class="rounded-xl bg-white/5 p-4 shadow-md hover:bg-white/10 transition-all duration-150">
+                <div class="mb-3 flex items-center justify-between gap-2">
+                    <div>
+                        <h4 class="font-semibold text-white">@project.StudentName</h4>
+                        <p class="text-xs text-emerald-300/70">@project.SubjectName</p>
+                    </div>
+                    @switch (project.ProjectStatus)
+                    {
+                        case ProjectStatus.Ongoing:
+                            <span class="rounded-md bg-sky-500/20 px-2 py-1 text-xs font-medium text-sky-300">U toku</span>
+                            break;
+                        case ProjectStatus.Completed:
+                            <span class="rounded-md bg-emerald-500/20 px-2 py-1 text-xs font-medium text-emerald-300">Završen</span>
+                            break;
+                        case ProjectStatus.Cancelled:
+                            <span class="rounded-md bg-rose-500/20 px-2 py-1 text-xs font-medium text-rose-300">Otkazan</span>
+                            break;
+                        case ProjectStatus.Standby:
+                            <span class="rounded-md bg-amber-500/20 px-2 py-1 text-xs font-medium text-amber-300">Na čekanju</span>
+                            break;
+                    }
+                </div>
+
+                <div class="grid gap-2 text-sm text-emerald-100/80">
+                    <p><i class="fa-regular fa-clock mr-2 text-emerald-400/80"></i>Početak: @project.StartDate</p>
+                    <p><i class="fa-regular fa-clock mr-2 text-emerald-400/80"></i>Kraj: @project.EndDate</p>
+                    <p><i class="fa-regular fa-calendar mr-2 text-emerald-400/80"></i>Rezervisano: @project.ReservedAt</p>
+                    <p><i class="fa-solid fa-sack-dollar mr-2 text-emerald-400/80"></i>Cena: @project.TotalPrice</p>
+                    @switch (project.PaymentStatus)
+                    {
+                        case PaymentStatus.Pending:
+                            <p class="text-amber-300"><i class="fa-regular fa-hourglass-half mr-2"></i>Plaćanje na čekanju</p>
+                            break;
+                        case PaymentStatus.Paid:
+                            <p class="text-emerald-300"><i class="fa-solid fa-circle-check mr-2"></i>Plaćeno</p>
+                            break;
+                        case PaymentStatus.Overdue:
+                            <p class="text-rose-300"><i class="fa-solid fa-circle-xmark mr-2"></i>Istekao rok</p>
+                            break;
+                        case PaymentStatus.PartiallyPaid:
+                            <p class="text-sky-300"><i class="fa-solid fa-circle-half-stroke mr-2"></i>Delimično plaćeno</p>
+                            break;
+                    }
+                </div>
+            </article>
+        }
+    </div>
+
+    <div class="flex items-center justify-between bg-emerald-900/30 px-5 py-3 sm:px-6">
+        <p class="text-xs text-emerald-300/50">Prikazan broj projekata: @Model.PaginatedCount</p>
+
+        <div class="flex gap-2">
+            <button hx-push-url="true"
+                    hx-get="/admin/projects?handler=Projects"
+                    hx-vals='js:{"page": "@(Model.PageNumber - 1)", "filter": document.getElementsByName("filter")[0]?.value, "subjectId": document.getElementsByName("subjectId")[0]?.value, "sort": document.getElementsByName("sort")[0]?.value}'
+                    hx-target="#projects-list"
+                    hx-indicator="#projects-list-indicator"
+                    hx-swap="innerHTML"
+                    class="bg-emerald-400 flex items-center justify-center px-4 py-1 rounded-md hover:bg-emerald-500 active:scale-95 disabled:opacity-50 transition duration-200"
+                    @(Model.HasPreviousPage ? "" : "disabled")>
+                <i class="fa-solid fa-chevron-left text-amber-600"></i>
+            </button>
+            <div class="bg-emerald-400 px-4 py-1 rounded-md text-amber-600 font-semibold">
+                @Model.PageNumber
+            </div>
+
+            <button hx-push-url="true"
+                    hx-get="/admin/projects?handler=Projects"
+                    hx-vals='js:{"page": "@(Model.PageNumber + 1)", "filter": document.getElementsByName("filter")[0]?.value, "subjectId": document.getElementsByName("subjectId")[0]?.value, "sort": document.getElementsByName("sort")[0]?.value}'
+                    hx-target="#projects-list"
+                    hx-indicator="#projects-list-indicator"
+                    hx-swap="innerHTML"
+                    class="bg-emerald-400 flex items-center justify-center px-4 py-1 rounded-md hover:bg-emerald-500 active:scale-95 disabled:opacity-50 transition duration-200"
+                    @(Model.HasNextPage ? "" : "disabled")>
+                <i class="fa-solid fa-chevron-right text-amber-600"></i>
+            </button>
+        </div>
+    </div>
+}

@@ -1,0 +1,173 @@
+@model ProjectsPageViewModel
+
+@{
+    var filter = Context.Request.Query["filter"].ToString();
+    var subjectId = Context.Request.Query["subjectId"].ToString();
+    var sort = Context.Request.Query["sort"].ToString();
+
+    string SetFilterOption(string value)
+    {
+        return value switch
+        {
+            "ongoing" => "U toku",
+            "completed" => "Završeni",
+            "cancelled" => "Otkazani",
+            "standby" => "Na čekanju",
+            _ => "Svi statusi"
+        };
+    }
+
+    string SetSortOption(string value)
+    {
+        return value switch
+        {
+            "reservation_desc" => "Rezervisano - silazno",
+            "reservation_asc" => "Rezervisano - uzlazno",
+            _ => "Rezervisano - silazno"
+        };
+    }
+
+    string SetSubjectOption(string value)
+    {
+        var subject = Model.Subjects.FirstOrDefault(s => s.Id.ToString() == value);
+        return subject != null ? subject.SubjectName : "Svi predmeti";
+    }
+}
+
+<title hx-swap-oob="outerHTML">CodeWithMixx | Projekti</title>
+
+@await Html.PartialAsync("_Partials/Dashboard/_PageHeading", ("Spisak i upravljanje studentskim projektima", "Projekti"))
+
+<div class="grid gap-4 grid-cols-1 grow lg:grid-cols-3">
+    <div class="w-full grow min-w-0 overflow-hidden rounded-2xl col-1 row-1 bg-emerald-950/80 shadow-xl shadow-black/20 lg:col-span-2">
+        <div class="flex flex-col gap-3 px-5 pb-4 pt-5 sm:flex-row sm:items-center sm:justify-between sm:px-6">
+            <div>
+                <h3 class="font-semibold text-white">Spisak projekata</h3>
+                <p class="mt-0.5 text-xs text-emerald-300/60">Lista svih projekata koji se nalaze u sistemu</p>
+            </div>
+            <div class="grid w-full gap-2 sm:w-auto sm:grid-cols-[170px_230px_230px] sm:items-center">
+                <div class="relative">
+                    <i class="fa-solid fa-filter pointer-events-none absolute left-3 top-1/2 -translate-y-1/2 text-xs text-emerald-300/80"></i>
+                    <select name="filter"
+                            hx-get="/admin/projects?handler=Projects"
+                            hx-target="#projects-list"
+                            hx-indicator="#projects-list-indicator"
+                            hx-swap="innerHTML"
+                            hx-push-url="true"
+                            hx-include="[name='subjectId'], [name='sort']"
+                            class="w-full appearance-none rounded-lg bg-emerald-800 py-2 pl-8 pr-8 text-sm text-emerald-100/80 outline-none">
+                        @if (string.IsNullOrWhiteSpace(filter))
+                        {
+                            <option value="" selected>Svi statusi</option>
+                        }
+                        else
+                        {
+                            <option value="">Svi statusi</option>
+                            <option value="@filter" selected>@SetFilterOption(filter)</option>
+                        }
+                        <option value="ongoing">U toku</option>
+                        <option value="completed">Završeni</option>
+                        <option value="cancelled">Otkazani</option>
+                        <option value="standby">Na čekanju</option>
+                    </select>
+                    <i class="fa-solid fa-chevron-down pointer-events-none absolute right-3 top-1/2 -translate-y-1/2 text-[10px] text-emerald-300/80"></i>
+                </div>
+
+                <div class="relative">
+                    <i class="fa-solid fa-filter pointer-events-none absolute left-3 top-1/2 -translate-y-1/2 text-xs text-emerald-300/80"></i>
+                    <select name="subjectId"
+                            hx-get="/admin/projects?handler=Projects"
+                            hx-target="#projects-list"
+                            hx-indicator="#projects-list-indicator"
+                            hx-swap="innerHTML"
+                            hx-push-url="true"
+                            hx-include="[name='filter'], [name='sort']"
+                            class="w-full appearance-none rounded-lg bg-emerald-800 py-2 pl-8 pr-8 text-sm text-emerald-100/80 outline-none">
+                        @if (string.IsNullOrWhiteSpace(subjectId))
+                        {
+                            <option value="" selected>Svi predmeti</option>
+                        }
+                        else
+                        {
+                            <option value="">Svi predmeti</option>
+                            <option value="@subjectId" selected>@SetSubjectOption(subjectId)</option>
+                        }
+                        @foreach (var subject in Model.Subjects)
+                        {
+                            <option value="@subject.Id">@subject.SubjectName</option>
+                        }
+                    </select>
+                    <i class="fa-solid fa-chevron-down pointer-events-none absolute right-3 top-1/2 -translate-y-1/2 text-[10px] text-emerald-300/80"></i>
+                </div>
+
+                <div class="relative">
+                    <i class="fa-solid fa-arrow-down-a-z pointer-events-none absolute left-3 top-1/2 -translate-y-1/2 text-xs text-emerald-300/80"></i>
+                    <select name="sort"
+                            hx-get="/admin/projects?handler=Projects"
+                            hx-target="#projects-list"
+                            hx-indicator="#projects-list-indicator"
+                            hx-swap="innerHTML"
+                            hx-push-url="true"
+                            hx-include="[name='filter'], [name='subjectId']"
+                            class="w-full appearance-none rounded-lg bg-emerald-800 py-2 pl-8 pr-8 text-sm text-emerald-100/80 outline-none">
+                        @if (string.IsNullOrWhiteSpace(sort))
+                        {
+                            <option value="reservation_desc" selected>Rezervisano - silazno</option>
+                        }
+                        else
+                        {
+                            <option value="@sort" selected>@SetSortOption(sort)</option>
+                        }
+                        <option value="reservation_desc">Rezervisano - silazno</option>
+                        <option value="reservation_asc">Rezervisano - uzlazno</option>
+                    </select>
+                    <i class="fa-solid fa-chevron-down pointer-events-none absolute right-3 top-1/2 -translate-y-1/2 text-[10px] text-emerald-300/80"></i>
+                </div>
+            </div>
+        </div>
+
+        <div class="relative min-h-[200px]">
+            <div id="projects-list-indicator" class="htmx-indicator absolute inset-0 z-10 flex items-center justify-center bg-emerald-950/40 backdrop-blur-[2px]">
+                <div class="flex flex-col items-center gap-3">
+                    <div class="h-10 w-10 animate-spin rounded-full border-4 border-emerald-500/20 border-t-emerald-500"></div>
+                    <span class="text-xs font-medium text-emerald-300">Učitavanje...</span>
+                </div>
+            </div>
+            <div id="projects-list">
+                @await Html.PartialAsync("_ProjectsList", Model.ProjectsPage)
+            </div>
+        </div>
+    </div>
+
+    <div class="w-full grow min-w-0 overflow-hidden rounded-2xl col-1 row-2 bg-emerald-950/80 shadow-xl shadow-black/20 lg:col-span-1 lg:row-span-1 lg:row-start-1 lg:col-start-3">
+        <div class="px-5 py-5 sm:px-6">
+            <h3 class="font-semibold text-white">Pregled projekata</h3>
+            <p class="mt-0.5 text-xs text-emerald-300/60">Brzi summary statusa projekata</p>
+
+            <div class="mt-4 grid gap-3 sm:grid-cols-2 lg:grid-cols-1">
+                <div class="rounded-xl bg-white/5 p-4">
+                    <p class="text-xs text-emerald-300/60">Ukupno projekata</p>
+                    <p class="mt-1 text-2xl font-semibold text-white">@Model.TotalProjects</p>
+                </div>
+                <div class="rounded-xl bg-white/5 p-4">
+                    <p class="text-xs text-emerald-300/60">Kompletirani</p>
+                    <p class="mt-1 text-2xl font-semibold text-emerald-300">@Model.CompletedProjects</p>
+                </div>
+                <div class="rounded-xl bg-white/5 p-4">
+                    <p class="text-xs text-emerald-300/60">Trenutni</p>
+                    <p class="mt-1 text-2xl font-semibold text-sky-300">@Model.OngoingProjects</p>
+                </div>
+                <div class="rounded-xl bg-white/5 p-4">
+                    <p class="text-xs text-emerald-300/60">Otkazani</p>
+                    <p class="mt-1 text-2xl font-semibold text-rose-300">@Model.CancelledProjects</p>
+                </div>
+                <div class="rounded-xl bg-white/5 p-4">
+                    <p class="text-xs text-emerald-300/60">Na čekanju</p>
+                    <p class="mt-1 text-2xl font-semibold text-amber-300">@Model.StandbyProjects</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
