@@ -10,10 +10,13 @@ public class Project
     public int Id { get; set; }
     public Reservation Reservation { get; set; } = null!;
     public int ReservationId { get; set; }
+    public Subject Subject { get; set; } = null!;
+    public int SubjectId { get; set; }
     public ProjectStatus ProjectStatus { get; set; }
     public DateTime StartDate { get; set; }
     public DateTime EndDate { get; set; }
-    public DateTime CreatedAt { get; set; }
-    
+    public DateTime ReservedAt { get; set; }
+    public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
+
 
 }

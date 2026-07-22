@@ -3,6 +3,7 @@ using System;
 using CodeWithMixx.Infrastructure.Persistence;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
@@ -11,9 +12,11 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace CodeWithMixx.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    partial class AppDbContextModelSnapshot : ModelSnapshot
+    [Migration("20260722103242_AddReservedAtPropertyToProjectEntity")]
+    partial class AddReservedAtPropertyToProjectEntity
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -193,9 +196,6 @@ namespace CodeWithMixx.Migrations
                     b.Property<DateTime>("StartDate")
                         .HasColumnType("timestamp with time zone");
 
-                    b.Property<int>("SubjectId")
-                        .HasColumnType("integer");
-
                     b.HasKey("Id");
 
                     b.HasIndex("EndDate");
@@ -206,8 +206,6 @@ namespace CodeWithMixx.Migrations
                         .IsUnique();
 
                     b.HasIndex("StartDate");
-
-                    b.HasIndex("SubjectId");
 
                     b.ToTable("Projects");
                 });
@@ -524,15 +522,7 @@ namespace CodeWithMixx.Migrations
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
-                    b.HasOne("CodeWithMixx.Domain.Entities.Subjects.Subject", "Subject")
-                        .WithMany("Projects")
-                        .HasForeignKey("SubjectId")
-                        .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
-
                     b.Navigation("Reservation");
-
-                    b.Navigation("Subject");
                 });
 
             modelBuilder.Entity("CodeWithMixx.Domain.Entities.Reservations.Reservation", b =>
@@ -655,8 +645,6 @@ namespace CodeWithMixx.Migrations
             modelBuilder.Entity("CodeWithMixx.Domain.Entities.Subjects.Subject", b =>
                 {
                     b.Navigation("Classes");
-
-                    b.Navigation("Projects");
                 });
 #pragma warning restore 612, 618
         }

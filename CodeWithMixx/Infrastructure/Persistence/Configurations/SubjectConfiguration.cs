@@ -22,6 +22,12 @@ public class SubjectConfiguration : IEntityTypeConfiguration<Subject>
             .HasForeignKey(c => c.SubjectId)
             .OnDelete(DeleteBehavior.Restrict);
         
+        builder.HasMany(s => s.Projects)
+            .WithOne(c => c.Subject)
+            .HasForeignKey(c => c.SubjectId)
+            .OnDelete(DeleteBehavior.Restrict);
+            
+        
         builder.HasData(
             new Subject { Id = 1, Name = "Programerski alati"},
             new Subject { Id = 2, Name = "Praktikum primenjenog programiranja"},

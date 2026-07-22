@@ -15,6 +15,11 @@ public class ProjectConfiguration : IEntityTypeConfiguration<Project>
             .WithOne(r => r.Project)
             .HasForeignKey<Project>(r => r.ReservationId)
             .OnDelete(DeleteBehavior.Restrict);
+        
+        builder.HasOne(p => p.Subject)
+            .WithMany(s => s.Projects)
+            .HasForeignKey(p => p.SubjectId)
+            .OnDelete(DeleteBehavior.Restrict);
 
         builder.Property(p => p.ProjectStatus)
             .HasConversion<string>();

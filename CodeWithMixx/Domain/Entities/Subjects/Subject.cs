@@ -1,5 +1,6 @@
 using CodeWithMixx.Domain.Entities.Admins;
 using CodeWithMixx.Domain.Entities.Classes;
+using CodeWithMixx.Domain.Entities.Projects;
 using CodeWithMixx.Domain.Entities.Students;
 
 namespace CodeWithMixx.Domain.Entities.Subjects;
@@ -13,4 +14,5 @@ public class Subject
     public string? AdminId { get; set; }
 
     public ICollection<Class> Classes { get; set; } = [];
+    public ICollection<Project> Projects { get; set; } = [];
 }
