@@ -73,11 +73,11 @@ else
 
         <div class="flex gap-2">
             <button hx-push-url="true"
-                    hx-get="/admin/projects?handler=Projects"
-                    hx-vals='js:{"page": "@(Model.PageNumber - 1)", "filter": document.getElementsByName("filter")[0]?.value, "subjectId": document.getElementsByName("subjectId")[0]?.value, "sort": document.getElementsByName("sort")[0]?.value}'
+                    hx-get="/admin/projects?handler=Projects&page=@(Model.PageNumber - 1)"
                     hx-target="#projects-list"
                     hx-indicator="#projects-list-indicator"
                     hx-swap="innerHTML"
+                    hx-include="[name='filter'], [name='subjectId'], [name='sort']"
                     class="bg-emerald-400 flex items-center justify-center px-4 py-1 rounded-md hover:bg-emerald-500 active:scale-95 disabled:opacity-50 transition duration-200"
                     @(Model.HasPreviousPage ? "" : "disabled")>
                 <i class="fa-solid fa-chevron-left text-amber-600"></i>
@@ -87,11 +87,11 @@ else
             </div>
 
             <button hx-push-url="true"
-                    hx-get="/admin/projects?handler=Projects"
-                    hx-vals='js:{"page": "@(Model.PageNumber + 1)", "filter": document.getElementsByName("filter")[0]?.value, "subjectId": document.getElementsByName("subjectId")[0]?.value, "sort": document.getElementsByName("sort")[0]?.value}'
+                    hx-get="/admin/projects?handler=Projects&page=@(Model.PageNumber + 1)"
                     hx-target="#projects-list"
                     hx-indicator="#projects-list-indicator"
                     hx-swap="innerHTML"
+                    hx-include="[name='filter'], [name='subjectId'], [name='sort']"
                     class="bg-emerald-400 flex items-center justify-center px-4 py-1 rounded-md hover:bg-emerald-500 active:scale-95 disabled:opacity-50 transition duration-200"
                     @(Model.HasNextPage ? "" : "disabled")>
                 <i class="fa-solid fa-chevron-right text-amber-600"></i>
