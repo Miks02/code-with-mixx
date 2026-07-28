@@ -45,7 +45,7 @@
                 <h3 class="font-semibold text-white">Spisak projekata</h3>
                 <p class="mt-0.5 text-xs text-emerald-300/60">Lista svih projekata koji se nalaze u sistemu</p>
             </div>
-            <div class="grid w-full gap-2 sm:w-auto sm:grid-cols-[170px_230px_230px] sm:items-center">
+            <div class="grid w-full gap-2 sm:w-auto sm:grid-cols-[minmax(180px,1fr)_170px_230px_auto] sm:items-center">
                 <div class="relative">
                     <i class="fa-solid fa-filter pointer-events-none absolute left-3 top-1/2 -translate-y-1/2 text-xs text-emerald-300/80"></i>
                     <select name="filter"
@@ -123,10 +123,14 @@
                     </select>
                     <i class="fa-solid fa-chevron-down pointer-events-none absolute right-3 top-1/2 -translate-y-1/2 text-[10px] text-emerald-300/80"></i>
                 </div>
+                <button hx-get="/admin/projects/create" hx-target="#content" hx-swap="innerHTML" hx-push-url="true" type="button" class="inline-flex items-center justify-center rounded-lg bg-emerald-500 px-3 py-2 text-sm font-semibold text-white shadow-lg shadow-emerald-900/40 transition-all hover:bg-emerald-400 active:scale-[.98]" aria-label="Dodaj projekat">
+                    <i class="fa-solid fa-plus"></i>
+                </button>
             </div>
+          
         </div>
 
-        <div class="relative min-h-[200px]">
+        <div class="relative min-h-50">
             <div id="projects-list-indicator" class="htmx-indicator absolute inset-0 z-10 flex items-center justify-center bg-emerald-950/40 backdrop-blur-[2px]">
                 <div class="flex flex-col items-center gap-3">
                     <div class="h-10 w-10 animate-spin rounded-full border-4 border-emerald-500/20 border-t-emerald-500"></div>
@@ -142,7 +146,7 @@
     <div class="w-full grow min-w-0 overflow-hidden rounded-2xl col-1 row-2 bg-emerald-950/80 shadow-xl shadow-black/20 lg:col-span-1 lg:row-span-1 lg:row-start-1 lg:col-start-3">
         <div class="px-5 py-5 sm:px-6">
             <h3 class="font-semibold text-white">Pregled projekata</h3>
-            <p class="mt-0.5 text-xs text-emerald-300/60">Brzi summary statusa projekata</p>
+            <p class="mt-0.5 text-xs text-emerald-300/60">Broj projekata po statusima</p>
 
             <div class="mt-4 grid gap-3 sm:grid-cols-2 lg:grid-cols-1">
                 <div class="rounded-xl bg-white/5 p-4">
