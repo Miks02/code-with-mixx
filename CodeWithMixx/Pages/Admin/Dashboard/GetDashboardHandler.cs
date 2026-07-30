@@ -2,6 +2,7 @@ using System.Globalization;
 using CodeWithMixx.Common.Interfaces;
 using CodeWithMixx.Domain.Entities.AppUsers;
 using CodeWithMixx.Domain.Entities.Classes;
+using CodeWithMixx.Domain.Entities.Projects;
 using CodeWithMixx.Domain.Entities.Reservations;
 using CodeWithMixx.Infrastructure.Persistence;
 using Microsoft.EntityFrameworkCore;
@@ -29,6 +30,10 @@ public class GetDashboardHandler(AppDbContext context) : IHandler
             .Distinct()
             .ToListAsync(ct);
         
+        var activeProjects = await context.Projects
+            .Where(p => p.ProjectStatus == ProjectStatus.Ongoing)
+            .CountAsync(ct);
+        
         var upcomingTerms = await context.Reservations
             .Where(r => r.Classes.Any(c => c.StartsAt > DateTime.UtcNow))
             .OrderByDescending(r => r.Classes.Min(c => c.StartsAt))
@@ -54,7 +59,8 @@ public class GetDashboardHandler(AppDbContext context) : IHandler
             Years = years,
             SubjectsChart = await GetClassCountBySubject(ct),
             FinanceChartData = await GetStudentsAndIncomeByMonth(year, ct),
-            UpcomingTerms = upcomingTerms
+            UpcomingTerms = upcomingTerms,
+            ProjectsCount = activeProjects
         };
 
     }

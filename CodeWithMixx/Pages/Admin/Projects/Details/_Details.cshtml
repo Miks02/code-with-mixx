@@ -1,0 +1,196 @@
+@using CodeWithMixx.Domain.Entities.Projects
+@using CodeWithMixx.Domain.Entities.Reservations
+@model CodeWithMixx.Pages.Admin.Projects.Details.IndexModel
+
+<title hx-swap-oob="outerHTML">CodeWithMixx | Detalji projekta</title>
+
+<div class="flex flex-col gap-4 lg:flex-row">
+
+    <form id="edit-project-form" 
+          class="flex-1 space-y-4"
+          method="post"
+          hx-post="/admin/projects/details/@Model.Input.ProjectId" 
+          hx-target="#content">
+        @Html.AntiForgeryToken()
+        <input type="hidden" asp-for="Input.ProjectId" />
+        <input type="hidden" asp-for="Input.ReservationId" />
+        <input type="hidden" asp-for="Input.StudentId" />
+
+        <div class="rounded-2xl bg-emerald-950/80 shadow-xl shadow-black/20 p-6">
+            <div class="mb-5 flex items-center gap-3">
+                <div class="flex h-10 w-10 items-center justify-center rounded-xl bg-emerald-500/15 text-emerald-300">
+                    <i class="fa-solid fa-diagram-project"></i>
+                </div>
+                <div>
+                    <h3 class="font-semibold text-white">Detalji projekta</h3>
+                    <p class="text-xs text-emerald-300/60 mt-0.5">Izmenite predmet, status i datume projekta</p>
+                </div>
+            </div>
+
+            <div class="flex flex-col gap-4">
+                <div class="w-full">
+                    <label class="mb-1.5 block text-xs font-semibold text-emerald-300/70 uppercase tracking-wider">Predmet</label>
+                    <div class="relative">
+                        <i class="fa-solid fa-book-open pointer-events-none absolute left-3 top-1/2 -translate-y-1/2 text-sm text-emerald-400/60"></i>
+                        <select id="SubjectId" asp-for="Input.SubjectId"
+                                class="w-full appearance-none rounded-xl bg-emerald-900/60 border border-emerald-700/40 py-3 pl-9 pr-9 text-sm text-white outline-none focus:border-emerald-500/60 focus:ring-1 focus:ring-emerald-500/30 transition"
+                                asp-items="@(new SelectList(Model.ViewModel.Subjects, "Id", "Name"))">
+                            <option value="0">Izaberite predmet</option>
+                        </select>
+                        <i class="fa-solid fa-chevron-down pointer-events-none absolute right-3 top-1/2 -translate-y-1/2 text-[10px] text-emerald-300/60"></i>
+                    </div>
+                    <span asp-validation-for="Input.SubjectId" class="text-xs text-red-400 mt-1 block"></span>
+                </div>
+
+                <div class="flex flex-col gap-4 sm:flex-row">
+                    <div class="flex-1">
+                        <label class="mb-1.5 block text-xs font-semibold text-emerald-300/70 uppercase tracking-wider">Status projekta</label>
+                        <div class="relative">
+                            <i class="fa-solid fa-list-check pointer-events-none absolute left-3 top-1/2 -translate-y-1/2 text-sm text-emerald-400/60"></i>
+                            <select asp-for="Input.ProjectStatus"
+                                    class="w-full appearance-none rounded-xl bg-emerald-900/60 border border-emerald-700/40 py-3 pl-9 pr-9 text-sm text-white outline-none focus:border-emerald-500/60 focus:ring-1 focus:ring-emerald-500/30 transition">
+                                <option value="@ProjectStatus.Standby">Na čekanju</option>
+                                <option value="@ProjectStatus.Ongoing">U toku</option>
+                                <option value="@ProjectStatus.Completed">Završen</option>
+                                <option value="@ProjectStatus.Cancelled">Otkazan</option>
+                            </select>
+                            <i class="fa-solid fa-chevron-down pointer-events-none absolute right-3 top-1/2 -translate-y-1/2 text-[10px] text-emerald-300/60"></i>
+                        </div>
+                        <span asp-validation-for="Input.ProjectStatus" class="text-xs text-red-400 mt-1 block"></span>
+                    </div>
+                    <div class="flex-1">
+                        <label class="mb-1.5 block text-xs font-semibold text-emerald-300/70 uppercase tracking-wider">Status plaćanja</label>
+                        <div class="relative">
+                            <i class="fa-solid fa-credit-card pointer-events-none absolute left-3 top-1/2 -translate-y-1/2 text-sm text-emerald-400/60"></i>
+                            <select asp-for="Input.PaymentStatus"
+                                    class="w-full appearance-none rounded-xl bg-emerald-900/60 border border-emerald-700/40 py-3 pl-9 pr-9 text-sm text-white outline-none focus:border-emerald-500/60 focus:ring-1 focus:ring-emerald-500/30 transition">
+                                <option value="@PaymentStatus.Pending">Na čekanju</option>
+                                <option value="@PaymentStatus.PartiallyPaid">Del. plaćeno</option>
+                                <option value="@PaymentStatus.Overdue">Neplaćeno</option>
+                                <option value="@PaymentStatus.Paid">Plaćeno</option>
+                            </select>
+                            <i class="fa-solid fa-chevron-down pointer-events-none absolute right-3 top-1/2 -translate-y-1/2 text-[10px] text-emerald-300/60"></i>
+                        </div>
+                        <span asp-validation-for="Input.PaymentStatus" class="text-xs text-red-400 mt-1 block"></span>
+                    </div>
+                </div>
+
+                <div class="flex flex-col gap-4 sm:flex-row">
+                    <div class="flex-1">
+                        <label class="mb-1.5 block text-xs font-semibold text-emerald-300/70 uppercase tracking-wider">Datum početka</label>
+                        <div class="relative">
+                            <i class="fa-solid fa-calendar-day pointer-events-none absolute left-3 top-1/2 -translate-y-1/2 text-sm text-emerald-400/60"></i>
+                            <input type="date" asp-for="Input.StartDate"
+                                   class="w-full rounded-xl bg-emerald-900/60 border border-emerald-700/40 py-3 pl-9 pr-4 text-sm text-white outline-none focus:border-emerald-500/60 focus:ring-1 focus:ring-emerald-500/30 transition" />
+                        </div>
+                        <span asp-validation-for="Input.StartDate" class="text-xs text-red-400 mt-1 block"></span>
+                    </div>
+                    <div class="flex-1">
+                        <label class="mb-1.5 block text-xs font-semibold text-emerald-300/70 uppercase tracking-wider">Datum završetka</label>
+                        <div class="relative">
+                            <i class="fa-solid fa-calendar-check pointer-events-none absolute left-3 top-1/2 -translate-y-1/2 text-sm text-emerald-400/60"></i>
+                            <input type="date" asp-for="Input.EndDate"
+                                   class="w-full rounded-xl bg-emerald-900/60 border border-emerald-700/40 py-3 pl-9 pr-4 text-sm text-white outline-none focus:border-emerald-500/60 focus:ring-1 focus:ring-emerald-500/30 transition" />
+                        </div>
+                        <span asp-validation-for="Input.EndDate" class="text-xs text-red-400 mt-1 block"></span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="rounded-2xl bg-emerald-950/80 shadow-xl shadow-black/20 p-6">
+            <div class="mb-5 flex items-center gap-3">
+                <div class="flex h-10 w-10 items-center justify-center rounded-xl bg-sky-500/15 text-sky-300">
+                    <i class="fa-solid fa-coins"></i>
+                </div>
+                <div>
+                    <h3 class="font-semibold text-white">Finansije i napomene</h3>
+                    <p class="text-xs text-emerald-300/60 mt-0.5">Ažurirajte cenu i dodatne informacije</p>
+                </div>
+            </div>
+
+            <div class="flex flex-col gap-4">
+                <div class="flex flex-col gap-4 sm:flex-row">
+                    <div class="flex-1">
+                        <label class="mb-1.5 block text-xs font-semibold text-emerald-300/70 uppercase tracking-wider">Ukupna cena (RSD)</label>
+                        <div class="relative">
+                            <i class="fa-solid fa-tag pointer-events-none absolute left-3 top-1/2 -translate-y-1/2 text-sm text-emerald-400/60"></i>
+                            <input type="number" asp-for="Input.Price" min="0" id="project-price"
+                                   class="w-full rounded-xl bg-emerald-900/60 border border-emerald-700/40 py-3 pl-9 pr-4 text-sm text-white outline-none placeholder:text-emerald-300/30 focus:border-emerald-500/60 focus:ring-1 focus:ring-emerald-500/30 transition" />
+                        </div>
+                        <span asp-validation-for="Input.Price" class="text-xs text-red-400 mt-1 block"></span>
+                    </div>
+                </div>
+
+                <div class="flex flex-col gap-4 sm:flex-row">
+                    <div class="flex-1">
+                        <label class="mb-1.5 block text-xs font-semibold text-emerald-300/70 uppercase tracking-wider">Plaćeno (RSD)</label>
+                        <div class="relative">
+                            <i class="fa-solid fa-wallet pointer-events-none absolute left-3 top-1/2 -translate-y-1/2 text-sm text-emerald-400/60"></i>
+                            <input type="number" asp-for="Input.PaidAmount" min="0" placeholder="0" id="project-paid"
+                                   class="w-full rounded-xl bg-emerald-900/60 border border-emerald-700/40 py-3 pl-9 pr-4 text-sm text-white outline-none placeholder:text-emerald-300/30 focus:border-emerald-500/60 focus:ring-1 focus:ring-emerald-500/30 transition" />
+                        </div>
+                        <span asp-validation-for="Input.PaidAmount" class="text-xs text-red-400 mt-1 block"></span>
+                    </div>
+                </div>
+
+                <div class="w-full">
+                    <label class="mb-1.5 block text-xs font-semibold text-emerald-300/70 uppercase tracking-wider">Napomene</label>
+                    <div class="relative">
+                        <i class="fa-solid fa-note-sticky pointer-events-none absolute left-3 top-3 text-sm text-emerald-400/60"></i>
+                        <textarea asp-for="Input.Notes" rows="3" placeholder="Dodatne napomene o projektu..."
+                                  class="w-full rounded-xl bg-emerald-900/60 border border-emerald-700/40 py-3 pl-9 pr-4 text-sm text-white outline-none placeholder:text-emerald-300/30 focus:border-emerald-500/60 focus:ring-1 focus:ring-emerald-500/30 transition resize-none"></textarea>
+                    </div>
+                    <span asp-validation-for="Input.Notes" class="text-xs text-red-400 mt-1 block"></span>
+                </div>
+            </div>
+        </div>
+    </form>
+
+    <div class="w-full lg:w-120 shrink-0 space-y-4">
+
+        <div class="rounded-2xl bg-emerald-950/80 shadow-xl shadow-black/20 p-6">
+            <div class="mb-5 flex items-center gap-3">
+                <div class="flex h-10 w-10 items-center justify-center rounded-xl bg-sky-500/15 text-sky-300">
+                    <i class="fa-solid fa-user-graduate"></i>
+                </div>
+                <div>
+                    <h3 class="font-semibold text-white">Student</h3>
+                    <p class="text-xs text-emerald-300/60 mt-0.5">Informacije o studentu</p>
+                </div>
+            </div>
+
+            @if (Model.ViewModel.SelectedStudent != null)
+            {
+                @await Html.PartialAsync("../Create/_StudentCard", Model.ViewModel.SelectedStudent)
+            }
+            
+            <div class="mt-4 p-3 rounded-xl bg-emerald-900/40 border border-emerald-700/30">
+                <p class="text-[10px] text-emerald-300/50 uppercase tracking-widest font-bold">Napomena</p>
+                <p class="text-xs text-emerald-300/70 mt-1">Studenta nije moguće promeniti nakon kreiranja rezervacije.</p>
+            </div>
+        </div>
+        
+        <div class="flex flex-col gap-3">
+            <button type="submit" form="edit-project-form"
+                    class="w-full inline-flex items-center justify-center gap-2 rounded-xl bg-emerald-500 px-5 py-3.5 text-sm font-semibold text-white shadow-lg shadow-emerald-900/40 hover:bg-emerald-400 active:scale-[.98] transition">
+                <i class="fa-solid fa-floppy-disk"></i>
+                Sačuvaj izmene
+            </button>
+            
+            <form method="post"
+                  hx-post="/admin/projects/details/@Model.Input.ProjectId?handler=Delete"
+                  hx-confirm="Da li ste sigurni da želite da obrišete ovaj projekat?"
+                  hx-swap="innerHTML"
+                  hx-target="#content">
+                @Html.AntiForgeryToken()
+                <button type="submit"
+                        
+                        class="w-full inline-flex items-center justify-center gap-2 rounded-xl bg-rose-500/10 border border-rose-500/20 px-5 py-3.5 text-sm font-semibold text-rose-400 hover:bg-rose-500/20 active:scale-[.98] transition">
+                    <i class="fa-solid fa-trash"></i>
+                    Obriši projekat
+                </button>
+            </form>
+        </div>
+    </div>
+</div>

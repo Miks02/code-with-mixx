@@ -1,3 +1,4 @@
+using CodeWithMixx.Domain.Entities.Projects;
 using CodeWithMixx.Domain.Entities.Reservations;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
@@ -14,6 +15,9 @@ public class ReservationConfiguration : IEntityTypeConfiguration<Reservation>
         builder.ToTable(t => t.HasCheckConstraint("CK_Reservations_DiscountRate_LessThan100", "\"DiscountRate\" <= 100"));
         
         builder.Property(r => r.TotalPrice)
+            .HasPrecision(18, 2);
+        
+        builder.Property(r => r.PaidAmount)
             .HasPrecision(18, 2);
 
         builder.Property(r => r.Bonus)
@@ -43,5 +47,6 @@ public class ReservationConfiguration : IEntityTypeConfiguration<Reservation>
             .WithMany(s => s.Reservations)
             .HasForeignKey(r => r.StudentId)
             .OnDelete(DeleteBehavior.Restrict);
+        
     }
 }
