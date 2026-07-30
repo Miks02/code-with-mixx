@@ -13,9 +13,9 @@ public class Project
     public Subject Subject { get; set; } = null!;
     public int SubjectId { get; set; }
     public ProjectStatus ProjectStatus { get; set; }
-    public DateTime StartDate { get; set; }
-    public DateTime EndDate { get; set; }
-    public DateTime ReservedAt { get; set; }
+    public DateOnly StartDate { get; set; }
+    public DateOnly EndDate { get; set; }
+    public DateOnly ReservedAt { get; set; }
     public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
 
 
