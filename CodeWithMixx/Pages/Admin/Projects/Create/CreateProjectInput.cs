@@ -11,8 +11,8 @@ public record CreateProjectInput
     public string? Notes { get; init; }
     public PaymentStatus PaymentStatus { get; init; } = PaymentStatus.Pending;
     public ProjectStatus ProjectStatus { get; init; } = ProjectStatus.Standby;
-    public DateTime StartDate { get; init; } = DateTime.UtcNow;
-    public DateTime EndDate { get; init; } = DateTime.UtcNow.AddDays(7);
+    public DateOnly StartDate { get; init; } = DateOnly.FromDateTime(DateTime.UtcNow);
+    public DateOnly EndDate { get; init; } = DateOnly.FromDateTime(DateTime.UtcNow.AddDays(7));
     public decimal Price { get; init; }
     public decimal PaidAmount { get; init; }
     

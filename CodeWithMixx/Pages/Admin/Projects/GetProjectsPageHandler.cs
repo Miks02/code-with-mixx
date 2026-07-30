@@ -48,9 +48,9 @@ public class GetProjectsPageHandler(AppDbContext context) : IHandler
                 PaymentStatus = p.Reservation.PaymentStatus,
                 ProjectStatus = p.ProjectStatus,
                 SubjectName = p.Subject.Name,
-                StartDate = p.StartDate.ToString("yy.M.dd HH:mm", CultureInfo.InvariantCulture),
-                EndDate = p.EndDate.ToString("yy.M.dd HH:mm", CultureInfo.InvariantCulture),
-                ReservedAt = p.ReservedAt.ToString("yy.M.dd HH:mm", CultureInfo.InvariantCulture),
+                StartDate = p.StartDate.ToString("yy.M.dd", CultureInfo.InvariantCulture),
+                EndDate = p.EndDate.ToString("yy.M.dd", CultureInfo.InvariantCulture),
+                ReservedAt = p.ReservedAt.ToString("yy.M.dd", CultureInfo.InvariantCulture),
             });
 
         var stats = await context.Projects

@@ -44,9 +44,9 @@ public class CreateProjectReservationHandler(AppDbContext context) : IHandler
             Reservation = reservation,
             SubjectId = request.SubjectId,
             ProjectStatus = request.ProjectStatus,
-            StartDate = DateTime.SpecifyKind(request.StartDate, DateTimeKind.Utc),
-            EndDate = DateTime.SpecifyKind(request.EndDate, DateTimeKind.Utc),
-            ReservedAt = DateTime.UtcNow
+            StartDate = request.StartDate,
+            EndDate = request.EndDate,
+            ReservedAt = DateOnly.FromDateTime(DateTime.UtcNow)
         };
 
         context.Reservations.Add(reservation);
@@ -67,12 +67,12 @@ public class CreateProjectReservationHandler(AppDbContext context) : IHandler
         return Math.Round(bonus, 2);
     }
 
-    private PaymentStatus GetPaymentStatus(decimal totalPrice, decimal paidAmount, DateTime endDate)
+    private PaymentStatus GetPaymentStatus(decimal totalPrice, decimal paidAmount, DateOnly endDate)
     {
         return totalPrice switch
         {
             var price when price <= paidAmount => PaymentStatus.Paid,
-            var price when price > paidAmount && DateTime.UtcNow.Date > endDate.Date => PaymentStatus.Overdue,
+            var price when price > paidAmount && DateOnly.FromDateTime(DateTime.UtcNow) > endDate => PaymentStatus.Overdue,
             var price when paidAmount > 0 && paidAmount < price => PaymentStatus.PartiallyPaid,
             _ => PaymentStatus.Pending
         };
