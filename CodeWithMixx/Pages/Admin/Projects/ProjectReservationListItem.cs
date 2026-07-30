@@ -11,7 +11,8 @@ public record ProjectReservationListItem
     public string StartDate { get; init; } = string.Empty;
     public string EndDate { get; init; } = string.Empty;
     public string ReservedAt { get; init; } = string.Empty;
-    public Decimal TotalPrice { get; init; }
+    public decimal TotalPrice { get; init; }
+    public decimal PaidAmount { get; init; }
     public PaymentStatus PaymentStatus { get; init; }
     public ProjectStatus ProjectStatus { get; init; }
 };

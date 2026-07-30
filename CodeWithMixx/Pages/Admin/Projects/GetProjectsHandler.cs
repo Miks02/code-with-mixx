@@ -43,6 +43,7 @@ public class GetProjectsHandler(AppDbContext context) : IHandler
                 Id = p.Id,
                 StudentName = p.Reservation.Student.AppUser.FirstName + " " + p.Reservation.Student.AppUser.LastName,
                 TotalPrice = p.Reservation.TotalPrice,
+                PaidAmount = p.Reservation.PaidAmount,
                 PaymentStatus = p.Reservation.PaymentStatus,
                 ProjectStatus = p.ProjectStatus,
                 SubjectName = p.Subject.Name,
