@@ -12,12 +12,12 @@ public class Reservation
     public ServiceType ServiceType { get; set; }
     public PaymentStatus PaymentStatus { get; set; } = PaymentStatus.Pending;
 
-    public Decimal TotalPrice { get; set; }
-    public Decimal PaidAmount { get; set; }
+    public decimal TotalPrice { get; set; }
+    public decimal PaidAmount { get; set; }
 
-    public Decimal DiscountRate { get; set; }
+    public decimal DiscountRate { get; set; }
 
-    public Decimal Bonus { get; set; }
+    public decimal Bonus { get; set; }
     
     public string? Notes { get; set; }
 

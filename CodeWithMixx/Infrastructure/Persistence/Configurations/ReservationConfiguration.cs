@@ -16,6 +16,9 @@ public class ReservationConfiguration : IEntityTypeConfiguration<Reservation>
         
         builder.Property(r => r.TotalPrice)
             .HasPrecision(18, 2);
+        
+        builder.Property(r => r.PaidAmount)
+            .HasPrecision(18, 2);
 
         builder.Property(r => r.Bonus)
             .HasPrecision(18, 2);
