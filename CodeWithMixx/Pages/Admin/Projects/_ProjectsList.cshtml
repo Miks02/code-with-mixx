@@ -47,30 +47,42 @@ else
                                 <p class="text-amber-200 sm:bg-amber-900 sm:px-2 sm:py-1 sm:rounded-md sm:shadow-sm"><i class="fa-solid fa-clock mr-2"></i>Na čekanju</p>
                                 break;
                         }
-
-                        @switch (project.PaymentStatus)
+                        
+                        @if(project.TotalPrice == 0)
                         {
-                            case PaymentStatus.Pending:
-                                <p class="text-amber-200 sm:bg-amber-900 sm:px-2 sm:py-1 sm:rounded-md sm:shadow-sm"><i class="fa-solid fa-circle-check mr-2"></i>Neplaćeno</p>
-                                break;
-                            case PaymentStatus.Paid:
-                                <p class="text-sky-200 sm:bg-sky-900 sm:px-2 sm:py-1 sm:rounded-md sm:shadow-sm"><i class="fa-solid fa-circle-check mr-2"></i>Plaćeno</p>
-                                break;
-                            case PaymentStatus.Overdue:
-                                <p class="text-red-200 sm:bg-red-900 sm:px-2 sm:py-1 sm:rounded-md sm:shadow-sm"><i class="fa-solid fa-circle-exclamation mr-2"></i>Dugovanje</p>
-                                break;
-                            case PaymentStatus.PartiallyPaid:
-                                <p class="text-yellow-200 sm:bg-yellow-900 sm:px-2 sm:py-1 sm:rounded-md sm:shadow-sm"><i class="fa-solid fa-circle-half-stroke mr-2"></i>Del. plaćeno</p>
-                                break;
+                            <p class="text-emerald-200 sm:bg-emerald-900 sm:px-2 sm:py-1 sm:rounded-md sm:shadow-sm"><i class="fa-solid fa-circle-check mr-2"></i>Besplatan rad</p>
                         }
+                        else
+                        {
+                            @switch (project.PaymentStatus)
+                            {
+                                case PaymentStatus.Pending:
+                                    <p class="text-amber-200 sm:bg-amber-900 sm:px-2 sm:py-1 sm:rounded-md sm:shadow-sm"><i class="fa-solid fa-circle-check mr-2"></i>Neplaćeno</p>
+                                    break;
+                                case PaymentStatus.Paid:
+                                    <p class="text-sky-200 sm:bg-sky-900 sm:px-2 sm:py-1 sm:rounded-md sm:shadow-sm"><i class="fa-solid fa-circle-check mr-2"></i>Plaćeno</p>
+                                    break;
+                                case PaymentStatus.Overdue:
+                                    <p class="text-red-200 sm:bg-red-900 sm:px-2 sm:py-1 sm:rounded-md sm:shadow-sm"><i class="fa-solid fa-circle-exclamation mr-2"></i>Dugovanje</p>
+                                    break;
+                                case PaymentStatus.PartiallyPaid:
+                                    <p class="text-yellow-200 sm:bg-yellow-900 sm:px-2 sm:py-1 sm:rounded-md sm:shadow-sm"><i class="fa-solid fa-circle-half-stroke mr-2"></i>Del. plaćeno</p>
+                                    break;
+                            }
+                        }
+
+                       
                     </div>
                 </div>
 
                 <div class="flex justify-between items-center gap-2 flex-wrap text-sm text-emerald-100/80">
                     <div class="flex flex-col gap-2">
                         <p class="sm:p-2 sm:bg-emerald-900 sm:rounded-md sm:shadow-sm"><i class="fa-regular fa-calendar mr-2 text-emerald-400/80"></i>Rezervisano: @project.ReservedAt</p>
-                        <p class="sm:p-2 sm:bg-emerald-900 sm:rounded-md sm:shadow-sm"><i class="fa-solid fa-money-bill mr-2 text-emerald-400/80"></i>Cena: @project.TotalPrice</p>
-                        <p class="sm:p-2 sm:bg-emerald-900 sm:rounded-md sm:shadow-sm"><i class="fa-solid fa-money-bill-wave mr-2 text-emerald-400/80"></i>Plaćeno: @project.PaidAmount</p>
+                        @if (project.TotalPrice != 0)
+                        {
+                            <p class="sm:p-2 sm:bg-emerald-900 sm:rounded-md sm:shadow-sm"><i class="fa-solid fa-money-bill mr-2 text-emerald-400/80"></i>Cena: @project.TotalPrice</p>
+                            <p class="sm:p-2 sm:bg-emerald-900 sm:rounded-md sm:shadow-sm"><i class="fa-solid fa-money-bill-wave mr-2 text-emerald-400/80"></i>Plaćeno: @project.PaidAmount</p>
+                        }
                     </div>
                     <div class="flex flex-col self-start gap-2">
                         <p class="sm:p-2 sm:bg-emerald-900 sm:rounded-md sm:shadow-sm"><i class="fa-solid fa-hourglass-start mr-2 text-emerald-400/80"></i>Početak: @project.StartDate</p>
