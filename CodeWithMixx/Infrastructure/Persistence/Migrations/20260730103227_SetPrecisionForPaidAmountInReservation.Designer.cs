@@ -3,6 +3,7 @@ using System;
 using CodeWithMixx.Infrastructure.Persistence;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
@@ -11,9 +12,11 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace CodeWithMixx.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    partial class AppDbContextModelSnapshot : ModelSnapshot
+    [Migration("20260730103227_SetPrecisionForPaidAmountInReservation")]
+    partial class SetPrecisionForPaidAmountInReservation
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -166,6 +169,52 @@ namespace CodeWithMixx.Migrations
                         });
                 });
 
+            modelBuilder.Entity("CodeWithMixx.Domain.Entities.Projects.Project", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
+
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<DateOnly>("EndDate")
+                        .HasColumnType("date");
+
+                    b.Property<string>("ProjectStatus")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<int>("ReservationId")
+                        .HasColumnType("integer");
+
+                    b.Property<DateOnly>("ReservedAt")
+                        .HasColumnType("date");
+
+                    b.Property<DateOnly>("StartDate")
+                        .HasColumnType("date");
+
+                    b.Property<int>("SubjectId")
+                        .HasColumnType("integer");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("EndDate");
+
+                    b.HasIndex("ProjectStatus");
+
+                    b.HasIndex("ReservationId")
+                        .IsUnique();
+
+                    b.HasIndex("StartDate");
+
+                    b.HasIndex("SubjectId");
+
+                    b.ToTable("Projects");
+                });
+
             modelBuilder.Entity("CodeWithMixx.Domain.Entities.Reservations.Reservation", b =>
                 {
                     b.Property<int>("Id")
@@ -194,7 +243,8 @@ namespace CodeWithMixx.Migrations
                         .HasColumnType("character varying(500)");
 
                     b.Property<decimal>("PaidAmount")
-                        .HasColumnType("numeric");
+                        .HasPrecision(18, 2)
+                        .HasColumnType("numeric(18,2)");
 
                     b.Property<string>("PaymentStatus")
                         .IsRequired()
@@ -470,6 +520,25 @@ namespace CodeWithMixx.Migrations
                     b.Navigation("Subject");
                 });
 
+            modelBuilder.Entity("CodeWithMixx.Domain.Entities.Projects.Project", b =>
+                {
+                    b.HasOne("CodeWithMixx.Domain.Entities.Reservations.Reservation", "Reservation")
+                        .WithOne("Project")
+                        .HasForeignKey("CodeWithMixx.Domain.Entities.Projects.Project", "ReservationId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("CodeWithMixx.Domain.Entities.Subjects.Subject", "Subject")
+                        .WithMany("Projects")
+                        .HasForeignKey("SubjectId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.Navigation("Reservation");
+
+                    b.Navigation("Subject");
+                });
+
             modelBuilder.Entity("CodeWithMixx.Domain.Entities.Reservations.Reservation", b =>
                 {
                     b.HasOne("CodeWithMixx.Domain.Entities.Admins.Admin", "Admin")
@@ -578,6 +647,8 @@ namespace CodeWithMixx.Migrations
             modelBuilder.Entity("CodeWithMixx.Domain.Entities.Reservations.Reservation", b =>
                 {
                     b.Navigation("Classes");
+
+                    b.Navigation("Project");
                 });
 
             modelBuilder.Entity("CodeWithMixx.Domain.Entities.Students.Student", b =>
@@ -588,6 +659,8 @@ namespace CodeWithMixx.Migrations
             modelBuilder.Entity("CodeWithMixx.Domain.Entities.Subjects.Subject", b =>
                 {
                     b.Navigation("Classes");
+
+                    b.Navigation("Projects");
                 });
 #pragma warning restore 612, 618
         }

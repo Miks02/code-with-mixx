@@ -2,6 +2,7 @@ using System.Globalization;
 using CodeWithMixx.Common.Interfaces;
 using CodeWithMixx.Common.Results;
 using CodeWithMixx.Domain.Entities.Classes;
+using CodeWithMixx.Domain.Entities.Reservations;
 using CodeWithMixx.Infrastructure.Persistence;
 
 namespace CodeWithMixx.Pages.Admin.Classes;
@@ -10,7 +11,9 @@ public class GetClassesHandler(AppDbContext context) : IHandler
 {
     public async Task<PagedResult<ClassReservationListItem>> HandleAsync(string? filter, string? sort, int? subjectId, int page, int pageSize, CancellationToken ct)
     {
-        var query = context.Reservations.AsQueryable();
+        var query = context.Reservations
+            .Where(r => r.ServiceType == ServiceType.Class)
+            .AsQueryable();
 
         query = filter switch
         {
