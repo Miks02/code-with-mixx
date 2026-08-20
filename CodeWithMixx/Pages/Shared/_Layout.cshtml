@@ -3,7 +3,7 @@
 <head>
     <meta charset="utf-8"/>
     <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-    <meta name="description" content="@(ViewData["Description"] 
+    <meta name="description" content="@(ViewData["Description"]
 ?? "Muče te ispiti iz IT oblasti poput programiranja, baza podataka , dizajna sistema i slično? Ili si možda tanak sa vremenom i ne stižeš da završiš projekat. Tu sam ja da ti pomognem. Javi se i rešavamo sve probleme korak po korak")" />
     <meta property="og:type" content="website" />
     <meta property="og:url" content="https://codewithmixx.com/" />
@@ -15,7 +15,7 @@
     <link rel="stylesheet" href="~/css/site.css" asp-append-version="true"/>
     <link rel="icon" type="image/png" href="~/codewithmixx-logo-transparent-icon.png"/>
 </head>
-<body class="overflow-x-hidden">
+<body id="public-layout" class="overflow-x-hidden">
 
 @await Html.PartialAsync("_Partials/_Header")
 
@@ -38,4 +38,3 @@
 @await RenderSectionAsync("Scripts", required: false)
 </body>
 </html>
-

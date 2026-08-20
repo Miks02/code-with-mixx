@@ -12,7 +12,7 @@
 
 @await Html.PartialAsync("_Partials/Dashboard/_AdminSidebar")
 
-<div class="flex flex-col grow overflow-hidden">
+<div id="dashboard" class="flex flex-col grow overflow-hidden">
     @await Html.PartialAsync("_Partials/Dashboard/_AdminHeader")
 
     <main  class="grow overflow-y-auto p-6">
@@ -33,7 +33,3 @@
 @await RenderSectionAsync("Scripts", required: false)
 </body>
 </html>
-
-
-
-
