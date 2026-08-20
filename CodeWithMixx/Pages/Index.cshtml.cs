@@ -126,7 +126,7 @@ public class IndexModel(
         if (!lease.IsAcquired)
         {
             TempData["ErrorMessage"] = "Previše zahteva, pokušaj opet za 2 minuta.";
-            return Partial("Shared/_Partials/Landing/_Contact");
+            return Partial("Shared/_Partials/Landing/_Contact", ContactForm);
         }
         
         var validationResult = await contactValidator.ValidateAsync(ContactForm, ct);
@@ -134,7 +134,7 @@ public class IndexModel(
         if (!validationResult.IsValid)
         {
             validationResult.Errors.ForEach(x => ModelState.AddModelError(x.PropertyName, x.ErrorMessage));
-            return Partial("Shared/_Partials/Landing/_Contact");
+            return Partial("Shared/_Partials/Landing/_Contact", ContactForm);
         }
         
         var result = await handler.Handle(ContactForm);
@@ -142,7 +142,7 @@ public class IndexModel(
         if (!result.IsSuccess)
         {
             TempData["ErrorMessage"] = "Došlo je do greške prilikom slanja forme. Molim te pokušaj ponovo kasnije.";
-            return Partial("Shared/_Partials/Landing/_Contact");
+            return Partial("Shared/_Partials/Landing/_Contact", ContactForm);
         }
 
         ModelState.Clear();
@@ -150,6 +150,6 @@ public class IndexModel(
         
         TempData["SuccessMessage"] = "Forma je poslata uspešno!";
         
-        return Partial("Shared/_Partials/Landing/_Contact");
+        return Partial("Shared/_Partials/Landing/_Contact", ContactForm);
     }
 }
