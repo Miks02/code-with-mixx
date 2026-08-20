@@ -40,10 +40,10 @@
                         <p class="text-white font-semibold">@@codewithmixx</p>
                     </div>
                 </a>
-                
+
                 <div class="p-8 bg-white/5 backdrop-blur-sm rounded-3xl  mt-12">
                     <p class="text-emerald-100/70 text-sm leading-relaxed font-semibold">
-                        Dostupan sam za konsultacije svakog radnog dana. Na poruke odgovaram u roku od svega nekoliko sati.
+                        Dostupan sam za konsultacije svakog radnog dana. Na poruke odgovaram u roku od 30 do 60 minuta.
                     </p>
                 </div>
             </div>
@@ -53,13 +53,13 @@
                     <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                         <div class="space-y-2">
                             <label asp-for="FirstName" class="text-sm font-semibold text-emerald-100/60 ml-1 ">Ime</label>
-                            <input asp-for="FirstName" type="text" id="first-name" placeholder="Unesite ime" 
+                            <input asp-for="FirstName" type="text" id="first-name" placeholder="Unesite ime"
                                    class="w-full bg-emerald-950/50  rounded-xl px-4 py-3 text-white placeholder:text-emerald-100/20 focus:outline-hidden focus:ring-2 focus:ring-emerald-500/40 transition duration-200">
                             <span asp-validation-for="FirstName" class="text-amber-600 font-semibold "></span>
                         </div>
                         <div class="space-y-2">
                             <label asp-for="LastName" class="text-sm font-semibold text-emerald-100/60 ml-1 ">Prezime</label>
-                            <input asp-for="LastName" type="text" id="last-name" placeholder="Unesite prezime" 
+                            <input asp-for="LastName" type="text" id="last-name" placeholder="Unesite prezime"
                                    class="w-full bg-emerald-950/50  rounded-xl px-4 py-3 text-white placeholder:text-emerald-100/20 focus:outline-hidden focus:ring-2 focus:ring-emerald-500/40 transition duration-200">
                             <span asp-validation-for="LastName" class="text-amber-600 font-semibold "></span>
                         </div>
@@ -68,13 +68,13 @@
                     <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                         <div class="space-y-2">
                             <label asp-for="PhoneNumber" class="text-sm font-semibold text-emerald-100/60 ml-1 ">Broj telefona</label>
-                            <input asp-for="PhoneNumber" type="tel" id="phone" placeholder="0601234567" 
+                            <input asp-for="PhoneNumber" type="tel" id="phone" placeholder="0601234567"
                                    class="w-full bg-emerald-950/50  rounded-xl px-4 py-3 text-white placeholder:text-emerald-100/20 focus:outline-hidden focus:ring-2 focus:ring-emerald-500/40 transition duration-200">
                             <span asp-validation-for="PhoneNumber" class="text-amber-600 font-semibold "></span>
                         </div>
                         <div class="space-y-2">
                             <label asp-for="Email" class="text-sm font-semibold text-emerald-100/60 ml-1 ">Email adresa</label>
-                            <input asp-for="Email" type="email" id="email" placeholder="vas@email.com" 
+                            <input asp-for="Email" type="email" id="email" placeholder="vas@email.com"
                                    class="w-full bg-emerald-950/50  rounded-xl px-4 py-3 text-white placeholder:text-emerald-100/20 focus:outline-hidden focus:ring-2 focus:ring-emerald-500/40 transition duration-200">
                             <span asp-validation-for="Email" class="text-amber-600 font-semibold "></span>
                         </div>
@@ -82,7 +82,7 @@
 
                     <div class="space-y-2">
                         <label asp-for="Type" class="text-sm font-semibold text-emerald-100/60 ml-1 ">Vrsta upita</label>
-                        <select asp-for="Type" id="type" 
+                        <select asp-for="Type" id="type"
                                 class="w-full bg-emerald-950/50  rounded-xl px-4 py-3 text-white focus:outline-hidden focus:ring-2 focus:ring-emerald-500/40 transition duration-200 appearance-none">
                             <option value="Individual" class="bg-emerald-900">Konsultacije za individualne časove</option>
                             <option value="ExamPreparation" class="bg-emerald-900">Konsultacije za pripremanje ispita</option>
@@ -94,18 +94,18 @@
 
                     <div class="space-y-2">
                         <label asp-for="Message" class="text-sm font-semibold text-emerald-100/60 ml-1 ">Poruka</label>
-                        <textarea asp-for="Message" id="message" rows="5" placeholder="Vaša poruka..." 
+                        <textarea asp-for="Message" id="message" rows="5" placeholder="Vaša poruka..."
                             class="w-full bg-emerald-950/50  rounded-xl px-4 py-3 text-white placeholder:text-emerald-100/20 focus:outline-hidden focus:ring-2 focus:ring-emerald-500/40 transition duration-200 resize-none h-32"></textarea>
                         <span asp-validation-for="Message" class="text-amber-600 font-semibold "></span>
                     </div>
 
-                    <button 
+                    <button
                         id="contact-submit-btn"
                         onsubmit="() => console.log('Submitting form...')"
-                        type="submit" 
-                            class="px-6 mx-auto py-4 bg-amber-500 hover:bg-amber-400 text-slate-800 font-bold rounded-2xl shadow-lg transition duration-200 active:scale-95 cursor-pointer">
+                        type="submit"
+                            class="px-6 mx-auto py-4 bg-amber-500 hover:bg-amber-400 text-slate-800 font-bold rounded-lg shadow-lg transition duration-200 active:scale-95 cursor-pointer items-center flex gap-2">
                         Pošalji poruku
-                        
+
                         <svg class="htmx-indicator animate-spin h-5 w-5 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
                             <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
                             <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
@@ -151,12 +151,12 @@
         if(!toast) return;
 
         const closeBtn = toast.querySelector(".close");
-        
+
         closeBtn.addEventListener("click", () => {
              toast.classList.remove("translate-x-0");
              toast.classList.add("translate-x-110");
         });
-        
+
         toast.classList.remove("translate-x-110");
         toast.classList.add("translate-x-0");
 
@@ -165,9 +165,7 @@
             toast.classList.add("translate-x-110");
         }, 4000);
     }
-    
+
     toggleToast();
-    
+
 </script>
-
-
